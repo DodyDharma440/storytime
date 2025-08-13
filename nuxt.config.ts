@@ -5,13 +5,17 @@ export default defineNuxtConfig({
   srcDir: "src/",
   serverDir: "server/",
   css: ["~/assets/scss/main.scss"],
+  components: {
+    dirs: [],
+  },
   vite: {
     css: {
       preprocessorOptions: {
         scss: {
-          // additionalData: '@use "/assets/scss/config" as *;',
+          additionalData: '@use "~/assets/scss/config" as *;',
         },
       },
     },
   },
+  modules: ["@nuxt/eslint", "@nuxt/image"],
 });
