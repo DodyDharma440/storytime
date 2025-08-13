@@ -17,8 +17,8 @@ defineProps<StoryCardProps>();
   <article
     class="story-card"
     :class="{
-      'story-card--large': story.isHighlight,
-      'story-card--small': !story.isHighlight,
+      'story-card--large': story.isHighlight === true,
+      'story-card--small': story.isHighlight === false,
     }"
   >
     <div class="story-card__thumbnail">
