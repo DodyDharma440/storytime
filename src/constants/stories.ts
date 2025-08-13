@@ -91,6 +91,7 @@ export const comedyStories: IStory[] = [
     avatar: "4.png",
     author: "Langgam",
     date: "11 May 2022",
+    isHighlight: false,
   },
   {
     thumbnail: "3.png",
@@ -100,6 +101,7 @@ export const comedyStories: IStory[] = [
     avatar: "1.png",
     author: "Fhaladin",
     date: "16 November 2022",
+    isHighlight: false,
   },
 ];
 
@@ -124,6 +126,7 @@ export const horrorStories: IStory[] = [
     author: "John Doe",
     date: "16 November 2022",
     bookmark: true,
+    isHighlight: false,
   },
   {
     thumbnail: "3.png",
@@ -134,6 +137,7 @@ export const horrorStories: IStory[] = [
     author: "John Doe",
     date: "16 November 2022",
     bookmark: true,
+    isHighlight: false,
   },
 ];
 
