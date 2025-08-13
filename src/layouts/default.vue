@@ -6,7 +6,7 @@ import DefaultFooter from "~/components/layout/default/Footer.vue";
 <template>
   <div>
     <DefaultHeader />
-    <main style="height: 1000px">
+    <main>
       <slot />
     </main>
     <DefaultFooter />
