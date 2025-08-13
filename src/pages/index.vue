@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import UiButton from "~/components/ui/Button.vue";
+import HeroSection from "~/components/section/home/HeroSection.vue";
 </script>
 
 <template>
-  <UiButton> Hello </UiButton>
+  <div>
+    <HeroSection />
+  </div>
 </template>

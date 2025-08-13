@@ -10,5 +10,5 @@
 // Usually used in font size
 // 18px is base font size in desktop screen size
 @function to-rem($sizePx) {
-  @return math.div($sizePx, 18) + rem;
+  @return math.div($sizePx, 16) + rem;
 }

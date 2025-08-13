@@ -1,0 +1,95 @@
+<script setup lang="ts">
+import { NuxtImg } from "#components";
+import SearchIcon from "~/assets/icons/SearchIcon.vue";
+import UiInput from "~/components/ui/Input.vue";
+</script>
+
+<template>
+  <section class="hero container">
+    <h1 class="hero__title">Welcome to Storytime</h1>
+    <p class="hero__description">
+      The world's most-loved social storytelling platform. Story time connects a
+      global community of 90 million readers and writers through the power of
+      story.
+    </p>
+
+    <UiInput id="search-input" type="search" placeholder="Search story">
+      <template #label>
+        <label for="search-input" class="sr-only">Search story</label>
+      </template>
+      <template #rightIcon>
+        <SearchIcon />
+      </template>
+    </UiInput>
+
+    <NuxtImg
+      class="hero__illustration"
+      src="/hero.png"
+      loading="lazy"
+      alt="Hero illustration"
+    />
+  </section>
+</template>
+
+<style lang="scss" scoped>
+.hero {
+  padding-top: 110px;
+  padding-bottom: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  @include min-md {
+    padding-top: 150px;
+    padding-bottom: 140px;
+  }
+
+  @include min-lg {
+    padding-top: 170px;
+    padding-bottom: 160px;
+  }
+
+  .input {
+    max-width: 1062px;
+    margin-bottom: spacing(10);
+  }
+
+  &__title {
+    margin-bottom: spacing(7.5);
+    font-size: to-rem(48);
+    font-family: "Playfair Display", serif;
+    text-shadow: 4px 2px 4px #00000040;
+    text-align: center;
+
+    @include min-lg {
+      font-size: to-rem(60);
+    }
+  }
+
+  &__description {
+    max-width: 1412px;
+    text-align: center;
+    margin-bottom: spacing(10);
+    font-size: to-rem(20);
+
+    @include min-lg {
+      font-size: to-rem(24);
+    }
+  }
+
+  &__search {
+    position: relative;
+    width: 100%;
+    max-width: 1062px;
+    margin-bottom: spacing(10);
+  }
+
+  &__illustration {
+    max-width: 802px;
+    max-height: 396px;
+    object-fit: contain;
+    width: 100%;
+    height: 100%;
+  }
+}
+</style>
