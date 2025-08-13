@@ -22,7 +22,6 @@ withDefaults(defineProps<ButtonProps>(), {
       'btn--primary': variant === 'solid',
       'btn--primary-outline': variant === 'outline',
     }"
-    v-bind="$attrs"
   >
     <slot />
   </button>

@@ -1,6 +1,18 @@
 <script setup lang="ts">
 import MenuIcon from "~/assets/icons/MenuIcon.vue";
 import UiButton from "~/components/ui/Button.vue";
+import HeaderMobileMenu from "./HeaderMobileMenu.vue";
+
+const isOpen = ref(false);
+
+const handleToggle = (e: Event) => {
+  e.stopPropagation();
+  isOpen.value = !isOpen.value;
+};
+
+const handleClose = () => {
+  isOpen.value = false;
+};
 </script>
 
 <template>
@@ -16,17 +28,34 @@ import UiButton from "~/components/ui/Button.vue";
       </div>
 
       <div class="navbar__actions-mobile">
-        <button id="nav-mobile-button" class="navbar__actions-mobile-button">
+        <button
+          id="nav-mobile-button"
+          type="button"
+          class="navbar__actions-mobile-button"
+          @click="handleToggle"
+        >
           <MenuIcon class="navbar__actions-mobile-button-icon" />
         </button>
 
-        <div id="nav-mobile-menu" class="navbar__actions-mobile-menu-wrapper" />
+        <Transition name="fade">
+          <HeaderMobileMenu v-if="isOpen" @close="handleClose" />
+        </Transition>
       </div>
     </div>
   </nav>
 </template>
 
 <style lang="scss" scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
 .navbar {
   box-shadow: 0px 1px 4px 0px #0c0c0d0d;
   position: fixed;
@@ -85,43 +114,6 @@ import UiButton from "~/components/ui/Button.vue";
         &-icon {
           width: 28px;
           height: 28px;
-        }
-      }
-
-      &-menu-wrapper {
-        transition: opacity 0.5s ease;
-      }
-
-      &-menu {
-        @keyframes fade-menu {
-          from {
-            opacity: 0;
-          }
-
-          to {
-            opacity: 1;
-          }
-        }
-
-        & {
-          position: absolute;
-          top: 100%;
-          right: 0;
-          background-color: #ffffff;
-          padding: spacing(3);
-          border-radius: spacing(2);
-          margin-top: spacing(2);
-          box-shadow: 0 2px 2px 2px #00000017;
-          min-width: 150px;
-          display: flex;
-          align-items: center;
-          gap: spacing(3);
-          flex-direction: column;
-          animation: fade-menu 0.5s ease;
-
-          .btn {
-            width: 100%;
-          }
         }
       }
     }

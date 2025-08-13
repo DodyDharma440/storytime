@@ -8,7 +8,7 @@ defineProps<TagProps>();
 </script>
 
 <template>
-  <div class="tag" v-bind="$attrs">
+  <div class="tag">
     <span>
       <slot />
     </span>

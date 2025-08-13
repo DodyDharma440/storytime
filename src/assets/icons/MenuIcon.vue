@@ -11,7 +11,6 @@ defineProps<SvgIconProps>();
     viewBox="0 0 48 48"
     xmlns="http://www.w3.org/2000/svg"
     fill="currentColor"
-    v-bind="$attrs"
   >
     <title>menu-hamburger</title>
     <g id="Layer_2" data-name="Layer 2">
