@@ -11,7 +11,6 @@ export const useClickOutside = <T extends ShallowRef>(
   };
 
   onMounted(() => {
-    console.log("mounted");
     document.addEventListener("click", handleClick);
   });
 

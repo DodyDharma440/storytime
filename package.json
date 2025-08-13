@@ -10,7 +10,8 @@
     "lint:fix": "eslint . --fix",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "type-check": "vue-tsc"
+    "type-check": "vue-tsc",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@nuxt/eslint": "1.8.0",
@@ -22,6 +23,7 @@
   },
   "devDependencies": {
     "sass-embedded": "^1.90.0",
-    "vue-tsc": "^3.0.5"
+    "vue-tsc": "^3.0.5",
+    "husky": "^8.0.0"
   }
 }

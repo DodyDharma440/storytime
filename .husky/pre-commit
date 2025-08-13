@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "Checking type error and eslint before commit"
+
+yarn lint
+yarn type-check
