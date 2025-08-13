@@ -1,13 +1,15 @@
 <script setup lang="ts">
-import { NuxtImg } from "#components";
+import dayjs from "dayjs";
 import BookmarkIcon from "~/assets/icons/BookmarkIcon.vue";
 import UiAvatar from "~/components/ui/Avatar.vue";
 import UiTag from "~/components/ui/Tag.vue";
-import type { IStory, StorySectionType } from "~/interfaces/story";
+import type { IStory } from "~/interfaces/story";
 
 interface StoryCardProps {
   story: IStory;
-  storyType: StorySectionType;
+  isHighlight?: boolean;
+  isGrid?: boolean;
+  withBookmark?: boolean;
 }
 
 defineProps<StoryCardProps>();
@@ -17,37 +19,37 @@ defineProps<StoryCardProps>();
   <article
     class="story-card"
     :class="{
-      'story-card--large': story.isHighlight === true,
-      'story-card--small': story.isHighlight === false,
+      'story-card--large': isGrid && isHighlight,
+      'story-card--small': isGrid && !isHighlight,
     }"
   >
     <div class="story-card__thumbnail">
       <NuxtImg
-        :src="`/stories/${storyType}/${story.thumbnail}`"
+        :src="story.content_image"
         class="story-card__thumbnail-image"
         :alt="`${story.title} thumb`"
       />
-      <button v-if="story.bookmark" class="story-card__bookmark-btn">
+      <button v-if="withBookmark" class="story-card__bookmark-btn">
         <BookmarkIcon class="story-card__bookmark-btn-icon" />
       </button>
     </div>
     <div>
       <h6 class="story-card__title">{{ story.title }}</h6>
-      <p class="story-card__description">{{ story.description }}</p>
+      <p class="story-card__description">{{ story.content }}</p>
 
       <div class="story-card__info">
         <div class="story-card__info-author">
-          <UiAvatar :src="`/avatars/${story.avatar}`" />
+          <UiAvatar :src="story.author.profile_image" />
 
           <p class="story-card__info-author-name">
-            {{ story.author }}
+            {{ story.author.name }}
           </p>
         </div>
 
         <div class="story-card__info-subinfo">
-          <p>{{ story.date }}</p>
+          <p>{{ dayjs(story.created_at).format("DD MMMM YYYY") }}</p>
           <UiTag v-if="story.category">
-            <span>{{ story.category }}</span>
+            <span>{{ story.category.name }}</span>
           </UiTag>
         </div>
       </div>

@@ -15,12 +15,17 @@ defineProps<StorySectionProps>();
         v-for="(story, index) in stories"
         :key="index"
         :class="{
-          'stories-grid__item': !story.isHighlight,
-          'stories-grid__item--large': story.isHighlight,
+          'stories-grid__item': index > 0,
+          'stories-grid__item--large': index === 0,
         }"
       >
         <NuxtLink href="#">
-          <StoryCard :story="story" :story-type="storyType" />
+          <StoryCard
+            :story="story"
+            with-bookmark
+            :is-highlight="index === 0"
+            is-grid
+          />
         </NuxtLink>
       </div>
     </div>
