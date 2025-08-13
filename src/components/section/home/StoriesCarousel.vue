@@ -17,9 +17,9 @@ defineProps<StorySectionProps>();
           :key="index"
           class="stories-slider__item"
         >
-          <a href="#">
+          <NuxtLink href="#">
             <StoryCard :story="story" :story-type="storyType" />
-          </a>
+          </NuxtLink>
         </div>
       </div>
     </div>

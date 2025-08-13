@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { NuxtImg } from "#components";
 import BookmarkIcon from "~/assets/icons/BookmarkIcon.vue";
+import UiAvatar from "~/components/ui/Avatar.vue";
+import UiTag from "~/components/ui/Tag.vue";
 import type { IStory, StorySectionType } from "~/interfaces/story";
 
 interface StoryCardProps {
@@ -12,7 +14,7 @@ defineProps<StoryCardProps>();
 </script>
 
 <template>
-  <div
+  <article
     class="story-card"
     :class="{
       'story-card--large': story.isHighlight,
@@ -35,12 +37,8 @@ defineProps<StoryCardProps>();
 
       <div class="story-card__info">
         <div class="story-card__info-author">
-          <div class="story-card__info-author-avatar">
-            <NuxtImg
-              :src="`/avatars/${story.avatar}`"
-              class="story-card__info-author-avatar-image"
-            />
-          </div>
+          <UiAvatar :src="`/avatars/${story.avatar}`" />
+
           <p class="story-card__info-author-name">
             {{ story.author }}
           </p>
@@ -48,13 +46,13 @@ defineProps<StoryCardProps>();
 
         <div class="story-card__info-subinfo">
           <p>{{ story.date }}</p>
-          <div v-if="story.category" class="story-card__info-subinfo-tag">
+          <UiTag v-if="story.category">
             <span>{{ story.category }}</span>
-          </div>
+          </UiTag>
         </div>
       </div>
     </div>
-  </div>
+  </article>
 </template>
 
 <style lang="scss" scoped>
@@ -115,7 +113,6 @@ defineProps<StoryCardProps>();
     -webkit-box-orient: vertical;
     display: -webkit-box;
     overflow: hidden;
-    height: 64px;
   }
 
   &__info {
@@ -129,20 +126,6 @@ defineProps<StoryCardProps>();
       align-items: center;
       gap: spacing(2.5);
       flex: 1;
-
-      &-avatar {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        background: #dddddd;
-
-        &-image {
-          object-fit: cover;
-          width: 100%;
-          height: 100%;
-          overflow: hidden;
-        }
-      }
 
       &-name {
         font-size: to-rem(20);
@@ -161,14 +144,6 @@ defineProps<StoryCardProps>();
         align-items: center;
         flex-direction: row;
         gap: spacing(5);
-      }
-
-      &-tag {
-        padding: spacing(2) spacing(3);
-        border-radius: spacing(2);
-        text-align: center;
-        background-color: $primary-color-light;
-        color: $primary-color;
       }
     }
   }

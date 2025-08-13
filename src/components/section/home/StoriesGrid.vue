@@ -19,9 +19,9 @@ defineProps<StorySectionProps>();
           'stories-grid__item--large': story.isHighlight,
         }"
       >
-        <a href="#">
+        <NuxtLink href="#">
           <StoryCard :story="story" :story-type="storyType" />
-        </a>
+        </NuxtLink>
       </div>
     </div>
   </section>
