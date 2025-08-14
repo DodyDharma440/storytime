@@ -18,9 +18,14 @@ const latestStories = computed(() => {
   });
   return sorted.slice(0, 5);
 });
-const comedyStories = computed(() => getStoriesByCategory("comedy"));
 const romanceStories = computed(() => getStoriesByCategory("romance"));
-const horrorStories = computed(() => getStoriesByCategory("horror"));
+
+const comedyStories = computed(() => {
+  return getStoriesByCategory("comedy").slice(0, 3);
+});
+const horrorStories = computed(() => {
+  return getStoriesByCategory("horror").slice(0, 3);
+});
 </script>
 
 <template>
