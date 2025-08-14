@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { NuxtImg } from "#components";
+
 import SearchIcon from "~/assets/icons/SearchIcon.vue";
 import UiInput from "~/components/ui/Input.vue";
 </script>

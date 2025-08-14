@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { NuxtLink } from "#components";
 import type { ButtonHTMLAttributes } from "vue";
+
+import { NuxtLink } from "#components";
 
 export type ButtonVariant = "solid" | "outline";
 

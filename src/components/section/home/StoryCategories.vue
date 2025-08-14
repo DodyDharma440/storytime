@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { categories } from "~/constants/stories";
+
 import SectionTitle from "./SectionTitle.vue";
 </script>
 

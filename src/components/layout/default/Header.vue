@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import MenuIcon from "~/assets/icons/MenuIcon.vue";
 import UiButton from "~/components/ui/Button.vue";
+
 import HeaderMobileMenu from "./HeaderMobileMenu.vue";
 
 const isOpen = ref(false);

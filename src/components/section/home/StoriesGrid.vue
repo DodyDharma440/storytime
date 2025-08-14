@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { StorySectionProps } from "~/interfaces/story";
+
 import SectionTitle from "./SectionTitle.vue";
 import StoryCard from "./StoryCard.vue";
 
