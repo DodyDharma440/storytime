@@ -10,7 +10,9 @@ interface StoryCardProps {
   isGrid?: boolean;
 }
 
-defineProps<StoryCardProps>();
+const props = defineProps<StoryCardProps>();
+
+const trimmedContent = computed(() => props.story.content.slice(0, 400));
 </script>
 
 <template>
@@ -30,7 +32,7 @@ defineProps<StoryCardProps>();
     </div>
     <div>
       <h6 class="story-card__title">{{ story.title }}</h6>
-      <p class="story-card__description">{{ story.content }}</p>
+      <p class="story-card__description">{{ trimmedContent }}</p>
 
       <div class="story-card__info">
         <div class="story-card__info-author">
