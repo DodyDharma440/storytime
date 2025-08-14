@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import dayjs from "dayjs";
-import BookmarkIcon from "~/assets/icons/BookmarkIcon.vue";
 import UiAvatar from "~/components/ui/Avatar.vue";
 import UiTag from "~/components/ui/Tag.vue";
 import type { IStory } from "~/interfaces/story";
@@ -9,7 +8,6 @@ interface StoryCardProps {
   story: IStory;
   isHighlight?: boolean;
   isGrid?: boolean;
-  withBookmark?: boolean;
 }
 
 defineProps<StoryCardProps>();
@@ -29,9 +27,6 @@ defineProps<StoryCardProps>();
         class="story-card__thumbnail-image"
         :alt="`${story.title} thumb`"
       />
-      <button v-if="withBookmark" class="story-card__bookmark-btn">
-        <BookmarkIcon class="story-card__bookmark-btn-icon" />
-      </button>
     </div>
     <div>
       <h6 class="story-card__title">{{ story.title }}</h6>
@@ -146,57 +141,6 @@ defineProps<StoryCardProps>();
         align-items: center;
         flex-direction: row;
         gap: spacing(5);
-      }
-    }
-  }
-
-  &__bookmark-btn {
-    position: absolute;
-    right: spacing(6);
-    bottom: spacing(6);
-    width: 55px;
-    height: 55px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: $primary-color;
-    border-radius: 50%;
-    transition: background-color 0.3s, transform 0.3s;
-    color: #f0f5ed;
-
-    @include min-md {
-      right: spacing(8);
-      bottom: spacing(8);
-    }
-
-    @include min-lg {
-      right: spacing(10);
-      bottom: spacing(10);
-      width: 65px;
-      height: 65px;
-    }
-
-    &:hover {
-      background-color: rgba($primary-color, 0.9);
-    }
-
-    &:active {
-      transform: translateY(spacing(0.5));
-    }
-
-    &-icon {
-      width: 42px;
-      height: 42px;
-      object-fit: contain;
-
-      @include min-md {
-        width: 48px;
-        height: 48px;
-      }
-
-      @include min-lg {
-        width: 52px;
-        height: 52px;
       }
     }
   }
