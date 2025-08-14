@@ -2,13 +2,15 @@
 import FacebookIcon from "~/assets/icons/FacebookIcon.vue";
 import InstagramIcon from "~/assets/icons/InstagramIcon.vue";
 import YoutubeIcon from "~/assets/icons/YoutubeIcon.vue";
+
+const cpYear = new Date().getFullYear();
 </script>
 
 <template>
   <footer class="footer">
     <div class="container footer__content">
       <p class="footer__cp-text">
-        © 2024 PT. Timedoor Indonesia. All rights reserved.
+        © {{ cpYear }} PT. Timedoor Indonesia. All rights reserved.
       </p>
 
       <div class="footer__socials">
