@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { NuxtLink } from "#components";
 import type { ButtonHTMLAttributes } from "vue";
 
 export type ButtonVariant = "solid" | "outline";
@@ -7,24 +8,28 @@ export interface ButtonProps extends /* @vue-ignore */ ButtonHTMLAttributes {
   variant?: ButtonVariant;
   isLoading?: boolean;
   loaderPosition?: "left" | "right";
+  href?: string;
 }
 
 withDefaults(defineProps<ButtonProps>(), {
   variant: "solid",
   loaderPosition: "left",
+  href: undefined,
 });
 </script>
 
 <template>
-  <button
+  <component
+    :is="href ? NuxtLink : 'button'"
     class="btn"
+    :href="href"
     :class="{
       'btn--primary': variant === 'solid',
       'btn--primary-outline': variant === 'outline',
     }"
   >
     <slot />
-  </button>
+  </component>
 </template>
 
 <style lang="scss" scoped>
