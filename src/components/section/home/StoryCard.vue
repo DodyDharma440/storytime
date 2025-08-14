@@ -8,11 +8,10 @@ interface StoryCardProps {
   story: IStory;
   isHighlight?: boolean;
   isGrid?: boolean;
+  withCategory?: boolean;
 }
 
-const props = defineProps<StoryCardProps>();
-
-const trimmedContent = computed(() => props.story.content.slice(0, 400));
+defineProps<StoryCardProps>();
 </script>
 
 <template>
@@ -25,28 +24,28 @@ const trimmedContent = computed(() => props.story.content.slice(0, 400));
   >
     <div class="story-card__thumbnail">
       <NuxtImg
-        :src="story.content_image"
+        :src="story.image"
         class="story-card__thumbnail-image"
         :alt="`${story.title} thumb`"
       />
     </div>
     <div>
       <h6 class="story-card__title">{{ story.title }}</h6>
-      <p class="story-card__description">{{ trimmedContent }}</p>
+      <p class="story-card__description">{{ story.shortContent }}</p>
 
       <div class="story-card__info">
         <div class="story-card__info-author">
-          <UiAvatar :src="story.author.profile_image" />
+          <UiAvatar :src="story.authorAvatar" />
 
           <p class="story-card__info-author-name">
-            {{ story.author.name }}
+            {{ story.authorName }}
           </p>
         </div>
 
         <div class="story-card__info-subinfo">
-          <p>{{ dayjs(story.created_at).format("DD MMMM YYYY") }}</p>
-          <UiTag v-if="story.category">
-            <span>{{ story.category.name }}</span>
+          <p>{{ dayjs(story.createdDate).format("DD MMMM YYYY") }}</p>
+          <UiTag v-if="withCategory">
+            <span>{{ story.category }}</span>
           </UiTag>
         </div>
       </div>

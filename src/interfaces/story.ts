@@ -1,19 +1,14 @@
 import type { SectionTitleProps } from "~/components/section/home/SectionTitle.vue";
 
 export interface IStory {
-  id: string;
+  id: number;
   title: string;
-  content: string;
-  content_image: string;
-  author: {
-    name: string;
-    profile_image: string;
-  };
-  category?: {
-    id: number;
-    name: string;
-  };
-  created_at: string;
+  shortContent: string;
+  image: string;
+  authorName: string;
+  authorAvatar: string;
+  category: string;
+  createdDate: string;
 }
 
 export interface StorySectionProps extends SectionTitleProps {

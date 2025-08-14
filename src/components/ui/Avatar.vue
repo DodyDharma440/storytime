@@ -31,6 +31,7 @@ defineProps<AvatarProps>();
   height: 50px;
   border-radius: 50%;
   background-color: #dddddd;
+  overflow: hidden;
 
   &__image {
     object-fit: cover;
