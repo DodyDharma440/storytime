@@ -11,6 +11,7 @@ export interface IStory {
   createdDate: string;
 }
 
-export interface StorySectionProps extends SectionTitleProps {
+export interface StorySectionProps
+  extends Omit<SectionTitleProps, "withContainer"> {
   stories: IStory[];
 }
