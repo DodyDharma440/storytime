@@ -1,0 +1,17 @@
+{
+  "UI Components": {
+    "prefix": ["uicomp"],
+    "body": "import Ui${1:Name} from \"~/components/ui/${1:Name}.vue\";",
+    "description": "Import from components/ui"
+  },
+  "Section Components": {
+    "prefix": ["sectioncomp"],
+    "body": "import ${1:Name} from \"~/components/section/${2:subfolder}/${1:Name}.vue\";",
+    "description": "Import from components/section"
+  },
+  "Layout Components": {
+    "prefix": ["layoutcomp"],
+    "body": "import ${2:Default}${1:Name} from \"~/components/layout/${3:default}/${1:Name}.vue\";",
+    "description": "Import from components/layout"
+  }
+}
