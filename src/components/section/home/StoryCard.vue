@@ -143,6 +143,10 @@ defineProps<StoryCardProps>();
         flex-direction: row;
         gap: spacing(5);
       }
+
+      .tag {
+        text-transform: capitalize;
+      }
     }
   }
 
