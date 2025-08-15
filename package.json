@@ -15,7 +15,6 @@
   },
   "dependencies": {
     "@nuxt/eslint": "1.8.0",
-    "@nuxt/icon": "1.15.0",
     "@nuxt/image": "1.11.0",
     "dayjs": "^1.11.13",
     "eslint": "^9.0.0",
@@ -25,6 +24,7 @@
   },
   "devDependencies": {
     "@iconify-json/iconoir": "^1.2.9",
+    "@nuxt/icon": "1.15.0",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "husky": "^8.0.0",
     "sass-embedded": "^1.90.0",

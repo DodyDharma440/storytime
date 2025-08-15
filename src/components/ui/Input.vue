@@ -72,10 +72,14 @@ const inputType = computed(() => {
         <button
           v-if="type === 'password'"
           type="button"
+          class="input__right-icon-button-pw"
           @click="togglePassword"
         >
-          <span>{{ showPw ? "-" : "O" }}</span>
-          <!-- <Icon v-if="type === 'password'" name="iconoir:eye-empty" /> -->
+          <Icon
+            v-if="type === 'password'"
+            :name="showPw ? 'iconoir:eye-off' : 'iconoir:eye-empty'"
+            size="30"
+          />
         </button>
         <slot v-else name="rightIcon" />
       </div>
@@ -161,6 +165,12 @@ const inputType = computed(() => {
 
     @include min-lg {
       right: spacing(7.5);
+    }
+
+    &-button-pw {
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
   }
 

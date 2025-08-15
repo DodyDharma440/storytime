@@ -10,9 +10,12 @@ export default defineNuxtConfig({
   srcDir: "src/",
   serverDir: "server/",
   css: ["~/assets/scss/main.scss"],
-  // components: {
-  //   dirs: [],
-  // },
+  components: {
+    dirs: [],
+  },
+  icon: {
+    mode: "svg",
+  },
   vite: {
     css: {
       preprocessorOptions: {
