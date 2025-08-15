@@ -74,7 +74,7 @@
 }
 
 @mixin grid-row($count) {
-  grid-template-columns: repeat($count, 1fr);
+  grid-template-rows: repeat($count, 1fr);
 }
 
 @mixin col-span($value) {
@@ -82,5 +82,5 @@
 }
 
 @mixin row-span($value) {
-  grid-column: span $value / span $value;
+  grid-row: span $value / span $value;
 }

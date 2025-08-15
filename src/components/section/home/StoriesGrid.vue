@@ -36,26 +36,26 @@ defineProps<StorySectionProps>();
 <style lang="scss" scoped>
 .stories-grid {
   display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  grid-template-rows: repeat(2, 1fr);
+  @include grid-col(12);
+  @include grid-row(2);
   column-gap: spacing(7.5);
   row-gap: spacing(11.5);
 
   &__item {
-    grid-column: span 12 / span 12;
-    grid-row: span 2 / span 2;
+    @include col-span(12);
+    @include row-span(2);
 
     @include min-lg {
-      grid-column: span 4 / span 4;
-      grid-row: span 1 / span 1;
+      @include col-span(4);
+      @include row-span(1);
     }
 
     &--large {
-      grid-column: span 12 / span 12;
-      grid-row: span 2 / span 2;
+      @include col-span(12);
+      @include row-span(2);
 
       @include min-lg {
-        grid-column: span 8 / span 8;
+        @include col-span(8);
       }
     }
   }
