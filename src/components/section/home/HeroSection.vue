@@ -51,8 +51,16 @@ import UiInput from "~/components/ui/Input.vue";
   }
 
   .input {
-    max-width: 1062px;
     margin-bottom: spacing(10);
+    max-width: 1062px;
+
+    :deep(.input__field) {
+      font-size: to-rem(20);
+
+      @include min-lg {
+        font-size: to-rem(24);
+      }
+    }
   }
 
   &__title {

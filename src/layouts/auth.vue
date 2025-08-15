@@ -15,7 +15,6 @@
   display: grid;
   align-items: center;
   @include grid-col(12);
-  gap: spacing(5);
 
   & > div {
     @include col-span(6);

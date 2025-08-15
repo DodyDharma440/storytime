@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import AuthWelcome from "~/components/layout/auth/Welcome.vue";
+import AuthLoginForm from "~/components/section/auth/LoginForm.vue";
 
 definePageMeta({
   layout: "auth",
@@ -7,7 +8,9 @@ definePageMeta({
 </script>
 
 <template>
-  <div class="content-grid">Login</div>
+  <div class="content-grid">
+    <AuthLoginForm />
+  </div>
   <div class="content-grid">
     <AuthWelcome
       title="Welcome Back to Story Time!"
@@ -20,5 +23,6 @@ definePageMeta({
 <style lang="scss" scoped>
 .content-grid {
   @include col-span(6);
+  height: 100%;
 }
 </style>

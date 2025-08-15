@@ -18,7 +18,7 @@ defineProps<WelcomeProps>();
         class="welcome__content"
         :class="{ 'welcome__content--with-logo': withLogo }"
       >
-        <div class="welcome__content-logo">
+        <div v-if="withLogo" class="welcome__content-logo">
           <DefaultLogo />
         </div>
 

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import AuthWelcome from "~/components/layout/auth/Welcome.vue";
+import AuthRegisterForm from "~/components/section/auth/RegisterForm.vue";
 
 definePageMeta({
   layout: "auth",
@@ -15,7 +16,9 @@ definePageMeta({
       with-logo
     />
   </div>
-  <div class="content-grid">Register</div>
+  <div class="content-grid">
+    <AuthRegisterForm />
+  </div>
 </template>
 
 <style lang="scss" scoped>

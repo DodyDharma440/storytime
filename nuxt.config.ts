@@ -10,9 +10,9 @@ export default defineNuxtConfig({
   srcDir: "src/",
   serverDir: "server/",
   css: ["~/assets/scss/main.scss"],
-  components: {
-    dirs: [],
-  },
+  // components: {
+  //   dirs: [],
+  // },
   vite: {
     css: {
       preprocessorOptions: {
@@ -22,5 +22,5 @@ export default defineNuxtConfig({
       },
     },
   },
-  modules: ["@nuxt/eslint", "@nuxt/image"],
+  modules: ["@nuxt/eslint", "@nuxt/image", "@nuxt/icon"],
 });

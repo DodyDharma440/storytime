@@ -1,44 +1,84 @@
 <script setup lang="ts">
-import type { InputHTMLAttributes } from "vue";
+import type { InputHTMLAttributes, InputTypeHTMLAttribute } from "vue";
 
 export interface InputProps extends /* @vue-ignore */ InputHTMLAttributes {
   classNames?: Partial<Record<"wrapper" | "leftIcon" | "rightIcon", string>>;
+  label?: string;
+  srOnlyLabel?: boolean;
+  id?: string;
+  type?: InputTypeHTMLAttribute;
 }
 
 type InputSlots = {
   leftIcon?(): any;
   rightIcon?(): any;
-  label?(): any;
 };
 
-defineProps<InputProps>();
+defineOptions({
+  inheritAttrs: false,
+});
+
+const props = defineProps<InputProps>();
 const slots = defineSlots<InputSlots>();
+
+const showPw = ref(false);
+const togglePassword = () => {
+  showPw.value = !showPw.value;
+};
+
+const inputType = computed(() => {
+  if (props.type === "password") {
+    return showPw.value ? "text" : "password";
+  }
+  return props.type;
+});
 </script>
 
 <template>
-  <div class="input" :class="classNames?.wrapper">
-    <div
-      v-if="slots.leftIcon"
-      class="input__left-icon"
-      :class="classNames?.leftIcon"
+  <div>
+    <label
+      v-if="label"
+      :for="id"
+      :class="{ 'sr-only': srOnlyLabel }"
+      class="input__label"
     >
-      <slot name="leftIcon" />
-    </div>
-    <slot name="label" />
-    <input
-      class="input__field"
-      :class="{
-        'input__field--with-left-icon': slots.leftIcon,
-        'input__field--with-right-icon': slots.rightIcon,
-      }"
-      v-bind="$attrs"
-    />
-    <div
-      v-if="slots.rightIcon"
-      class="input__right-icon"
-      :class="classNames?.rightIcon"
-    >
-      <slot name="rightIcon" />
+      {{ label }}
+    </label>
+    <div class="input" :class="classNames?.wrapper">
+      <div
+        v-if="slots.leftIcon"
+        class="input__left-icon"
+        :class="classNames?.leftIcon"
+      >
+        <slot name="leftIcon" />
+      </div>
+
+      <input
+        :id="id"
+        class="input__field"
+        :class="{
+          'input__field--with-left-icon': slots.leftIcon,
+          'input__field--with-right-icon': slots.rightIcon,
+        }"
+        v-bind="$attrs"
+        :type="inputType"
+        :autocomplete="type === 'password' ? 'off' : undefined"
+      />
+      <div
+        v-if="slots.rightIcon || type === 'password'"
+        class="input__right-icon"
+        :class="classNames?.rightIcon"
+      >
+        <button
+          v-if="type === 'password'"
+          type="button"
+          @click="togglePassword"
+        >
+          <span>{{ showPw ? "-" : "O" }}</span>
+          <!-- <Icon v-if="type === 'password'" name="iconoir:eye-empty" /> -->
+        </button>
+        <slot v-else name="rightIcon" />
+      </div>
     </div>
   </div>
 </template>
@@ -65,6 +105,11 @@ const slots = defineSlots<InputSlots>();
   position: relative;
   width: 100%;
 
+  &__label {
+    display: block;
+    margin-bottom: spacing(5);
+  }
+
   &__field {
     padding-top: spacing(5);
     padding-bottom: spacing(5);
@@ -73,7 +118,7 @@ const slots = defineSlots<InputSlots>();
     border-radius: spacing(2);
     border: 2px solid #cccccc;
     width: 100%;
-    font-size: to-rem(20);
+    font-size: to-rem(16);
     transition: all 0.3s;
     outline: 2px solid transparent;
 
@@ -87,7 +132,7 @@ const slots = defineSlots<InputSlots>();
       padding-bottom: spacing(6);
       padding-right: spacing(7.5);
       padding-left: spacing(7.5);
-      font-size: to-rem(24);
+      font-size: to-rem(18);
     }
 
     &--with-right-icon {
