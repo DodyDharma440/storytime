@@ -1,0 +1,24 @@
+<script setup lang="ts">
+import AuthWelcome from "~/components/layout/auth/Welcome.vue";
+
+definePageMeta({
+  layout: "auth",
+});
+</script>
+
+<template>
+  <div class="content-grid">Login</div>
+  <div class="content-grid">
+    <AuthWelcome
+      title="Welcome Back to Story Time!"
+      description="Dive back into captivating stories, follow your favorite authors, and continue sharing your own tales."
+      image="/images/auth/login.png"
+    />
+  </div>
+</template>
+
+<style lang="scss" scoped>
+.content-grid {
+  @include col-span(6);
+}
+</style>

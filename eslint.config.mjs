@@ -13,6 +13,7 @@ export default withNuxt({
     "@typescript-eslint/no-explicit-any": "off",
     "no-console": "error",
     "simple-import-sort/exports": "warn",
+    "vue/no-multiple-template-root": "off",
     "simple-import-sort/imports": [
       "warn",
       {

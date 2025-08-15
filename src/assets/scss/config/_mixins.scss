@@ -68,3 +68,19 @@
     @content;
   }
 }
+
+@mixin grid-col($count) {
+  grid-template-columns: repeat($count, 1fr);
+}
+
+@mixin grid-row($count) {
+  grid-template-columns: repeat($count, 1fr);
+}
+
+@mixin col-span($value) {
+  grid-column: span $value / span $value;
+}
+
+@mixin row-span($value) {
+  grid-column: span $value / span $value;
+}

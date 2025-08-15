@@ -24,8 +24,8 @@ const handleClose = () => {
       </NuxtLink>
 
       <div class="navbar__actions">
-        <UiButton variant="outline">Register</UiButton>
-        <UiButton>Login</UiButton>
+        <UiButton variant="outline" href="/register">Register</UiButton>
+        <UiButton href="/login">Login</UiButton>
       </div>
 
       <div class="navbar__actions-mobile">
