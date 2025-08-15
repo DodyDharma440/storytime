@@ -22,7 +22,11 @@ definePageMeta({
 
 <style lang="scss" scoped>
 .content-grid {
-  @include col-span(6);
+  @include col-span(12);
   height: 100%;
+
+  @include min-xl {
+    @include col-span(6);
+  }
 }
 </style>

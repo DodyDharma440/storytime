@@ -60,6 +60,7 @@ const navContent = computed(() => navContents[props.formType]);
     align-items: center;
     gap: spacing(2.5);
     font-size: to-rem(18);
+    flex-wrap: wrap;
 
     &-link {
       font-weight: 700;

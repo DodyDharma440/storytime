@@ -40,9 +40,13 @@ defineProps<WelcomeProps>();
   min-height: calc(100dvh - spacing(10));
   border-radius: spacing(2);
   background-color: $primary-color-light;
-  display: flex;
   align-items: center;
   justify-content: center;
+  display: none;
+
+  @include min-xl {
+    display: flex;
+  }
 
   &__content {
     padding: 114px 137px 62px 137px;
@@ -65,15 +69,23 @@ defineProps<WelcomeProps>();
 
     &-title {
       max-width: 549px;
-      font-size: to-rem(60);
-      line-height: to-rem(74);
+      font-size: to-rem(50);
       margin-bottom: spacing(10);
+
+      @include min-xxl {
+        font-size: to-rem(60);
+        line-height: to-rem(74);
+      }
     }
 
     &-description {
-      font-size: to-rem(26);
-      line-height: to-rem(38);
+      font-size: to-rem(20);
       color: #4b4b4b;
+
+      @include min-xxl {
+        font-size: to-rem(26);
+        line-height: to-rem(38);
+      }
     }
   }
 
@@ -83,6 +95,7 @@ defineProps<WelcomeProps>();
     justify-content: center;
 
     &-image {
+      max-width: 100%;
       object-fit: contain;
       min-height: 600px;
     }

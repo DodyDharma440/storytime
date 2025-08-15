@@ -43,7 +43,14 @@ import AuthFormSubmitter from "./FormSubmitter.vue";
 
   &__logo {
     margin-top: spacing(7.5);
-    margin-left: 62px;
+    margin-left: 32px;
+    display: flex;
+    justify-content: center;
+
+    @include min-xl {
+      margin-left: 62px;
+      justify-content: flex-start;
+    }
   }
 
   &__content {
