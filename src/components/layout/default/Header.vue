@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import MenuIcon from "~/assets/icons/MenuIcon.vue";
+import DefaultLogo from "~/components/layout/default/Logo.vue";
 import UiButton from "~/components/ui/Button.vue";
 
 import HeaderMobileMenu from "./HeaderMobileMenu.vue";
@@ -19,9 +20,7 @@ const handleClose = () => {
 <template>
   <nav class="navbar">
     <div class="container navbar__content">
-      <NuxtLink href="/">
-        <NuxtImg src="/logo.png" alt="Storytime Logo" class="navbar__logo" />
-      </NuxtLink>
+      <DefaultLogo />
 
       <div class="navbar__actions">
         <UiButton variant="outline" href="/register">Register</UiButton>
@@ -74,15 +73,6 @@ const handleClose = () => {
 
     @include min-lg {
       padding: spacing(5);
-    }
-  }
-
-  &__logo {
-    width: 180px;
-    height: 100%;
-
-    @include min-lg {
-      width: 254px;
     }
   }
 
