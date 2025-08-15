@@ -35,7 +35,7 @@ const inputType = computed(() => {
 </script>
 
 <template>
-  <div>
+  <div class="input-wrapper">
     <label
       v-if="label"
       :for="id"
@@ -101,9 +101,12 @@ const inputType = computed(() => {
   }
 }
 
+.input-wrapper {
+  width: 100%;
+}
+
 .input {
   position: relative;
-  width: 100%;
 
   &__label {
     display: block;

@@ -50,19 +50,6 @@ import UiInput from "~/components/ui/Input.vue";
     padding-bottom: 160px;
   }
 
-  .input {
-    margin-bottom: spacing(10);
-    max-width: 1062px;
-
-    :deep(.input__field) {
-      font-size: to-rem(20);
-
-      @include min-lg {
-        font-size: to-rem(24);
-      }
-    }
-  }
-
   &__title {
     margin-bottom: spacing(7.5);
     font-size: to-rem(48);
@@ -86,11 +73,17 @@ import UiInput from "~/components/ui/Input.vue";
     }
   }
 
-  &__search {
-    position: relative;
-    width: 100%;
-    max-width: 1062px;
+  :deep(.input-wrapper) {
     margin-bottom: spacing(10);
+    max-width: 1062px;
+  }
+
+  :deep(.input__field) {
+    font-size: to-rem(20);
+
+    @include min-lg {
+      font-size: to-rem(24);
+    }
   }
 
   &__illustration {
