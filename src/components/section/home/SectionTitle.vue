@@ -14,14 +14,14 @@ defineProps<SectionTitleProps>();
   <div class="section-title" :class="{ container: withContainer }">
     <div class="section-title__content">
       <h2 class="section-title__text">{{ title }}</h2>
-      <a
+      <NuxtLink
         v-if="exploreHref"
         :href="exploreHref"
         class="section-title__explore-btn"
       >
         Explore more
         <ArrowRightIcon class="section-title__explore-btn-icon" />
-      </a>
+      </NuxtLink>
     </div>
 
     <hr class="section-title__divider" />

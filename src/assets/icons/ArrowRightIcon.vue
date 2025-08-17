@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { SvgIconProps } from "~/interfaces/svg";
+import type { SvgIconProps } from "~/interfaces/ui";
 
 defineProps<SvgIconProps>();
 </script>
