@@ -66,7 +66,6 @@ const inputType = computed(() => {
           'input__field-is-error': !!error,
         }"
         :type="inputType"
-        :autocomplete="type === 'password' ? 'off' : undefined"
       />
       <div
         v-if="slots.rightIcon || type === 'password'"

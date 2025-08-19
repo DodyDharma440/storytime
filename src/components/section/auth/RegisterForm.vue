@@ -66,6 +66,7 @@ const [confirmPassword, confirmPasswordAttrs] = defineField("confirmPassword");
             label="Email"
             v-bind="emailAttrs"
             :error="errors.email"
+            autocomplete="username"
           />
           <UiInput
             id="password"
