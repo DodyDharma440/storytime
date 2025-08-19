@@ -9,13 +9,14 @@ import SectionTitle from "./SectionTitle.vue";
     <SectionTitle title="More Categories" />
 
     <div class="categories">
-      <button
+      <NuxtLink
         v-for="(category, index) in categories"
         :key="index"
         class="categories__item"
+        :href="`/stories?category=${category}`"
       >
         {{ category }}
-      </button>
+      </NuxtLink>
     </div>
   </section>
 </template>

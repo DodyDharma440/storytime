@@ -3,6 +3,12 @@ import { NuxtImg } from "#components";
 
 import SearchIcon from "~/assets/icons/SearchIcon.vue";
 import UiInput from "~/components/ui/Input.vue";
+
+const searchValue = ref("");
+
+const handleSearch = () => {
+  navigateTo(`/stories?search=${searchValue.value}`);
+};
 </script>
 
 <template>
@@ -14,10 +20,15 @@ import UiInput from "~/components/ui/Input.vue";
       story.
     </p>
 
-    <UiInput id="search-input" type="search" placeholder="Search story">
-      <template #label>
-        <label for="search-input" class="sr-only">Search story</label>
-      </template>
+    <UiInput
+      id="search-input"
+      v-model="searchValue"
+      type="search"
+      placeholder="Search story"
+      label="Search story"
+      sr-only-label
+      @keydown.enter="handleSearch"
+    >
       <template #rightIcon>
         <SearchIcon />
       </template>
