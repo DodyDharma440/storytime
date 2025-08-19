@@ -1,7 +1,10 @@
 <script setup lang="ts">
+import UiPagination from "~/components/ui/Pagination.vue";
 import { articles } from "~/constants/stories";
 
 import StoryCard from "../home/StoryCard.vue";
+
+const page = ref(1);
 </script>
 
 <template>
@@ -10,6 +13,10 @@ import StoryCard from "../home/StoryCard.vue";
       <div v-for="story in articles" :key="story.id" class="stories__grid-item">
         <StoryCard :story="story" />
       </div>
+    </div>
+
+    <div class="stories__pagination">
+      <UiPagination v-model="page" :total="articles.length" :per-page="12" />
     </div>
   </div>
 </template>
@@ -32,6 +39,13 @@ import StoryCard from "../home/StoryCard.vue";
         @include col-span(4);
       }
     }
+  }
+
+  &__pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 200px 0px;
   }
 }
 </style>

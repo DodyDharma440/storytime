@@ -24,6 +24,7 @@
   },
   "devDependencies": {
     "@iconify-json/iconoir": "^1.2.9",
+    "@iconify-json/mdi": "^1.2.3",
     "@nuxt/icon": "1.15.0",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "husky": "^8.0.0",
