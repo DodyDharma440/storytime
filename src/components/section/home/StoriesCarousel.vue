@@ -18,7 +18,7 @@ defineProps<StorySectionProps>();
           :key="index"
           class="stories-slider__item"
         >
-          <NuxtLink href="#">
+          <NuxtLink :href="`/story/${'slug-story'}`">
             <StoryCard :story="story" with-category />
           </NuxtLink>
         </div>

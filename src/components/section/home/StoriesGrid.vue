@@ -20,7 +20,7 @@ defineProps<StorySectionProps>();
           'stories-grid__item--large': index === 0,
         }"
       >
-        <NuxtLink href="#">
+        <NuxtLink :href="`/story/${'slug-story'}`">
           <StoryCard
             :story="story"
             with-bookmark
