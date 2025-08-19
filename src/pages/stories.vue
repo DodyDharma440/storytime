@@ -33,31 +33,41 @@ storiesFilter.$subscribe((mutation, state) => {
   window.scrollTo(0, 0);
 });
 
-onMounted(() => {
-  const { page, sort_by, category, search } = route.query;
-  if (!page || !sort_by) {
-    const queryParams = new URLSearchParams({
-      page: `${page || "1"}`,
-      sort_by: `${sort_by || sortByOptions[0]}`,
-    });
+const { page, sort_by, category, search } = route.query;
+if (!page || !sort_by) {
+  const queryParams = new URLSearchParams({
+    page: `${page || "1"}`,
+    sort_by: `${sort_by || sortByOptions[0]}`,
+  });
 
-    if (category) {
-      queryParams.append("category", category as string);
-    }
-
-    if (search) {
-      queryParams.append("search", search as string);
-    }
-
-    navigateTo(`/stories?${queryParams}`, { replace: true });
+  if (category) {
+    queryParams.append("category", category as string);
   }
 
-  storiesFilter.setValue({
-    category: `${category || "All"}`,
-    search: `${search || ""}`,
-    page: Number(page || "1"),
-    sortBy: `${sort_by || sortByOptions[0]}`,
-  });
+  if (search) {
+    queryParams.append("search", search as string);
+  }
+
+  navigateTo(`/stories?${queryParams}`, { replace: true });
+}
+
+// const fetchParams = new URLSearchParams({
+//   category: `${category || "All"}`,
+//   search: `${search || ""}`,
+//   page: `${page || "1"}`,
+//   sortBy: `${sort_by || sortByOptions[0]}`,
+// });
+
+// const data = await useFetch(
+//   `https://api.kraken.com/0/public/Depth?pair=xbteur&count=4&${fetchParams}`
+// );
+// console.log("success fetching");
+
+storiesFilter.setValue({
+  category: `${category || "All"}`,
+  search: `${search || ""}`,
+  page: Number(page || "1"),
+  sortBy: `${sort_by || sortByOptions[0]}`,
 });
 </script>
 
