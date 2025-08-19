@@ -4,7 +4,7 @@ import { articles } from "~/constants/stories";
 
 import StoryCard from "../home/StoryCard.vue";
 
-const page = ref(1);
+const storiesFilter = useStoriesFilterStore();
 </script>
 
 <template>
@@ -16,7 +16,11 @@ const page = ref(1);
     </div>
 
     <div class="stories__pagination">
-      <UiPagination v-model="page" :total="articles.length" :per-page="12" />
+      <UiPagination
+        v-model="storiesFilter.page"
+        :total="articles.length"
+        :per-page="12"
+      />
     </div>
   </div>
 </template>

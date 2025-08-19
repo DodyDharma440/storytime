@@ -25,5 +25,5 @@ export default defineNuxtConfig({
       },
     },
   },
-  modules: ["@nuxt/eslint", "@nuxt/image", "@nuxt/icon"],
+  modules: ["@nuxt/eslint", "@nuxt/image", "@nuxt/icon", "@pinia/nuxt"],
 });

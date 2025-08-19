@@ -15,3 +15,10 @@ export interface StorySectionProps
   extends Omit<SectionTitleProps, "withContainer"> {
   stories: IStory[];
 }
+
+export interface IStoryFilter {
+  page: number;
+  sortBy: string;
+  category: string;
+  search: string;
+}

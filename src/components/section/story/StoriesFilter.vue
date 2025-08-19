@@ -5,16 +5,31 @@ import { allCategories, sortByOptions } from "~/constants/stories";
 
 import DropdownFilter from "./DropdownFilter.vue";
 
-const sortBy = ref("Newest");
-const category = ref("All");
+const storiesFilter = useStoriesFilterStore();
+
+const searchValue = ref("");
+
+storiesFilter.$subscribe((mutate, state) => {
+  searchValue.value = state.search;
+});
+
+const handleSearch = () => {
+  storiesFilter.setValue({
+    search: searchValue.value,
+  });
+};
 </script>
 
 <template>
   <div class="stories-filter">
     <div class="stories-filter__dropdown-group">
-      <DropdownFilter v-model="sortBy" :items="sortByOptions" label="Sort by" />
       <DropdownFilter
-        v-model="category"
+        v-model="storiesFilter.sortBy"
+        :items="sortByOptions"
+        label="Sort by"
+      />
+      <DropdownFilter
+        v-model="storiesFilter.category"
         :items="allCategories"
         label="Category"
       />
@@ -22,10 +37,12 @@ const category = ref("All");
     <div class="stories-filter__search">
       <UiInput
         id="search-input"
+        v-model="searchValue"
         type="search"
         placeholder="Search story"
         label="Search story"
         sr-only-label
+        @keyup.enter="handleSearch"
       >
         <template #rightIcon>
           <SearchIcon />

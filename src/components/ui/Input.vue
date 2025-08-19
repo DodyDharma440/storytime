@@ -18,6 +18,7 @@ defineOptions({
   inheritAttrs: false,
 });
 
+const model = defineModel<any>();
 const props = defineProps<InputProps>();
 const slots = defineSlots<InputSlots>();
 
@@ -55,12 +56,13 @@ const inputType = computed(() => {
 
       <input
         :id="id"
+        v-bind="$attrs"
+        v-model="model"
         class="input__field"
         :class="{
           'input__field--with-left-icon': slots.leftIcon,
           'input__field--with-right-icon': slots.rightIcon,
         }"
-        v-bind="$attrs"
         :type="inputType"
         :autocomplete="type === 'password' ? 'off' : undefined"
       />
