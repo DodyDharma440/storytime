@@ -1,9 +1,29 @@
 <script setup lang="ts">
+import * as yup from "yup";
+
 import AuthFormWrapper from "~/components/layout/auth/FormWrapper.vue";
 import DefaultLogo from "~/components/layout/default/Logo.vue";
 import UiInput from "~/components/ui/Input.vue";
+import type { ILoginForm } from "~/interfaces/auth";
 
 import AuthFormSubmitter from "./FormSubmitter.vue";
+
+const schema = yup.object<ILoginForm>({
+  email: yup
+    .string()
+    .required("Email should not be empty")
+    .email("Email must be a valid email"),
+  password: yup.string().required("Password should not be empty"),
+});
+
+const { handleSubmit, defineField, errors } = useForm<ILoginForm>({
+  validationSchema: schema,
+});
+
+const submitHandler = handleSubmit(() => {});
+
+const [email, emailAttrs] = defineField("email");
+const [password, passwordAttrs] = defineField("password");
 </script>
 
 <template>
@@ -13,23 +33,29 @@ import AuthFormSubmitter from "./FormSubmitter.vue";
     </div>
     <div class="login-wrapper__content">
       <AuthFormWrapper title="Login" form-position="left">
-        <div class="login">
+        <form class="login" @submit="submitHandler">
           <div class="login__fields">
             <UiInput
               id="email"
+              v-model="email"
               type="email"
               placeholder="Enter your email"
               label="Email"
+              v-bind="emailAttrs"
+              :error="errors.email"
             />
             <UiInput
               id="password"
+              v-model="password"
               placeholder="Enter your chosen password"
               label="Password"
               type="password"
+              v-bind="passwordAttrs"
+              :error="errors.password"
             />
           </div>
           <AuthFormSubmitter form-type="login" />
-        </div>
+        </form>
       </AuthFormWrapper>
     </div>
   </div>

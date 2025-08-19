@@ -7,6 +7,7 @@ export interface InputProps extends /* @vue-ignore */ InputHTMLAttributes {
   srOnlyLabel?: boolean;
   id?: string;
   type?: InputTypeHTMLAttribute;
+  error?: string;
 }
 
 type InputSlots = {
@@ -62,6 +63,7 @@ const inputType = computed(() => {
         :class="{
           'input__field--with-left-icon': slots.leftIcon,
           'input__field--with-right-icon': slots.rightIcon,
+          'input__field-is-error': !!error,
         }"
         :type="inputType"
         :autocomplete="type === 'password' ? 'off' : undefined"
@@ -85,6 +87,10 @@ const inputType = computed(() => {
         </button>
         <slot v-else name="rightIcon" />
       </div>
+    </div>
+    <div v-if="error" class="input-error">
+      <Icon name="iconoir:warning-circle" size="18" />
+      <p>{{ error }}</p>
     </div>
   </div>
 </template>
@@ -144,6 +150,15 @@ const inputType = computed(() => {
       font-size: to-rem(18);
     }
 
+    &-is-error {
+      border-color: $error-color;
+
+      &:focus {
+        border-color: $error-color;
+        outline-color: $error-color;
+      }
+    }
+
     &--with-right-icon {
       padding-right: spacing(16);
 
@@ -184,5 +199,13 @@ const inputType = computed(() => {
       left: spacing(7.5);
     }
   }
+}
+
+.input-error {
+  display: flex;
+  align-items: center;
+  gap: spacing(3);
+  color: $error-color;
+  margin-top: spacing(1);
 }
 </style>
