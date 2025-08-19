@@ -208,3 +208,17 @@ export const categories = [
   "Heartfelt",
   "Mystery",
 ];
+
+export const allCategories = [
+  "All",
+  "Comedy",
+  "Romance",
+  "Horror",
+  "Adventure",
+  "Fiction",
+  "Fantasy",
+  "Heartfelt",
+  "Mystery",
+];
+
+export const sortByOptions = ["Newest", "Popular", "A - Z", "Z - A"];
