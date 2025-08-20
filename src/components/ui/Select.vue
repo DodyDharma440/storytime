@@ -26,6 +26,32 @@ const selectedLabel = computed(() => {
 const search = ref(selectedLabel.value ?? "");
 const isSearched = ref(false);
 const isOpen = ref(false);
+const highlightedIndex = ref(-1);
+
+const handleHighlight = (type: "inc" | "dec") => {
+  switch (type) {
+    case "inc":
+      if (highlightedIndex.value === filteredOptions.value.length - 1) {
+        highlightedIndex.value = 0;
+      } else {
+        highlightedIndex.value++;
+      }
+      break;
+    case "dec":
+      if (highlightedIndex.value === 0) {
+        highlightedIndex.value = filteredOptions.value.length - 1;
+      } else {
+        highlightedIndex.value--;
+      }
+      break;
+  }
+};
+
+const handleEnter = () => {
+  model.value = filteredOptions.value[highlightedIndex.value].value;
+  isOpen.value = false;
+  inputRef.value?.blur();
+};
 
 const filteredOptions = computed(() => {
   return props.options.filter((opt) => {
@@ -37,6 +63,34 @@ const filteredOptions = computed(() => {
 });
 
 const menuRef = useTemplateRef("select-input");
+const inputRef = useTemplateRef("input-field");
+
+const dropdownPosStyle: Ref<Record<string, any>> = ref({});
+
+const handleDropdownPosition = () => {
+  if (!menuRef.value) return;
+
+  const rect = menuRef.value.getBoundingClientRect();
+  const viewportHeight = window.innerHeight;
+  const spaceBelow = viewportHeight - rect.bottom;
+  const spaceAbove = rect.top;
+
+  const dropdownHeight = 400;
+
+  if (spaceBelow < dropdownHeight && spaceAbove > spaceBelow) {
+    // Render di atas
+    dropdownPosStyle.value = {
+      bottom: rect.height + "px",
+      maxHeight: spaceAbove + "px",
+    };
+  } else {
+    // Render di bawah (default)
+    dropdownPosStyle.value = {
+      top: rect.height + "px",
+      maxHeight: spaceBelow + "px",
+    };
+  }
+};
 
 const handleChange = (value: string) => {
   model.value = value;
@@ -46,17 +100,45 @@ const handleChange = (value: string) => {
 const handleChangeSearch = (e: Event) => {
   isSearched.value = true;
   search.value = (e.target as HTMLInputElement).value;
+  highlightedIndex.value = -1;
 };
 
 watch(model, () => {
   search.value = selectedLabel.value ?? "";
+  highlightedIndex.value = -1;
 });
 
-useClickOutside(menuRef, () => {
+watch(highlightedIndex, (newIndex) => {
+  nextTick(() => {
+    const el = document.querySelector(
+      `.select__dropdown-item[data-index="${newIndex}"]`
+    ) as HTMLElement | null;
+    el?.scrollIntoView({
+      behavior: "smooth",
+      block: "nearest",
+      inline: "nearest",
+    });
+  });
+});
+
+watch(isOpen, (val) => {
+  if (val) {
+    nextTick(handleDropdownPosition);
+  }
+});
+
+const handleClickOutside = () => {
   isOpen.value = false;
   search.value = model.value ?? "";
   isSearched.value = false;
-});
+  inputRef.value?.blur();
+  highlightedIndex.value = -1;
+};
+
+window.addEventListener("resize", handleDropdownPosition);
+window.addEventListener("scroll", handleDropdownPosition);
+
+useClickOutside(menuRef, handleClickOutside);
 </script>
 
 <template>
@@ -72,25 +154,36 @@ useClickOutside(menuRef, () => {
         <input
           v-bind="$attrs"
           :id="id"
+          ref="input-field"
           :value="search"
           :class="slotProps.className"
           :placeholder="placeholder"
           @input="handleChangeSearch"
           @focus="isOpen = true"
+          @keydown.arrow-down="handleHighlight('inc')"
+          @keydown.arrow-up="handleHighlight('dec')"
+          @keydown.enter="handleEnter"
+          @keydown.esc="handleClickOutside"
         />
         <Transition name="select__dropdown-transition">
-          <ul v-if="isOpen" class="select__dropdown">
-            <li
-              v-for="option in filteredOptions"
-              :key="option.value"
-              class="select__dropdown-item"
-              :class="{
-                'select__dropdown-item--active': option.value === model,
-              }"
-              @click="handleChange(option.value)"
-            >
-              {{ option.label }}
-            </li>
+          <ul v-if="isOpen" class="select__dropdown" :style="dropdownPosStyle">
+            <template v-if="filteredOptions.length">
+              <li
+                v-for="(option, index) in filteredOptions"
+                :key="option.value"
+                class="select__dropdown-item"
+                :class="{
+                  'select__dropdown-item--highlight':
+                    index === highlightedIndex && option.value !== model,
+                  'select__dropdown-item--active': option.value === model,
+                }"
+                :data-index="index"
+                @click="handleChange(option.value)"
+              >
+                {{ option.label }}
+              </li>
+            </template>
+            <div v-else class="select__dropdown-empty">No options</div>
           </ul>
         </Transition>
       </div>
@@ -102,7 +195,6 @@ useClickOutside(menuRef, () => {
 .select {
   &__dropdown {
     position: absolute;
-    top: 100%;
     left: 0;
     right: 0;
     max-height: 400px;
@@ -111,6 +203,7 @@ useClickOutside(menuRef, () => {
     margin-top: spacing(2);
     box-shadow: 0 0 5px 1px #00000021;
     overflow: auto;
+    z-index: $dropdown-z-index;
 
     &-transition-enter-active,
     &-transition-leave-active {
@@ -139,6 +232,15 @@ useClickOutside(menuRef, () => {
           background-color: rgba($color: $primary-color, $alpha: 0.9);
         }
       }
+
+      &--highlight {
+        background-color: rgba($color: #000000, $alpha: 0.2);
+      }
+    }
+
+    &-empty {
+      padding: spacing(4);
+      text-align: center;
     }
   }
 }
