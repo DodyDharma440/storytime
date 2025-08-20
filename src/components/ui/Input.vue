@@ -34,6 +34,18 @@ const inputType = computed(() => {
   }
   return props.type;
 });
+
+const inputClass = computed(() => {
+  return [
+    "input__field",
+    {
+      "input__field--with-left-icon": slots.leftIcon,
+      "input__field--with-right-icon": slots.rightIcon,
+      "input__field-is-error": !!props.error,
+      "input__field-textarea": inputType.value === "textarea",
+    },
+  ];
+});
 </script>
 
 <template>
@@ -55,20 +67,23 @@ const inputType = computed(() => {
         <slot name="leftIcon" />
       </div>
 
-      <component
-        :is="type === 'textarea' ? 'textarea' : 'input'"
+      <textarea
+        v-if="inputType === 'textarea'"
         :id="id"
         v-bind="$attrs"
         v-model="model"
-        class="input__field"
-        :class="{
-          'input__field--with-left-icon': slots.leftIcon,
-          'input__field--with-right-icon': slots.rightIcon,
-          'input__field-is-error': !!error,
-          'input__field-textarea': type === 'textarea',
-        }"
-        :type="inputType === 'textarea' ? undefined : inputType"
+        :class="inputClass"
+        :type="inputType"
       />
+      <input
+        v-else
+        :id="id"
+        v-bind="$attrs"
+        v-model="model"
+        :class="inputClass"
+        :type="inputType"
+      />
+
       <div
         v-if="slots.rightIcon || type === 'password'"
         class="input__right-icon"
