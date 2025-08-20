@@ -6,7 +6,7 @@ import type {
   IRegisterForm,
 } from "~/interfaces/auth";
 
-import HttpFactory from "./factory";
+import HttpFactory from "../factory";
 
 class AuthRepository extends HttpFactory implements IAuthRepository {
   async login(data: ILoginForm): Promise<IAuthResponse> {

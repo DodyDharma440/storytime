@@ -1,6 +1,6 @@
 import type { $Fetch, FetchOptions } from "ofetch";
 
-import AuthRepository from "~/repositories/authRepository";
+import AuthRepository from "~/repositories/modules/auth";
 
 interface IApiInstance {
   auth: AuthRepository;
