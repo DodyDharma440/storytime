@@ -16,6 +16,11 @@ export default defineNuxtConfig({
   icon: {
     mode: "svg",
   },
+  runtimeConfig: {
+    public: {
+      API_BASE_URL: process.env.NUXT_PUBLIC_API_BASE_URL,
+    },
+  },
   vite: {
     css: {
       preprocessorOptions: {

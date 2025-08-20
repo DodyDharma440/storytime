@@ -16,11 +16,22 @@ const schema = yup.object<ILoginForm>({
   password: yup.string().required("Password should not be empty"),
 });
 
+const { $api } = useNuxtApp();
+
 const { handleSubmit, defineField, errors } = useForm<ILoginForm>({
   validationSchema: schema,
 });
 
-const submitHandler = handleSubmit(() => {});
+const submitHandler = handleSubmit(async (values) => {
+  try {
+    const res = await $api.auth.login(values);
+    // eslint-disable-next-line no-console
+    console.log("🚀 ~ res:", res);
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.log("🚀 ~ error:", error);
+  }
+});
 
 const [email, emailAttrs] = defineField("email");
 const [password, passwordAttrs] = defineField("password");
