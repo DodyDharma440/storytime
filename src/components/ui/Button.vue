@@ -3,11 +3,14 @@ import type { ButtonHTMLAttributes } from "vue";
 
 import { NuxtLink } from "#components";
 
+import LoadingSpinner from "~/assets/icons/LoadingSpinner.vue";
+
 export type ButtonVariant = "solid" | "outline";
 
 export interface ButtonProps extends /* @vue-ignore */ ButtonHTMLAttributes {
   variant?: ButtonVariant;
   isLoading?: boolean;
+  disabledLoading?: boolean;
   loaderPosition?: "left" | "right";
   href?: string;
 }
@@ -16,6 +19,7 @@ withDefaults(defineProps<ButtonProps>(), {
   variant: "solid",
   loaderPosition: "left",
   href: undefined,
+  disabledLoading: true,
 });
 </script>
 
@@ -28,7 +32,12 @@ withDefaults(defineProps<ButtonProps>(), {
       'btn--primary': variant === 'solid',
       'btn--primary-outline': variant === 'outline',
     }"
+    :disabled="isLoading && disabledLoading ? true : disabled"
   >
+    <LoadingSpinner
+      v-if="isLoading && loaderPosition === 'left'"
+      class="btn__loader"
+    />
     <slot />
   </component>
 </template>
@@ -51,6 +60,12 @@ withDefaults(defineProps<ButtonProps>(), {
   @include min-lg {
     font-size: to-rem(24);
     padding: spacing(3.5) spacing(7.5);
+  }
+
+  &__loader {
+    width: 30px;
+    height: 30px;
+    margin-right: spacing(2);
   }
 
   &:active {
