@@ -5,6 +5,7 @@ type FormType = "login" | "register";
 
 interface FormSubmitterProps {
   formType: FormType;
+  isLoading?: boolean;
 }
 
 const buttonLabels: Record<FormType, string> = {
@@ -35,9 +36,14 @@ const navContent = computed(() => navContents[props.formType]);
 
 <template>
   <div class="form-submitter">
-    <UiButton class="form-submitter__button" type="submit">
+    <UiButton
+      class="form-submitter__button"
+      type="submit"
+      :is-loading="isLoading"
+    >
       {{ buttonLabel }}
     </UiButton>
+
     <div class="form-submitter__nav">
       <p>{{ navContent.description }}</p>
       <NuxtLink class="form-submitter__nav-link" :href="navContent.href">

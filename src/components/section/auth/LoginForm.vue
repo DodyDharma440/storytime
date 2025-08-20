@@ -22,15 +22,12 @@ const { handleSubmit, defineField, errors } = useForm<ILoginForm>({
   validationSchema: schema,
 });
 
-const submitHandler = handleSubmit(async (values) => {
-  try {
-    const res = await $api.auth.login(values);
-    // eslint-disable-next-line no-console
-    console.log("🚀 ~ res:", res);
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.log("🚀 ~ error:", error);
-  }
+const { isLoading, mutate } = useMutation({
+  mutationFn: (data: ILoginForm) => $api.auth.login(data),
+});
+
+const submitHandler = handleSubmit((values) => {
+  mutate(values);
 });
 
 const [email, emailAttrs] = defineField("email");
@@ -65,7 +62,7 @@ const [password, passwordAttrs] = defineField("password");
               :error="errors.password"
             />
           </div>
-          <AuthFormSubmitter form-type="login" />
+          <AuthFormSubmitter form-type="login" :is-loading="isLoading" />
         </form>
       </AuthFormWrapper>
     </div>
