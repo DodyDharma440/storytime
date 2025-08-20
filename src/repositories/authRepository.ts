@@ -1,5 +1,6 @@
 import type { ApiResponse } from "~/interfaces/api";
 import type {
+  IAuthRepository,
   IAuthResponse,
   ILoginForm,
   IRegisterForm,
@@ -7,16 +8,16 @@ import type {
 
 import HttpFactory from "./factory";
 
-class AuthRepository extends HttpFactory {
-  async login(data: ILoginForm) {
-    return await this.call<IAuthResponse>(`/login`, "POST", data);
+class AuthRepository extends HttpFactory implements IAuthRepository {
+  async login(data: ILoginForm): Promise<IAuthResponse> {
+    return await this.call(`/login`, "POST", data);
   }
 
-  async register(data: IRegisterForm) {
-    return await this.call<IAuthResponse>(`/register`, "POST", data);
+  async register(data: IRegisterForm): Promise<IAuthResponse> {
+    return await this.call(`/register`, "POST", data);
   }
 
-  async logout() {
+  async logout(): Promise<ApiResponse<any>> {
     return await this.call<ApiResponse<any>>(`/logout`, "DELETE");
   }
 }

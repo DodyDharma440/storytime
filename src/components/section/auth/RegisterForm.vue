@@ -26,14 +26,23 @@ const schema = yup.object({
     .matches(/^[^\s]+$/, "Password must not contain spaces"),
   confirmPassword: yup
     .string()
+    .required("Confirm Password should not be empty")
     .oneOf([yup.ref("password")], "Confirm password must match to password"),
 });
+
+const { $api } = useNuxtApp();
 
 const { handleSubmit, defineField, errors } = useForm<IRegisterForm>({
   validationSchema: schema,
 });
 
-const submitHandler = handleSubmit(() => {});
+const { isLoading, mutate } = useMutation({
+  mutationFn: (data: IRegisterForm) => $api.auth.register(data),
+});
+
+const submitHandler = handleSubmit((values) => {
+  mutate(values);
+});
 
 const [name, nameAttrs] = defineField("name");
 const [email, emailAttrs] = defineField("email");
@@ -89,7 +98,7 @@ const [confirmPassword, confirmPasswordAttrs] = defineField("confirmPassword");
             autocomplete="new-password"
           />
         </div>
-        <AuthFormSubmitter form-type="register" />
+        <AuthFormSubmitter form-type="register" :is-loading="isLoading" />
       </form>
     </AuthFormWrapper>
   </div>

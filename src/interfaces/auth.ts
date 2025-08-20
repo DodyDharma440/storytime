@@ -17,3 +17,9 @@ export interface IAuthResponse extends Omit<ApiResponse<any>, "data"> {
   user: IUser;
   token: string;
 }
+
+export interface IAuthRepository {
+  login(data: ILoginForm): Promise<IAuthResponse>;
+  register(data: IRegisterForm): Promise<IAuthResponse>;
+  logout(): Promise<ApiResponse<any>>;
+}
