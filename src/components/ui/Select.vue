@@ -47,7 +47,8 @@ const handleHighlight = (type: "inc" | "dec") => {
   }
 };
 
-const handleEnter = () => {
+const handleEnter = (e: Event) => {
+  e.preventDefault();
   model.value = filteredOptions.value[highlightedIndex.value].value;
   isOpen.value = false;
   inputRef.value?.blur();
@@ -129,14 +130,21 @@ watch(isOpen, (val) => {
 
 const handleClickOutside = () => {
   isOpen.value = false;
-  search.value = model.value ?? "";
+  search.value = selectedLabel.value ?? "";
   isSearched.value = false;
   inputRef.value?.blur();
   highlightedIndex.value = -1;
 };
 
-window.addEventListener("resize", handleDropdownPosition);
-window.addEventListener("scroll", handleDropdownPosition);
+onMounted(() => {
+  window.addEventListener("resize", handleDropdownPosition);
+  window.addEventListener("scroll", handleDropdownPosition);
+});
+
+onUnmounted(() => {
+  window.removeEventListener("resize", handleDropdownPosition);
+  window.removeEventListener("scroll", handleDropdownPosition);
+});
 
 useClickOutside(menuRef, handleClickOutside);
 </script>
@@ -158,6 +166,7 @@ useClickOutside(menuRef, handleClickOutside);
           :value="search"
           :class="slotProps.className"
           :placeholder="placeholder"
+          autocomplete="off"
           @input="handleChangeSearch"
           @focus="isOpen = true"
           @keydown.arrow-down="handleHighlight('inc')"
