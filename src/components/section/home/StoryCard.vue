@@ -27,6 +27,7 @@ defineProps<StoryCardProps>();
         :src="story.image"
         class="story-card__thumbnail-image"
         :alt="`${story.title} thumb`"
+        loading="lazy"
       />
     </div>
     <div>
