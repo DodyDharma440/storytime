@@ -8,6 +8,7 @@ import LoadingSpinner from "~/assets/icons/LoadingSpinner.vue";
 export type ButtonVariant = "solid" | "outline";
 
 export interface ButtonProps extends /* @vue-ignore */ ButtonHTMLAttributes {
+  is?: any;
   variant?: ButtonVariant;
   isLoading?: boolean;
   disabledLoading?: boolean;
@@ -20,12 +21,13 @@ withDefaults(defineProps<ButtonProps>(), {
   loaderPosition: "left",
   href: undefined,
   disabledLoading: true,
+  is: "button",
 });
 </script>
 
 <template>
   <component
-    :is="href ? NuxtLink : 'button'"
+    :is="href ? NuxtLink : is ?? 'button'"
     class="btn"
     :href="href"
     :class="{

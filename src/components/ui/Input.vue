@@ -6,7 +6,7 @@ export interface InputProps extends /* @vue-ignore */ InputHTMLAttributes {
   label?: string;
   srOnlyLabel?: boolean;
   id?: string;
-  type?: InputTypeHTMLAttribute;
+  type?: InputTypeHTMLAttribute | "textarea";
   error?: string;
 }
 
@@ -55,7 +55,8 @@ const inputType = computed(() => {
         <slot name="leftIcon" />
       </div>
 
-      <input
+      <component
+        :is="type === 'textarea' ? 'textarea' : 'input'"
         :id="id"
         v-bind="$attrs"
         v-model="model"
@@ -64,8 +65,9 @@ const inputType = computed(() => {
           'input__field--with-left-icon': slots.leftIcon,
           'input__field--with-right-icon': slots.rightIcon,
           'input__field-is-error': !!error,
+          'input__field-textarea': type === 'textarea',
         }"
-        :type="inputType"
+        :type="inputType === 'textarea' ? undefined : inputType"
       />
       <div
         v-if="slots.rightIcon || type === 'password'"
@@ -141,6 +143,11 @@ const inputType = computed(() => {
       outline-color: $primary-color;
     }
 
+    &:disabled {
+      cursor: not-allowed;
+      background-color: #eeeeee;
+    }
+
     @include min-lg {
       padding-top: spacing(6);
       padding-bottom: spacing(6);
@@ -156,6 +163,10 @@ const inputType = computed(() => {
         border-color: $error-color;
         outline-color: $error-color;
       }
+    }
+
+    &-textarea {
+      min-height: 120px;
     }
 
     &--with-right-icon {

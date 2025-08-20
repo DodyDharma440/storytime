@@ -2,6 +2,14 @@
 import UiAvatar from "~/components/ui/Avatar.vue";
 import UiButton from "~/components/ui/Button.vue";
 import { articles } from "~/constants/stories";
+
+import ModalEditProfile from "./ModalEditProfile.vue";
+
+const isOpen = ref(false);
+
+const handleOpen = () => {
+  isOpen.value = true;
+};
 </script>
 
 <template>
@@ -17,8 +25,10 @@ import { articles } from "~/constants/stories";
           for new stories and adventures.
         </p>
       </div>
-      <UiButton> Edit Profile </UiButton>
+      <UiButton @click="handleOpen"> Edit Profile </UiButton>
     </div>
+
+    <ModalEditProfile v-model="isOpen" />
   </div>
 </template>
 
