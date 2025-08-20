@@ -91,15 +91,32 @@ const handleClickPage = (pageItem: string | number, index: number) => {
 .pagination {
   display: flex;
   align-items: center;
-  gap: spacing(5);
+  justify-content: center;
+  gap: spacing(3);
+  flex-wrap: wrap;
+
+  @include min-md {
+    flex-wrap: nowrap;
+    gap: spacing(5);
+  }
 
   &__button {
-    font-size: to-rem(28);
+    font-size: to-rem(20);
     font-weight: 700;
-    padding: spacing(4) spacing(7.5);
+    padding: spacing(3) spacing(6.5);
     border-radius: spacing(2);
     background-color: $primary-color-light;
     transition: all 0.3s;
+
+    @include min-md {
+      font-size: to-rem(24);
+      padding: spacing(4) spacing(7.5);
+    }
+
+    @include min-xl {
+      font-size: to-rem(28);
+    }
+
     &--active {
       background-color: $primary-color;
       color: #fff;
