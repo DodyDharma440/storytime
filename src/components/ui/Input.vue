@@ -1,18 +1,24 @@
 <script setup lang="ts">
 import type { InputHTMLAttributes, InputTypeHTMLAttribute } from "vue";
 
-export interface InputProps extends /* @vue-ignore */ InputHTMLAttributes {
+export interface BaseInputProps {
   classNames?: Partial<Record<"wrapper" | "leftIcon" | "rightIcon", string>>;
   label?: string;
   srOnlyLabel?: boolean;
   id?: string;
-  type?: InputTypeHTMLAttribute | "textarea";
   error?: string;
 }
 
-type InputSlots = {
+interface InputProps
+  extends /* @vue-ignore */ InputHTMLAttributes,
+    BaseInputProps {
+  type?: InputTypeHTMLAttribute | "textarea";
+}
+
+export type InputSlots = {
   leftIcon?(): any;
   rightIcon?(): any;
+  field?(props: { className: any }): any;
 };
 
 defineOptions({
@@ -67,22 +73,28 @@ const inputClass = computed(() => {
         <slot name="leftIcon" />
       </div>
 
-      <textarea
-        v-if="inputType === 'textarea'"
-        :id="id"
-        v-bind="$attrs"
-        v-model="model"
-        :class="inputClass"
-        :type="inputType"
-      />
-      <input
-        v-else
-        :id="id"
-        v-bind="$attrs"
-        v-model="model"
-        :class="inputClass"
-        :type="inputType"
-      />
+      <template v-if="slots.field">
+        <slot name="field" :class-name="inputClass" />
+      </template>
+
+      <template v-else>
+        <textarea
+          v-if="inputType === 'textarea'"
+          :id="id"
+          v-bind="$attrs"
+          v-model="model"
+          :class="inputClass"
+          :type="inputType"
+        />
+        <input
+          v-else
+          :id="id"
+          v-bind="$attrs"
+          v-model="model"
+          :class="inputClass"
+          :type="inputType"
+        />
+      </template>
 
       <div
         v-if="slots.rightIcon || type === 'password'"
@@ -111,7 +123,7 @@ const inputClass = computed(() => {
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @mixin icon-style {
   position: absolute;
   top: 50%;
