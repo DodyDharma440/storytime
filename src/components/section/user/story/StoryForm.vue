@@ -29,7 +29,6 @@ const editor = ref("");
     </div>
 
     <div class="story-form__fields">
-      {{ editor }}
       <UiInput label="Title" placeholder="Enter a story title" />
       <UiSelect
         v-model="select"
@@ -37,7 +36,12 @@ const editor = ref("");
         placeholder="Select category"
         :options="categoryOptions"
       />
-      <UiTiptapEditor v-model="editor" />
+      <UiTiptapEditor
+        v-model="editor"
+        placeholder="Enter a content here"
+        label="Content"
+        @empty="editor = ''"
+      />
     </div>
 
     <div class="story-form__action">
