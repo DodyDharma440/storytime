@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import HeroSection from "~/components/section/home/HeroSection.vue";
 import StoriesCarousel from "~/components/section/home/StoriesCarousel.vue";
-import StoriesGrid from "~/components/section/home/StoriesGrid.vue";
+import StoriesList from "~/components/section/home/StoriesList.vue";
 import StoryCategories from "~/components/section/home/StoryCategories.vue";
 import { articles } from "~/constants/stories";
 
@@ -18,7 +18,9 @@ const latestStories = computed(() => {
   });
   return sorted.slice(0, 5);
 });
-const romanceStories = computed(() => getStoriesByCategory("romance"));
+const romanceStories = computed(() =>
+  getStoriesByCategory("romance").slice(0, 3)
+);
 
 const comedyStories = computed(() => {
   return getStoriesByCategory("comedy").slice(0, 3);
@@ -37,22 +39,25 @@ const horrorStories = computed(() => {
       :stories="latestStories"
     />
 
-    <StoriesGrid
+    <StoriesList
       title="Comedy"
       explore-href="/story?category=Comedy"
       :stories="comedyStories"
+      layout="grid"
     />
 
-    <StoriesCarousel
+    <StoriesList
       title="Romance"
       explore-href="/story?category=Romance"
       :stories="romanceStories"
+      layout="flex"
     />
 
-    <StoriesGrid
+    <StoriesList
       title="Horror"
       explore-href="/story?category=Horror"
       :stories="horrorStories"
+      layout="grid"
     />
 
     <StoryCategories />

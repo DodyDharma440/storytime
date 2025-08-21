@@ -9,9 +9,12 @@ interface StoryCardProps {
   story: IStory;
   isHighlight?: boolean;
   isGrid?: boolean;
+  withCategory?: boolean;
 }
 
-defineProps<StoryCardProps>();
+withDefaults(defineProps<StoryCardProps>(), {
+  withCategory: true,
+});
 </script>
 
 <template>
@@ -45,7 +48,7 @@ defineProps<StoryCardProps>();
 
         <div class="story-card__info-subinfo">
           <p>{{ dayjs(story.createdDate).format("DD MMMM YYYY") }}</p>
-          <UiTag>
+          <UiTag v-if="withCategory">
             <span>{{ story.category }}</span>
           </UiTag>
         </div>

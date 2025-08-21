@@ -7,7 +7,7 @@ import type { BreadcrumbItem } from "~/interfaces/ui";
 
 const breadcrumbItems: BreadcrumbItem[] = [
   { label: "Home", href: "/" },
-  { label: "All Story", href: "/story", isActive: true },
+  { label: "All Story", href: "/stories", isActive: true },
 ];
 
 const route = useRoute();
@@ -29,7 +29,7 @@ storiesFilter.$subscribe((mutation, state) => {
     queryParams.append("search", search as string);
   }
 
-  navigateTo(`/story?${queryParams}`);
+  navigateTo(`/stories?${queryParams}`);
   window.scrollTo(0, 0);
 });
 
@@ -48,7 +48,7 @@ if (!page || !sort_by) {
     queryParams.append("search", search as string);
   }
 
-  navigateTo(`/story?${queryParams}`, { replace: true });
+  navigateTo(`/stories?${queryParams}`, { replace: true });
 }
 
 // const fetchParams = new URLSearchParams({
