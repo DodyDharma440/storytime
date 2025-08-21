@@ -2,6 +2,7 @@
 import UiButton from "~/components/ui/Button.vue";
 import UiInput from "~/components/ui/Input.vue";
 import UiSelect from "~/components/ui/Select.vue";
+import UiTiptapEditor from "~/components/ui/TiptapEditor.vue";
 import { allCategories } from "~/constants/stories";
 import type { IStory } from "~/interfaces/story";
 
@@ -13,6 +14,7 @@ interface StoryFormProps {
 
 defineProps<StoryFormProps>();
 const select = ref("All");
+const editor = ref("");
 </script>
 
 <template>
@@ -27,6 +29,7 @@ const select = ref("All");
     </div>
 
     <div class="story-form__fields">
+      {{ editor }}
       <UiInput label="Title" placeholder="Enter a story title" />
       <UiSelect
         v-model="select"
@@ -34,6 +37,7 @@ const select = ref("All");
         placeholder="Select category"
         :options="categoryOptions"
       />
+      <UiTiptapEditor v-model="editor" />
     </div>
 
     <div class="story-form__action">

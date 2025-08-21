@@ -30,6 +30,8 @@ defineProps<SectionTitleProps>();
 
 <style lang="scss" scoped>
 .section-title {
+  font-weight: 400;
+
   &__content {
     display: flex;
     align-items: center;
