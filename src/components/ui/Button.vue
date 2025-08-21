@@ -14,6 +14,7 @@ export interface ButtonProps extends /* @vue-ignore */ ButtonHTMLAttributes {
   disabledLoading?: boolean;
   loaderPosition?: "left" | "right";
   href?: string;
+  disabled?: boolean;
 }
 
 withDefaults(defineProps<ButtonProps>(), {
@@ -41,6 +42,10 @@ withDefaults(defineProps<ButtonProps>(), {
       class="btn__loader"
     />
     <slot />
+    <LoadingSpinner
+      v-if="isLoading && loaderPosition === 'right'"
+      class="btn__loader"
+    />
   </component>
 </template>
 
@@ -57,6 +62,7 @@ withDefaults(defineProps<ButtonProps>(), {
   border-radius: spacing(2);
   border: 2px solid;
   border-color: transparent;
+  gap: spacing(2);
   transition: background-color 0.3s, transform 0.3s;
 
   @include min-lg {
