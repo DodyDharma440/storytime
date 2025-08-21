@@ -387,6 +387,14 @@ onBeforeUnmount(() => {
       * {
         all: revert;
       }
+
+      .is-editor-empty:first-child:before {
+        content: attr(data-placeholder);
+        opacity: 0.8;
+        float: left;
+        height: 0;
+        pointer-events: none;
+      }
     }
   }
 }
