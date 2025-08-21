@@ -1,11 +1,17 @@
 <script setup lang="ts">
 import UiButton from "~/components/ui/Button.vue";
+import UiModal from "~/components/ui/Modal.vue";
 import UiPagination from "~/components/ui/Pagination.vue";
 import { articles } from "~/constants/stories";
 
 import StoryCard from "../../home/StoryCard.vue";
 
 const page = ref(1);
+const isOpenDelete: Ref<string | null> = ref(null);
+
+const handleCloseDelete = () => {
+  isOpenDelete.value = null;
+};
 </script>
 
 <template>
@@ -28,7 +34,11 @@ const page = ref(1);
             class="user-stories__list-item"
           >
             <NuxtLink :href="`/story/some-slug`">
-              <StoryCard :story="story" />
+              <StoryCard
+                :story="story"
+                is-editable
+                @delete="(id) => (isOpenDelete = id)"
+              />
             </NuxtLink>
           </div>
         </div>
@@ -36,6 +46,20 @@ const page = ref(1);
         <div class="user-stories__pagination">
           <UiPagination v-model="page" :total="articles.length" :per-page="4" />
         </div>
+
+        <UiModal :is-open="!!isOpenDelete" @close="handleCloseDelete">
+          <div class="user-stories__delete-modal">
+            <h3 class="section-title">Delete Story</h3>
+            <p>Are you sure want to delete this story?</p>
+
+            <div class="user-stories__delete-modal-actions">
+              <UiButton variant="outline" @click="handleCloseDelete"
+                >Cancel</UiButton
+              >
+              <UiButton>Delete</UiButton>
+            </div>
+          </div>
+        </UiModal>
       </div>
     </div>
   </div>
@@ -131,6 +155,27 @@ const page = ref(1);
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  &__delete-modal {
+    padding: spacing(6);
+    display: flex;
+    flex-direction: column;
+    gap: spacing(5);
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    &-actions {
+      display: flex;
+      align-items: center;
+      gap: spacing(8);
+      margin-top: spacing(2.5);
+
+      @include min-lg {
+        gap: spacing(11);
+      }
+    }
   }
 }
 </style>

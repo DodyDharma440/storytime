@@ -1,13 +1,20 @@
 <script setup lang="ts">
 interface ModalProps {
   withCloseButton?: boolean;
+  isOpen?: boolean;
+}
+
+interface ModalEmits {
+  (e: "close"): void;
 }
 
 defineProps<ModalProps>();
-const isOpen = defineModel<boolean>({ default: false });
+const emit = defineEmits<ModalEmits>();
+const isOpenModel = defineModel<boolean>({ default: false });
 
 const handleClose = () => {
-  isOpen.value = false;
+  isOpenModel.value = false;
+  emit("close");
 };
 </script>
 
@@ -15,10 +22,14 @@ const handleClose = () => {
   <Teleport to="body">
     <div class="modal">
       <Transition name="modal__overlay-transition">
-        <div v-if="isOpen" class="modal__overlay" @click="handleClose"></div>
+        <div
+          v-if="isOpen || isOpenModel"
+          class="modal__overlay"
+          @click="handleClose"
+        ></div>
       </Transition>
       <Transition name="modal__body-transition">
-        <div v-if="isOpen" class="modal__body">
+        <div v-if="isOpen || isOpenModel" class="modal__body">
           <div v-if="withCloseButton" class="modal__body-header">
             <div></div>
             <button class="modal__body-close-btn" @click="handleClose">

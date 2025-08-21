@@ -10,11 +10,28 @@ interface StoryCardProps {
   isHighlight?: boolean;
   isGrid?: boolean;
   withCategory?: boolean;
+  isEditable?: boolean;
 }
+
+interface StoryCardEmits {
+  (e: "delete", id: string): void;
+}
+
+const emit = defineEmits<StoryCardEmits>();
 
 withDefaults(defineProps<StoryCardProps>(), {
   withCategory: true,
 });
+
+const handleEdit = (e: Event, slug: string) => {
+  e.preventDefault();
+  navigateTo(`/dashboard/story/${slug}/edit`);
+};
+
+const handleDelete = (e: Event, id: string) => {
+  e.preventDefault();
+  emit("delete", id);
+};
 </script>
 
 <template>
@@ -32,13 +49,30 @@ withDefaults(defineProps<StoryCardProps>(), {
         :alt="`${story.title} thumb`"
         loading="lazy"
       />
+
+      <div v-if="isEditable" class="story-card__actions">
+        <button
+          type="button"
+          class="story-card__actions-button"
+          @click="(e) => handleEdit(e, 'some-id')"
+        >
+          <Icon name="mage:edit" />
+        </button>
+        <button
+          type="button"
+          class="story-card__actions-button"
+          @click="(e) => handleDelete(e, 'some-id')"
+        >
+          <Icon name="weui:delete-outlined" />
+        </button>
+      </div>
     </div>
     <div>
       <h6 class="story-card__title">{{ story.title }}</h6>
       <p class="story-card__description">{{ story.shortContent }}</p>
 
       <div class="story-card__info">
-        <div class="story-card__info-author">
+        <div v-if="!isEditable" class="story-card__info-author">
           <UiAvatar :src="story.authorAvatar" />
 
           <p class="story-card__info-author-name">
@@ -46,7 +80,10 @@ withDefaults(defineProps<StoryCardProps>(), {
           </p>
         </div>
 
-        <div class="story-card__info-subinfo">
+        <div
+          class="story-card__info-subinfo"
+          :class="{ 'story-card__info-subinfo--editable': isEditable }"
+        >
           <p>{{ dayjs(story.createdDate).format("DD MMMM YYYY") }}</p>
           <UiTag v-if="withCategory">
             <span>{{ story.category }}</span>
@@ -94,6 +131,32 @@ withDefaults(defineProps<StoryCardProps>(), {
       width: 100%;
       height: 100%;
       transition: transform 0.4s;
+    }
+  }
+
+  &__actions {
+    position: absolute;
+    right: spacing(10);
+    bottom: spacing(10);
+    display: flex;
+    align-items: center;
+    gap: spacing(7.5);
+
+    &-button {
+      width: 65px;
+      height: 65px;
+      border-radius: 50%;
+      background-color: $primary-color;
+      transition: all 0.3s;
+      color: #fff;
+      font-size: to-rem(52);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &:hover {
+        background-color: rgba($color: $primary-color, $alpha: 0.9);
+      }
     }
   }
 
@@ -146,6 +209,13 @@ withDefaults(defineProps<StoryCardProps>(), {
         align-items: center;
         flex-direction: row;
         gap: spacing(5);
+      }
+
+      &--editable {
+        flex-direction: row;
+        align-items: center;
+        width: 100%;
+        justify-content: space-between;
       }
 
       .tag {
