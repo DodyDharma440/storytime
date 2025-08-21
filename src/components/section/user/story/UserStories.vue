@@ -6,6 +6,8 @@ import { articles } from "~/constants/stories";
 
 import StoryCard from "../../home/StoryCard.vue";
 
+const isEmpty = false;
+
 const page = ref(1);
 const isOpenDelete: Ref<string | null> = ref(null);
 
@@ -27,39 +29,56 @@ const handleCloseDelete = () => {
         <UiButton href="/dashboard/story/create">Write Story</UiButton>
       </div>
       <div class="user-stories__list-grid-item">
-        <div class="user-stories__list">
-          <div
-            v-for="(story, index) in articles.slice(0, 4)"
-            :key="index"
-            class="user-stories__list-item"
-          >
-            <NuxtLink :href="`/story/some-slug`">
-              <StoryCard
-                :story="story"
-                is-editable
-                @delete="(id) => (isOpenDelete = id)"
-              />
-            </NuxtLink>
-          </div>
+        <div v-if="isEmpty" class="user-stories__empty">
+          <h4 class="user-stories__empty-title">No Stories Yet</h4>
+          <p class="user-stories__empty-description">
+            You haven't shared any stories yet. Start your fitness journey
+            today!
+          </p>
+          <NuxtImg
+            class="user-stories__empty-image"
+            src="/images/error/empty.png"
+          />
         </div>
-
-        <div class="user-stories__pagination">
-          <UiPagination v-model="page" :total="articles.length" :per-page="4" />
-        </div>
-
-        <UiModal :is-open="!!isOpenDelete" @close="handleCloseDelete">
-          <div class="user-stories__delete-modal">
-            <h3 class="section-title">Delete Story</h3>
-            <p>Are you sure want to delete this story?</p>
-
-            <div class="user-stories__delete-modal-actions">
-              <UiButton variant="outline" @click="handleCloseDelete"
-                >Cancel</UiButton
-              >
-              <UiButton>Delete</UiButton>
+        <template v-else>
+          <div class="user-stories__list">
+            <div
+              v-for="(story, index) in articles.slice(0, 4)"
+              :key="index"
+              class="user-stories__list-item"
+            >
+              <NuxtLink :href="`/story/some-slug`">
+                <StoryCard
+                  :story="story"
+                  is-editable
+                  @delete="(id) => (isOpenDelete = id)"
+                />
+              </NuxtLink>
             </div>
           </div>
-        </UiModal>
+
+          <div class="user-stories__pagination">
+            <UiPagination
+              v-model="page"
+              :total="articles.length"
+              :per-page="4"
+            />
+          </div>
+
+          <UiModal :is-open="!!isOpenDelete" @close="handleCloseDelete">
+            <div class="user-stories__delete-modal">
+              <h3 class="section-title">Delete Story</h3>
+              <p>Are you sure want to delete this story?</p>
+
+              <div class="user-stories__delete-modal-actions">
+                <UiButton variant="outline" @click="handleCloseDelete"
+                  >Cancel</UiButton
+                >
+                <UiButton>Delete</UiButton>
+              </div>
+            </div>
+          </UiModal>
+        </template>
       </div>
     </div>
   </div>
@@ -175,6 +194,37 @@ const handleCloseDelete = () => {
       @include min-lg {
         gap: spacing(11);
       }
+    }
+  }
+
+  &__empty {
+    max-width: 741px;
+    margin: 0px auto;
+    text-align: center;
+
+    &-title {
+      font-family: "Playfair Display", serif;
+      margin-bottom: spacing(7.5);
+      font-size: to-rem(40);
+      font-weight: 600;
+      @include min-lg {
+        font-size: to-rem(44);
+      }
+    }
+
+    &-description {
+      font-size: to-rem(20);
+      @include min-lg {
+        font-size: to-rem(24);
+      }
+    }
+
+    &-image {
+      margin-top: spacing(15);
+      max-width: 529px;
+      width: 100%;
+      max-height: 100%;
+      object-fit: contain;
     }
   }
 }
