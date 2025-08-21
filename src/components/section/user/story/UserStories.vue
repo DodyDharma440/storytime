@@ -18,7 +18,7 @@ const page = ref(1);
           Share your unique voice with the world – start writing your story
           today!
         </p>
-        <UiButton href="/user/stories/create">Write Story</UiButton>
+        <UiButton href="/dashboard/story/create">Write Story</UiButton>
       </div>
       <div class="user-stories__list-grid-item">
         <div class="user-stories__list">
@@ -27,7 +27,7 @@ const page = ref(1);
             :key="index"
             class="user-stories__list-item"
           >
-            <NuxtLink :href="`/stories/some-slug`">
+            <NuxtLink :href="`/story/some-slug`">
               <StoryCard :story="story" />
             </NuxtLink>
           </div>

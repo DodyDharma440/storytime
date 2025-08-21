@@ -33,25 +33,25 @@ const horrorStories = computed(() => {
     <HeroSection />
     <StoriesCarousel
       title="Latest Story"
-      explore-href="/stories"
+      explore-href="/story"
       :stories="latestStories"
     />
 
     <StoriesGrid
       title="Comedy"
-      explore-href="/stories?category=Comedy"
+      explore-href="/story?category=Comedy"
       :stories="comedyStories"
     />
 
     <StoriesCarousel
       title="Romance"
-      explore-href="/stories?category=Romance"
+      explore-href="/story?category=Romance"
       :stories="romanceStories"
     />
 
     <StoriesGrid
       title="Horror"
-      explore-href="/stories?category=Horror"
+      explore-href="/story?category=Horror"
       :stories="horrorStories"
     />
 

@@ -20,7 +20,7 @@ const editor = ref("");
 <template>
   <div class="container story-form">
     <div class="story-form__header">
-      <NuxtLink href="/user/stories" class="story-form__header-back">
+      <NuxtLink href="/dashboard" class="story-form__header-back">
         <Icon name="formkit:arrowleft" size="40" />
       </NuxtLink>
       <h1 class="story-form__header-title">
@@ -41,7 +41,7 @@ const editor = ref("");
     </div>
 
     <div class="story-form__action">
-      <UiButton variant="outline" href="/user/stories">Cancel</UiButton>
+      <UiButton variant="outline" href="/dashboard">Cancel</UiButton>
       <UiButton>{{ editData ? "Update" : "Post" }} Story</UiButton>
     </div>
   </div>
