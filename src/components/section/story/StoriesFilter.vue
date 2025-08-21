@@ -5,9 +5,10 @@ import { allCategories, sortByOptions } from "~/constants/stories";
 
 import DropdownFilter from "./DropdownFilter.vue";
 
-const storiesFilter = useStoriesFilterStore();
+const route = useRoute();
 
-const searchValue = ref("");
+const storiesFilter = useStoriesFilterStore();
+const searchValue: Ref<string> = ref((route.query.search as string) ?? "");
 
 storiesFilter.$subscribe((mutate, state) => {
   searchValue.value = state.search;
@@ -15,7 +16,8 @@ storiesFilter.$subscribe((mutate, state) => {
 
 const handleSearch = () => {
   storiesFilter.setValue({
-    search: searchValue.value,
+    search: searchValue.value.trim(),
+    page: 1,
   });
 };
 </script>

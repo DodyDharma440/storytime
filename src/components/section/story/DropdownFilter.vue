@@ -5,11 +5,17 @@ interface DropdownFilterProps {
   items: string[];
   label: string;
 }
+
 defineProps<DropdownFilterProps>();
 const model = defineModel<string>();
 
+const storiesFilter = useStoriesFilterStore();
+
 const handleChange = (value: string) => {
   model.value = value;
+  storiesFilter.setValue({
+    page: 1,
+  });
 };
 </script>
 

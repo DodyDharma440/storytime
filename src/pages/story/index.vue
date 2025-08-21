@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { LocationQuery } from "vue-router";
+
 import AllStories from "~/components/section/story/AllStories.vue";
 import StoriesFilter from "~/components/section/story/StoriesFilter.vue";
 import UiBreadcrumb from "~/components/ui/Breadcrumb.vue";
@@ -13,12 +15,12 @@ const breadcrumbItems: BreadcrumbItem[] = [
 const route = useRoute();
 const storiesFilter = useStoriesFilterStore();
 
-storiesFilter.$subscribe((mutation, state) => {
-  const { page, sortBy, category, search } = state;
+const handleGenerateParams = (query: Record<string, string>) => {
+  const { page, sort_by, category, search } = query;
 
   const queryParams = new URLSearchParams({
     page: `${page || "1"}`,
-    sort_by: `${sortBy || sortByOptions[0]}`,
+    sort_by: `${sort_by || sortByOptions[0]}`,
   });
 
   if (category && category !== "All") {
@@ -29,26 +31,16 @@ storiesFilter.$subscribe((mutation, state) => {
     queryParams.append("search", search as string);
   }
 
-  navigateTo(`/stories?${queryParams}`);
-  window.scrollTo(0, 0);
-});
+  return queryParams;
+};
 
-const { page, sort_by, category, search } = route.query;
+const { page, sort_by } = route.query;
 if (!page || !sort_by) {
-  const queryParams = new URLSearchParams({
-    page: `${page || "1"}`,
-    sort_by: `${sort_by || sortByOptions[0]}`,
-  });
+  const queryParams = handleGenerateParams(
+    route.query as Record<string, string>
+  );
 
-  if (category) {
-    queryParams.append("category", category as string);
-  }
-
-  if (search) {
-    queryParams.append("search", search as string);
-  }
-
-  navigateTo(`/stories?${queryParams}`, { replace: true });
+  navigateTo(`/story?${queryParams}`, { replace: true });
 }
 
 // const fetchParams = new URLSearchParams({
@@ -63,12 +55,32 @@ if (!page || !sort_by) {
 // );
 // console.log("success fetching");
 
-storiesFilter.setValue({
-  category: `${category || "All"}`,
-  search: `${search || ""}`,
-  page: Number(page || "1"),
-  sortBy: `${sort_by || sortByOptions[0]}`,
+storiesFilter.$subscribe((mutation, state) => {
+  const { page, sortBy, category, search } = state;
+  const queryParams = handleGenerateParams({
+    page: `${page}`,
+    sort_by: sortBy,
+    category,
+    search,
+  });
+
+  navigateTo(`/story?${queryParams}`);
+  window.scrollTo(0, 0);
 });
+
+const handleSetStore = (query: LocationQuery) => {
+  const { page, sort_by, category, search } = query;
+
+  storiesFilter.setValue({
+    category: `${category || "All"}`,
+    search: `${search || ""}`,
+    page: Number(page || "1"),
+    sortBy: `${sort_by || sortByOptions[0]}`,
+  });
+};
+
+watch(() => route.query, handleSetStore);
+handleSetStore(route.query);
 </script>
 
 <template>
