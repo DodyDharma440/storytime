@@ -1,14 +1,25 @@
 <script setup lang="ts">
+import type { StyleValue } from "vue";
+
 interface DropdownProps {
-  label: string;
+  label?: string;
+  buttonRef?: HTMLElement | null;
+}
+
+interface SlotProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onToggle: () => void;
+  onOpen: () => void;
 }
 
 interface DropdownSlots {
-  default?(a: { isOpen: boolean; onClose: () => void }): any;
+  default?(a: SlotProps): any;
+  button?(p: SlotProps): any;
 }
 
-defineProps<DropdownProps>();
-defineSlots<DropdownSlots>();
+const props = defineProps<DropdownProps>();
+const slots = defineSlots<DropdownSlots>();
 
 const isOpen = ref(false);
 
@@ -16,22 +27,76 @@ const handleToggle = () => {
   isOpen.value = !isOpen.value;
 };
 
+const handleOpen = () => {
+  isOpen.value = true;
+};
+
+const handleClose = () => {
+  isOpen.value = false;
+};
+
 const menuRef = useTemplateRef("dropdown-menu");
+const defaultButtonRef = useTemplateRef("button-ref");
+const menuContentRef = useTemplateRef("dropdown-content");
 
 useClickOutside(menuRef, () => {
   isOpen.value = false;
+});
+
+const dropdownPosition: Ref<StyleValue> = ref({});
+
+watch(isOpen, async (value) => {
+  if (value) {
+    const _buttonRef = props.buttonRef || defaultButtonRef.value;
+    if (!_buttonRef) return;
+
+    await nextTick();
+
+    const rect = _buttonRef.getBoundingClientRect();
+    const screenWidth = window.innerWidth;
+    const menuWidth = menuContentRef.value!.offsetWidth;
+
+    // jika dropdown bakal melewati kanan
+    if (rect.left + menuWidth > screenWidth) {
+      dropdownPosition.value = { right: "0px" };
+    } else {
+      dropdownPosition.value = { left: "0px" };
+    }
+  }
 });
 </script>
 
 <template>
   <div ref="dropdown-menu" class="dropdown">
-    <button class="dropdown__button" @click="handleToggle">
+    <slot
+      name="button"
+      :is-open="isOpen"
+      :on-close="handleClose"
+      :on-open="handleOpen"
+      :on-toggle="handleToggle"
+    />
+    <button
+      v-if="!slots.button"
+      ref="button-ref"
+      class="dropdown__button"
+      @click="handleToggle"
+    >
       <span>{{ label }}</span>
       <Icon name="mdi:chevron-down" size="32" />
     </button>
     <Transition name="fade">
-      <div v-if="isOpen" class="dropdown__content">
-        <slot :is-open="isOpen" :on-close="handleToggle" />
+      <div
+        v-if="isOpen"
+        ref="dropdown-content"
+        class="dropdown__content"
+        :style="dropdownPosition"
+      >
+        <slot
+          :is-open="isOpen"
+          :on-close="handleClose"
+          :on-open="handleOpen"
+          :on-toggle="handleToggle"
+        />
       </div>
     </Transition>
   </div>

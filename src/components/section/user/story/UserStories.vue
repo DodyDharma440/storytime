@@ -1,6 +1,6 @@
 <script setup lang="ts">
+import UiAlertDialog from "~/components/ui/AlertDialog.vue";
 import UiButton from "~/components/ui/Button.vue";
-import UiModal from "~/components/ui/Modal.vue";
 import UiPagination from "~/components/ui/Pagination.vue";
 import { articles } from "~/constants/stories";
 
@@ -65,19 +65,14 @@ const handleCloseDelete = () => {
             />
           </div>
 
-          <UiModal :is-open="!!isOpenDelete" @close="handleCloseDelete">
-            <div class="user-stories__delete-modal">
-              <h3 class="section-title">Delete Story</h3>
-              <p>Are you sure want to delete this story?</p>
-
-              <div class="user-stories__delete-modal-actions">
-                <UiButton variant="outline" @click="handleCloseDelete"
-                  >Cancel</UiButton
-                >
-                <UiButton>Delete</UiButton>
-              </div>
-            </div>
-          </UiModal>
+          <UiAlertDialog
+            :is-open="!!isOpenDelete"
+            title="Delete Story"
+            description="Are you sure want to delete this story?"
+            confirm-button-text="Delete"
+            @close="handleCloseDelete"
+            @confirm="handleCloseDelete"
+          />
         </template>
       </div>
     </div>

@@ -4,6 +4,9 @@ import DefaultLogo from "~/components/layout/default/Logo.vue";
 import UiButton from "~/components/ui/Button.vue";
 
 import HeaderMobileMenu from "./HeaderMobileMenu.vue";
+import HeaderProfile from "./HeaderProfile.vue";
+
+const IS_LOGIN = false;
 
 const isOpen = ref(false);
 
@@ -22,25 +25,28 @@ const handleClose = () => {
     <div class="container navbar__content">
       <DefaultLogo />
 
-      <div class="navbar__actions">
-        <UiButton variant="outline" href="/register">Register</UiButton>
-        <UiButton href="/login">Login</UiButton>
-      </div>
+      <HeaderProfile v-if="IS_LOGIN" />
+      <template v-else>
+        <div class="navbar__actions">
+          <UiButton variant="outline" href="/register">Register</UiButton>
+          <UiButton href="/login">Login</UiButton>
+        </div>
 
-      <div class="navbar__actions-mobile">
-        <button
-          id="nav-mobile-button"
-          type="button"
-          class="navbar__actions-mobile-button"
-          @click="handleToggle"
-        >
-          <MenuIcon class="navbar__actions-mobile-button-icon" />
-        </button>
+        <div class="navbar__actions-mobile">
+          <button
+            id="nav-mobile-button"
+            type="button"
+            class="navbar__actions-mobile-button"
+            @click="handleToggle"
+          >
+            <MenuIcon class="navbar__actions-mobile-button-icon" />
+          </button>
 
-        <Transition name="fade">
-          <HeaderMobileMenu v-if="isOpen" @close="handleClose" />
-        </Transition>
-      </div>
+          <Transition name="fade">
+            <HeaderMobileMenu v-if="isOpen" @close="handleClose" />
+          </Transition>
+        </div>
+      </template>
     </div>
   </nav>
 </template>
