@@ -11,7 +11,9 @@ const storiesFilter = useStoriesFilterStore();
   <div class="stories">
     <div class="stories__grid">
       <div v-for="story in articles" :key="story.id" class="stories__grid-item">
-        <StoryCard :story="story" />
+        <NuxtLink href="/story/some-slug">
+          <StoryCard :story="story" />
+        </NuxtLink>
       </div>
     </div>
 
@@ -35,11 +37,11 @@ const storiesFilter = useStoriesFilterStore();
     &-item {
       @include col-span(12);
 
-      @include min-md {
+      @include min-lg {
         @include col-span(6);
       }
 
-      @include min-lg {
+      @include min-xxl {
         @include col-span(4);
       }
     }
