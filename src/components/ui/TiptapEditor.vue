@@ -187,16 +187,29 @@ watch(
   }
 );
 
+const isSomethingSelected = () => {
+  if (!editor.value) return false;
+
+  const { from, to } = editor.value.view.state.selection;
+  return from !== to;
+};
+
 watch(textStyle, (value) => {
-  if (value.includes("heading")) {
-    const [_, level] = value.split("_");
-    editor.value
-      ?.chain()
-      .focus()
-      .setHeading({ level: Number(level) as Level })
-      .run();
-  } else {
-    editor.value?.chain().focus().setParagraph().run();
+  if (
+    !editor.value?.isActive("bulletList") &&
+    !editor.value?.isActive("orderedList") &&
+    !isSomethingSelected()
+  ) {
+    if (value.includes("heading")) {
+      const [_, level] = value.split("_");
+      editor.value
+        ?.chain()
+        .focus()
+        .setHeading({ level: Number(level) as Level })
+        .run();
+    } else {
+      editor.value?.chain().focus().setParagraph().run();
+    }
   }
 });
 
@@ -338,9 +351,16 @@ onBeforeUnmount(() => {
     align-items: center;
     gap: spacing(4);
     position: absolute;
-    top: 0;
+    top: spacing(0.5);
+    left: spacing(0.5);
+    right: spacing(0.5);
+    border-top-left-radius: spacing(2);
+    border-top-right-radius: spacing(2);
     padding: spacing(3) spacing(6);
     z-index: 2;
+    background-color: #fff;
+    box-shadow: 0 2px 2px 0px #00000017;
+    flex-wrap: wrap;
 
     &-group {
       display: flex;
@@ -382,7 +402,14 @@ onBeforeUnmount(() => {
 
   &__content {
     :deep(.tiptap) {
-      padding-top: calc(spacing(6) + 52px);
+      padding-top: calc(spacing(6) + 104px);
+      max-height: 600px;
+      overflow: auto;
+      border-radius: spacing(2);
+
+      @include min-sm {
+        padding-top: calc(spacing(6) + 52px);
+      }
 
       * {
         all: revert;
