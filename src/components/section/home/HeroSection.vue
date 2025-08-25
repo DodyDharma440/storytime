@@ -41,7 +41,7 @@ const handleSearch = () => {
 
     <NuxtImg
       class="hero__illustration"
-      src="/hero.png"
+      src="/images/hero.png"
       loading="lazy"
       alt="Hero illustration"
     />
