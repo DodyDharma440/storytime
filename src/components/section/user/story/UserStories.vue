@@ -1,10 +1,9 @@
 <script setup lang="ts">
+import StoryCard from "~/components/section/home/StoryCard.vue";
 import UiAlertDialog from "~/components/ui/AlertDialog.vue";
 import UiButton from "~/components/ui/Button.vue";
 import UiPagination from "~/components/ui/Pagination.vue";
 import { articles } from "~/constants/stories";
-
-import StoryCard from "../../home/StoryCard.vue";
 
 const isEmpty = false;
 

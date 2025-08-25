@@ -1,4 +1,4 @@
-import type { ApiResponse } from "../interfaces/api";
+import type { ApiResponse } from "~/interfaces/api";
 
 export type MutationOptions<P, R> = {
   mutationFn: (p: P) => Promise<R>;

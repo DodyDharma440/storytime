@@ -4,8 +4,7 @@ import type {
   IStoryCategory,
   IStoryRepository,
 } from "~/interfaces/story";
-
-import HttpFactory from "../factory";
+import HttpFactory from "~/repositories/factory";
 
 class StoryRepository extends HttpFactory implements IStoryRepository {
   async getCategories(): Promise<ApiResponse<IStoryCategory[]>> {
