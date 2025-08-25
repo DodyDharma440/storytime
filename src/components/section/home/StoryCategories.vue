@@ -13,7 +13,7 @@ import SectionTitle from "./SectionTitle.vue";
         v-for="(category, index) in categories"
         :key="index"
         class="categories__item"
-        :href="`/story?category=${category}`"
+        :to="{ name: 'story', query: { category } }"
       >
         {{ category }}
       </NuxtLink>

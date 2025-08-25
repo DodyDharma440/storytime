@@ -59,7 +59,7 @@ const previewUrl = computed(() =>
 <template>
   <div class="container story-form">
     <div class="story-form__header">
-      <NuxtLink href="/dashboard" class="story-form__header-back">
+      <NuxtLink :to="{ name: 'dashboard' }" class="story-form__header-back">
         <Icon name="formkit:arrowleft" size="40" />
       </NuxtLink>
       <h1 class="story-form__header-title">
@@ -134,7 +134,7 @@ const previewUrl = computed(() =>
       </div>
 
       <div class="story-form__action">
-        <UiButton type="button" variant="outline" href="/dashboard">
+        <UiButton type="button" variant="outline" :to="{ name: 'dashboard' }">
           Cancel
         </UiButton>
         <UiButton type="submit">

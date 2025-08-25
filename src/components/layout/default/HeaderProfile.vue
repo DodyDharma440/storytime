@@ -34,7 +34,7 @@ const handleLogout = () => {
         <div class="profile-menu">
           <div class="profile-menu__item profile-menu__item-name">Iswara</div>
           <NuxtLink
-            href="/dashboard"
+            :to="{ name: 'dashboard' }"
             class="profile-menu__item"
             @click="slotProps.onClose"
           >

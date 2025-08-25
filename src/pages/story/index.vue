@@ -8,8 +8,8 @@ import { sortByOptions } from "~/constants/stories";
 import type { BreadcrumbItem } from "~/interfaces/ui";
 
 const breadcrumbItems: BreadcrumbItem[] = [
-  { label: "Home", href: "/" },
-  { label: "All Story", href: "/stories", isActive: true },
+  { label: "Home", href: { path: "/" } },
+  { label: "All Story", href: { path: "/story" }, isActive: true },
 ];
 
 const route = useRoute();
@@ -18,17 +18,17 @@ const storiesFilter = useStoriesFilterStore();
 const handleGenerateParams = (query: Record<string, string>) => {
   const { page, sort_by, category, search } = query;
 
-  const queryParams = new URLSearchParams({
+  const queryParams: Record<string, string> = {
     page: `${page || "1"}`,
     sort_by: `${sort_by || sortByOptions[0]}`,
-  });
+  };
 
   if (category && category !== "All") {
-    queryParams.append("category", category as string);
+    queryParams.category = category;
   }
 
   if (search) {
-    queryParams.append("search", search as string);
+    queryParams.search = search;
   }
 
   return queryParams;
@@ -40,7 +40,13 @@ if (!page || !sort_by) {
     route.query as Record<string, string>
   );
 
-  navigateTo(`/story?${queryParams}`, { replace: true });
+  navigateTo(
+    {
+      name: "story",
+      query: queryParams,
+    },
+    { replace: true }
+  );
 }
 
 // const fetchParams = new URLSearchParams({
@@ -64,7 +70,13 @@ storiesFilter.$subscribe((mutation, state) => {
     search,
   });
 
-  navigateTo(`/story?${queryParams}`);
+  navigateTo(
+    {
+      name: "story",
+      query: queryParams,
+    },
+    { replace: true }
+  );
   window.scrollTo(0, 0);
 });
 

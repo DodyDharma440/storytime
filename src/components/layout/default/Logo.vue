@@ -1,5 +1,5 @@
 <template>
-  <NuxtLink href="/">
+  <NuxtLink :to="{ path: '/' }">
     <NuxtImg src="/logo.png" alt="Storytime Logo" class="logo" />
   </NuxtLink>
 </template>

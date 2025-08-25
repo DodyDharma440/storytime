@@ -8,8 +8,8 @@ import type { BreadcrumbItem } from "~/interfaces/ui";
 
 const story = articles[0];
 const breadcrumbItems: BreadcrumbItem[] = [
-  { label: "Home", href: "/" },
-  { label: story.title, href: "/", isActive: true },
+  { label: "Home", href: { path: "/" } },
+  { label: story.title, href: { path: "/story" }, isActive: true },
 ];
 
 provide("story", story);

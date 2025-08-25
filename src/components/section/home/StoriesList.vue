@@ -24,7 +24,7 @@ defineProps<StoriesListProps>();
           'stories-grid__item--large': index === 0,
         }"
       >
-        <NuxtLink :href="`/story/${'slug-story'}`">
+        <NuxtLink :to="{ name: 'story-slug', params: { slug: 'some-slug' } }">
           <StoryCard
             :story="story"
             :is-highlight="index === 0"
@@ -39,7 +39,7 @@ defineProps<StoriesListProps>();
       <NuxtLink
         v-for="(story, index) in stories"
         :key="index"
-        :href="`/story/${'slug-story'}`"
+        :to="{ name: 'story-slug', params: { slug: 'some-slug' } }"
       >
         <StoryCard :story="story" :with-category="false" />
       </NuxtLink>

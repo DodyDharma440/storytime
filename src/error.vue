@@ -49,7 +49,7 @@ defineProps({
         <p class="error-page__content-description">
           {{ customMessages[error?.statusCode ?? "default"] }}
         </p>
-        <UiButton href="/"> Back to Home </UiButton>
+        <UiButton :href="{ path: '/' }"> Back to Home </UiButton>
       </div>
     </main>
     <DefaultFooter />

@@ -26,7 +26,9 @@ const handleCloseDelete = () => {
           Share your unique voice with the world – start writing your story
           today!
         </p>
-        <UiButton href="/dashboard/story/create">Write Story</UiButton>
+        <UiButton :href="{ name: 'dashboard-story-create' }">
+          Write Story
+        </UiButton>
       </div>
       <div class="user-stories__list-grid-item">
         <div v-if="isEmpty" class="user-stories__empty">
@@ -47,7 +49,9 @@ const handleCloseDelete = () => {
               :key="index"
               class="user-stories__list-item"
             >
-              <NuxtLink :href="`/story/some-slug`">
+              <NuxtLink
+                :to="{ name: 'story-slug', params: { slug: 'some-slug' } }"
+              >
                 <StoryCard
                   :story="story"
                   is-editable

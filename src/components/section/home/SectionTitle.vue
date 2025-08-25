@@ -1,9 +1,17 @@
 <script setup lang="ts">
+import type {
+  RouteLocationAsPathGeneric,
+  RouteLocationAsRelativeGeneric,
+} from "vue-router";
+
 import ArrowRightIcon from "~/assets/icons/ArrowRightIcon.vue";
 
 export interface SectionTitleProps {
   title: string;
-  exploreHref?: string;
+  exploreHref?:
+    | string
+    | RouteLocationAsRelativeGeneric
+    | RouteLocationAsPathGeneric;
   withContainer?: boolean;
 }
 
@@ -16,7 +24,7 @@ defineProps<SectionTitleProps>();
       <h2 class="section-title__text">{{ title }}</h2>
       <NuxtLink
         v-if="exploreHref"
-        :href="exploreHref"
+        :to="exploreHref"
         class="section-title__explore-btn"
       >
         Explore more

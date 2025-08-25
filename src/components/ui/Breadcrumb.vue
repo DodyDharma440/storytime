@@ -18,7 +18,7 @@ defineProps<BreadcrumbProps>();
       >
         <NuxtLink
           v-if="!item.isActive"
-          :href="item.href"
+          :to="item.href"
           class="breadcrumb__content-item-link"
         >
           {{ item.label }}

@@ -28,8 +28,10 @@ const handleClose = () => {
       <HeaderProfile v-if="IS_LOGIN" />
       <template v-else>
         <div class="navbar__actions">
-          <UiButton variant="outline" href="/register">Register</UiButton>
-          <UiButton href="/login">Login</UiButton>
+          <UiButton variant="outline" :href="{ name: 'register' }">
+            Register
+          </UiButton>
+          <UiButton :href="{ name: 'login' }">Login</UiButton>
         </div>
 
         <div class="navbar__actions-mobile">

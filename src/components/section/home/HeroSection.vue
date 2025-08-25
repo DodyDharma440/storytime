@@ -7,7 +7,12 @@ import UiInput from "~/components/ui/Input.vue";
 const searchValue = ref("");
 
 const handleSearch = () => {
-  navigateTo(`/story?search=${searchValue.value}`);
+  navigateTo({
+    path: "/story",
+    query: {
+      search: searchValue.value,
+    },
+  });
 };
 </script>
 

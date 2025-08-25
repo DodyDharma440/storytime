@@ -27,7 +27,10 @@ const props = withDefaults(defineProps<StoryCardProps>(), {
 
 const handleEdit = (e: Event, slug: string) => {
   e.preventDefault();
-  navigateTo(`/dashboard/story/${slug}/edit`);
+  navigateTo({
+    name: "dashboard-story-slug-edit",
+    params: { slug },
+  });
 };
 
 const handleDelete = (e: Event, id: string) => {

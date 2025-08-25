@@ -1,5 +1,9 @@
 <script setup lang="ts">
 import type { ButtonHTMLAttributes } from "vue";
+import type {
+  RouteLocationAsPathGeneric,
+  RouteLocationAsRelativeGeneric,
+} from "vue-router";
 
 import { NuxtLink } from "#components";
 
@@ -13,7 +17,7 @@ export interface ButtonProps extends /* @vue-ignore */ ButtonHTMLAttributes {
   isLoading?: boolean;
   disabledLoading?: boolean;
   loaderPosition?: "left" | "right";
-  href?: string;
+  href?: string | RouteLocationAsRelativeGeneric | RouteLocationAsPathGeneric;
   disabled?: boolean;
 }
 
@@ -30,7 +34,7 @@ withDefaults(defineProps<ButtonProps>(), {
   <component
     :is="href ? NuxtLink : is ?? 'button'"
     class="btn"
-    :href="href"
+    :to="href"
     :class="{
       'btn--primary': variant === 'solid',
       'btn--primary-outline': variant === 'outline',

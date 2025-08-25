@@ -1,4 +1,9 @@
 <script setup lang="ts">
+import type {
+  RouteLocationAsPathGeneric,
+  RouteLocationAsRelativeGeneric,
+} from "vue-router";
+
 import UiButton from "~/components/ui/Button.vue";
 
 type FormType = "login" | "register";
@@ -14,17 +19,19 @@ const buttonLabels: Record<FormType, string> = {
 };
 const navContents: Record<
   FormType,
-  Record<"description" | "label" | "href", string>
+  Record<"description" | "label", string> & {
+    href: string | RouteLocationAsRelativeGeneric | RouteLocationAsPathGeneric;
+  }
 > = {
   login: {
     description: "Don't have an account?",
     label: "Register",
-    href: "/register",
+    href: { name: "register" },
   },
   register: {
     description: "Already have an account?",
     label: "Login",
-    href: "/login",
+    href: { name: "login" },
   },
 };
 
@@ -46,7 +53,7 @@ const navContent = computed(() => navContents[props.formType]);
 
     <div class="form-submitter__nav">
       <p>{{ navContent.description }}</p>
-      <NuxtLink class="form-submitter__nav-link" :href="navContent.href">
+      <NuxtLink class="form-submitter__nav-link" :to="navContent.href">
         {{ navContent.label }}
       </NuxtLink>
     </div>

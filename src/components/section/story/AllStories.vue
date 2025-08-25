@@ -33,7 +33,7 @@ onMounted(() => {
           :key="story.id"
           class="stories__grid-item"
         >
-          <NuxtLink href="/story/some-slug">
+          <NuxtLink :to="{ name: 'story-slug', params: { slug: 'some-slug' } }">
             <StoryCard :story="story" />
           </NuxtLink>
         </div>
