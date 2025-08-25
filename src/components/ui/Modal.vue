@@ -47,6 +47,9 @@ const handleClose = () => {
 
 <style lang="scss" scoped>
 .modal {
+  position: fixed;
+  z-index: $modal-z-index;
+
   &__overlay {
     background-color: rgba(#000000, 0.25);
     position: fixed;

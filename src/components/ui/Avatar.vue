@@ -2,7 +2,7 @@
 import type { HTMLAttributes } from "vue";
 
 interface AvatarProps extends /* @vue-ignore */ HTMLAttributes {
-  src: string;
+  src?: string | null;
   size?: number;
 }
 
@@ -21,7 +21,7 @@ defineProps<AvatarProps>();
         : {}
     "
   >
-    <NuxtImg :src="src" class="avatar__image" />
+    <NuxtImg v-if="src" :src="src" class="avatar__image" />
   </div>
 </template>
 

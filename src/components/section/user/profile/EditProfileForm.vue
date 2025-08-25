@@ -6,6 +6,8 @@ import UiButton from "~/components/ui/Button.vue";
 import UiInput from "~/components/ui/Input.vue";
 import type { IUpdateProfileForm } from "~/interfaces/user";
 
+import ModalCropImage from "./ModalCropImage.vue";
+
 const schema = yup
   .object({
     name: yup.string().required("Name should not be empty"),
@@ -61,6 +63,9 @@ const { handleSubmit, defineField, errors } = useForm<IUpdateProfileForm>({
 
 const submitHandler = handleSubmit((values) => {
   const { old_password, new_password, new_password_confirmation } = values;
+
+  delete values.temp_profile_picture;
+
   if (!old_password || !new_password || !new_password_confirmation) {
     delete values.new_password;
     delete values.old_password;
@@ -77,6 +82,12 @@ const [newPassword, newPasswordAttrs] = defineField("new_password");
 const [confirmPassword, confirmPasswordAttrs] = defineField(
   "new_password_confirmation"
 );
+
+const [picture, pictureAttrs] = defineField("temp_profile_picture");
+const [croppedPicture] = defineField("profile_picture");
+const croppedPictureUrl = computed(() =>
+  croppedPicture.value ? URL.createObjectURL(croppedPicture.value) : null
+);
 </script>
 
 <template>
@@ -84,8 +95,22 @@ const [confirmPassword, confirmPasswordAttrs] = defineField(
     <div class="profile-form__fields">
       <div class="profile-form__fields-section">
         <div class="profile-form__fields-avatar">
-          <UiAvatar src="" :size="200" />
-          <UiButton is="label" variant="outline"> Change Picture </UiButton>
+          <UiAvatar :src="croppedPictureUrl" :size="200" />
+
+          <UiButton is="label" variant="outline">
+            Change Picture
+            <input
+              type="file"
+              style="display: none"
+              v-bind="pictureAttrs"
+              accept="image/png,image/jpeg,image/jpg"
+              @change="
+                (e) => {
+                  picture = (e.target as HTMLInputElement)?.files?.[0] ?? null;
+                }
+              "
+            />
+          </UiButton>
         </div>
         <UiInput
           v-model="name"
@@ -142,6 +167,11 @@ const [confirmPassword, confirmPasswordAttrs] = defineField(
       </UiButton>
       <UiButton type="submit">Update Profile</UiButton>
     </div>
+
+    <ModalCropImage
+      v-model="picture"
+      @save="(file) => (croppedPicture = file)"
+    />
   </form>
 </template>
 

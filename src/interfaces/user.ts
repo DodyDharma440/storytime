@@ -16,4 +16,6 @@ export interface IUpdateProfileForm {
   old_password?: string;
   new_password?: string;
   new_password_confirmation?: string;
+  temp_profile_picture?: File | null;
+  profile_picture?: File | null;
 }
