@@ -20,5 +20,16 @@ export default withNuxt({
         groups: [["^vue"], ["^#*"], ["^~?\\w"], ["~/(.*)"], ["^[./]"]],
       },
     ],
+    "no-restricted-imports": [
+      "error",
+      {
+        patterns: [
+          {
+            group: ["../"],
+            message: "Relative imports are not allowed.",
+          },
+        ],
+      },
+    ],
   },
 });

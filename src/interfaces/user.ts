@@ -1,3 +1,5 @@
+import type { ApiResponse } from "./api";
+
 export interface IUser {
   id: number;
   name: string;
@@ -18,4 +20,12 @@ export interface IUpdateProfileForm {
   new_password_confirmation?: string;
   temp_profile_picture?: File | null;
   profile_picture?: File | null;
+}
+
+export interface IUserRepository {
+  getProfile(): Promise<ApiResponse<IUser>>;
+  updateProfile(
+    data: Omit<IUpdateProfileForm, "temp_profile_picture" | "profile_picture">
+  ): Promise<ApiResponse<IUser>>;
+  updateProfilePicture(data: FormData): Promise<ApiResponse<IUser>>;
 }
