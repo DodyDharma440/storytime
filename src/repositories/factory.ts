@@ -28,6 +28,8 @@ class HttpFactory {
     data?: B,
     options?: FetchOptions<"json">
   ) {
+    const authToken = useState<string | null>("__auth_token");
+
     this.controller?.abort();
     this.controller = new AbortController();
 
@@ -36,6 +38,12 @@ class HttpFactory {
       body: data,
       signal: this.controller.signal,
       ...options,
+      headers: {
+        ...options?.headers,
+        ...(authToken.value
+          ? { Authorization: `Bearer ${authToken.value}` }
+          : {}),
+      },
     });
   }
 }

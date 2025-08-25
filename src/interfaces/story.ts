@@ -1,5 +1,15 @@
 import type { SectionTitleProps } from "~/components/section/home/SectionTitle.vue";
 
+import type { ApiResponse } from "./api";
+
+export interface IStoryCategory {
+  id: number;
+  name: string;
+  slug: string;
+  created_at: string | null;
+  updated_at: string | null;
+}
+
 export interface IStory {
   id: number;
   title: string;
@@ -28,4 +38,17 @@ export interface IStoryForm {
   content: string;
   category_id: string;
   content_image: File | null;
+}
+
+export interface IStoryRepository {
+  getCategories(): Promise<ApiResponse<IStoryCategory[]>>;
+
+  getStories(params: string): Promise<ApiResponse<IStory[]>>;
+  getStory(id: string): Promise<ApiResponse<IStory>>;
+
+  getUserStories(params: string): Promise<ApiResponse<IStory[]>>;
+  getUserStory(id: string): Promise<ApiResponse<IStory>>;
+  createStory(data: FormData): Promise<ApiResponse<IStory>>;
+  updateStory(data: FormData, id: string): Promise<ApiResponse<IStory>>;
+  deleteStory(id: string): Promise<ApiResponse<IStory>>;
 }
