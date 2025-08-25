@@ -84,3 +84,10 @@
 @mixin row-span($value) {
   grid-row: span $value / span $value;
 }
+
+@mixin line-clamp($count) {
+  line-clamp: $count;
+  -webkit-line-clamp: $count;
+  -webkit-box-orient: vertical;
+  display: -webkit-box;
+}

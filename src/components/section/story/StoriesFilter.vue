@@ -20,6 +20,10 @@ const handleSearch = () => {
     page: 1,
   });
 };
+
+watch(searchValue, () => {
+  debounce(handleSearch, 500);
+});
 </script>
 
 <template>
@@ -44,7 +48,6 @@ const handleSearch = () => {
         placeholder="Search story"
         label="Search story"
         sr-only-label
-        @keyup.enter="handleSearch"
       >
         <template #rightIcon>
           <SearchIcon />

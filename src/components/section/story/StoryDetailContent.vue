@@ -38,6 +38,7 @@ const handleOpenImages = () => {
   gap: spacing(8);
   padding-top: spacing(15);
   padding-bottom: 200px;
+  align-content: start;
 
   @include min-lg {
     gap: spacing(15);
@@ -48,6 +49,8 @@ const handleOpenImages = () => {
 
     @include min-xl {
       @include col-span(5);
+      position: sticky;
+      top: 120px;
     }
 
     @include min-xxl {

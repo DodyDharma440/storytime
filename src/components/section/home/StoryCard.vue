@@ -68,8 +68,12 @@ const handleDelete = (e: Event, id: string) => {
       </div>
     </div>
     <div>
-      <h6 class="story-card__title">{{ story.title }}</h6>
-      <p class="story-card__description">{{ story.shortContent }}</p>
+      <h6 class="story-card__title">
+        {{ story.title }}
+      </h6>
+      <p class="story-card__description">
+        {{ story.shortContent }}
+      </p>
 
       <div class="story-card__info">
         <div v-if="!isEditable" class="story-card__info-author">
@@ -165,6 +169,8 @@ const handleDelete = (e: Event, id: string) => {
     margin-bottom: spacing(5);
     font-weight: 700;
     transition: color 0.3s;
+    @include line-clamp(2);
+    overflow: hidden;
 
     @include min-lg {
       font-size: to-rem(36);
@@ -172,11 +178,8 @@ const handleDelete = (e: Event, id: string) => {
   }
 
   &__description {
+    @include line-clamp(3);
     margin-bottom: spacing(5);
-    line-clamp: 3;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    display: -webkit-box;
     overflow: hidden;
   }
 
