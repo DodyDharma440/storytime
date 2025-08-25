@@ -44,8 +44,7 @@ interface TiptapEditorProps extends Omit<BaseInputProps, "classNames" | "id"> {
   placeholder?: string;
 }
 
-const model = defineModel<string>({ default: "" });
-const emit = defineEmits<{ (e: "empty"): void }>();
+const model = defineModel<string>();
 const props = defineProps<TiptapEditorProps>();
 const textStyle = ref(textStyleOptions[0].value);
 
@@ -113,11 +112,11 @@ const editor = useEditor({
     }),
   ],
   onUpdate: (value) => {
-    model.value = value.editor.getHTML();
+    model.value = value.editor.isEmpty ? "" : value.editor.getHTML();
   },
   onBlur: (value) => {
     if (value.editor.isEmpty) {
-      emit("empty");
+      model.value = "";
     }
   },
   onSelectionUpdate: ({ editor }) => {
@@ -172,13 +171,6 @@ const handleErrorStyles = (isError: boolean) => {
 onMounted(() => {
   if (props.error) handleErrorStyles(!!props.error);
 });
-
-watch(
-  () => editor.value?.isEmpty,
-  (value) => {
-    if (value) emit("empty");
-  }
-);
 
 watch(
   () => props.error,

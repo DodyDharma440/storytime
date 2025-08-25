@@ -37,12 +37,14 @@ interface StoryFormProps {
 
 defineProps<StoryFormProps>();
 
-const { handleSubmit, defineField, errors, setFieldTouched } =
-  useForm<IStoryForm>({
-    validationSchema: schema,
-  });
+const { handleSubmit, defineField, errors } = useForm<IStoryForm>({
+  validationSchema: schema,
+});
 
-const submitHandler = handleSubmit(() => {});
+const submitHandler = handleSubmit((values) => {
+  // eslint-disable-next-line no-console
+  console.log("🚀 ~ values:", values);
+});
 
 const [title, titleAttrs] = defineField("title");
 const [content, contentAttrs] = defineField("content");
@@ -65,8 +67,6 @@ const previewUrl = computed(() =>
       </h1>
     </div>
 
-    {{ errors }}
-    content: {{ content }}
     <form @submit="submitHandler">
       <div class="story-form__fields">
         <UiInput
@@ -90,8 +90,6 @@ const previewUrl = computed(() =>
           placeholder="Enter a content here"
           label="Content"
           :error="errors.content"
-          @empty="content = ''"
-          @create="setFieldTouched('content', false)"
         />
         <UiInput label="Cover Image" :error="errors.content_image">
           <template #field="slotProps">
