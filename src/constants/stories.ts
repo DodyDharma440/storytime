@@ -1,5 +1,17 @@
 import type { IStory } from "~/interfaces/story";
 
+export const storySkeleton = {
+  id: 1,
+  image: "https://via.placeholder.com/400x300",
+  title: "Lorem Ipsum Dolor Sit Amet",
+  shortContent:
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur vel turpis vitae nulla.",
+  authorAvatar: "https://via.placeholder.com/50",
+  authorName: "John Doe",
+  createdDate: "2025-08-14",
+  category: "placeholder",
+};
+
 export const articles: IStory[] = [
   {
     id: 1,

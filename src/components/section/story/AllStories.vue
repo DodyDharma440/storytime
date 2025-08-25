@@ -1,20 +1,43 @@
 <script setup lang="ts">
 import UiPagination from "~/components/ui/Pagination.vue";
-import { articles } from "~/constants/stories";
+import { articles, storySkeleton } from "~/constants/stories";
 
 import StoryCard from "../home/StoryCard.vue";
 
 const storiesFilter = useStoriesFilterStore();
+
+const isLoading = ref(true);
+
+onMounted(() => {
+  setTimeout(() => {
+    isLoading.value = false;
+  }, 1000);
+});
 </script>
 
 <template>
   <div class="stories">
     <div class="stories__grid">
-      <div v-for="story in articles" :key="story.id" class="stories__grid-item">
-        <NuxtLink href="/story/some-slug">
-          <StoryCard :story="story" />
-        </NuxtLink>
-      </div>
+      <template v-if="isLoading">
+        <div
+          v-for="(_, index) in [...Array(6)]"
+          :key="index"
+          class="stories__grid-item"
+        >
+          <StoryCard :story="storySkeleton" with-category :is-loading />
+        </div>
+      </template>
+      <template v-else>
+        <div
+          v-for="story in articles"
+          :key="story.id"
+          class="stories__grid-item"
+        >
+          <NuxtLink href="/story/some-slug">
+            <StoryCard :story="story" />
+          </NuxtLink>
+        </div>
+      </template>
     </div>
 
     <div class="stories__pagination">

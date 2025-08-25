@@ -2,6 +2,7 @@
 import dayjs from "dayjs";
 
 import UiAvatar from "~/components/ui/Avatar.vue";
+import UiSkeleton from "~/components/ui/Skeleton.vue";
 import UiTag from "~/components/ui/Tag.vue";
 import type { IStory } from "~/interfaces/story";
 
@@ -11,6 +12,7 @@ interface StoryCardProps {
   isGrid?: boolean;
   withCategory?: boolean;
   isEditable?: boolean;
+  isLoading?: boolean;
 }
 
 interface StoryCardEmits {
@@ -19,7 +21,7 @@ interface StoryCardEmits {
 
 const emit = defineEmits<StoryCardEmits>();
 
-withDefaults(defineProps<StoryCardProps>(), {
+const props = withDefaults(defineProps<StoryCardProps>(), {
   withCategory: true,
 });
 
@@ -32,6 +34,9 @@ const handleDelete = (e: Event, id: string) => {
   e.preventDefault();
   emit("delete", id);
 };
+
+const isLoadingProps = toRef(props, "isLoading");
+provide("skeleton-loading", isLoadingProps);
 </script>
 
 <template>
@@ -42,56 +47,71 @@ const handleDelete = (e: Event, id: string) => {
       'story-card--small': isGrid && !isHighlight,
     }"
   >
-    <div class="story-card__thumbnail">
-      <NuxtImg
-        :src="story.image"
-        class="story-card__thumbnail-image"
-        :alt="`${story.title} thumb`"
-        loading="lazy"
-      />
+    <UiSkeleton>
+      <div class="story-card__thumbnail">
+        <NuxtImg
+          :src="story.image"
+          class="story-card__thumbnail-image"
+          :alt="`${story.title} thumb`"
+          loading="lazy"
+        />
 
-      <div v-if="isEditable" class="story-card__actions">
-        <button
-          type="button"
-          class="story-card__actions-button"
-          @click="(e) => handleEdit(e, 'some-id')"
-        >
-          <Icon name="mage:edit" />
-        </button>
-        <button
-          type="button"
-          class="story-card__actions-button"
-          @click="(e) => handleDelete(e, 'some-id')"
-        >
-          <Icon name="weui:delete-outlined" />
-        </button>
+        <div v-if="isEditable" class="story-card__actions">
+          <button
+            type="button"
+            class="story-card__actions-button"
+            @click="(e) => handleEdit(e, 'some-id')"
+          >
+            <Icon name="mage:edit" />
+          </button>
+          <button
+            type="button"
+            class="story-card__actions-button"
+            @click="(e) => handleDelete(e, 'some-id')"
+          >
+            <Icon name="weui:delete-outlined" />
+          </button>
+        </div>
       </div>
-    </div>
+    </UiSkeleton>
+
     <div>
-      <h6 class="story-card__title">
-        {{ story.title }}
-      </h6>
-      <p class="story-card__description">
-        {{ story.shortContent }}
-      </p>
+      <UiSkeleton :text-line="1" class="story-card__title-skeleton">
+        <h6 class="story-card__title">
+          {{ story.title }}
+        </h6>
+      </UiSkeleton>
+      <UiSkeleton :text-line="3" class="story-card__description-skeleton">
+        <p class="story-card__description">
+          {{ story.shortContent }}
+        </p>
+      </UiSkeleton>
 
       <div class="story-card__info">
         <div v-if="!isEditable" class="story-card__info-author">
-          <UiAvatar :src="story.authorAvatar" />
+          <UiSkeleton is-circle>
+            <UiAvatar :src="story.authorAvatar" />
+          </UiSkeleton>
 
-          <p class="story-card__info-author-name">
-            {{ story.authorName }}
-          </p>
+          <UiSkeleton>
+            <p class="story-card__info-author-name">
+              {{ story.authorName }}
+            </p>
+          </UiSkeleton>
         </div>
 
         <div
           class="story-card__info-subinfo"
           :class="{ 'story-card__info-subinfo--editable': isEditable }"
         >
-          <p>{{ dayjs(story.createdDate).format("DD MMMM YYYY") }}</p>
-          <UiTag v-if="withCategory">
-            <span>{{ story.category }}</span>
-          </UiTag>
+          <UiSkeleton>
+            <p>{{ dayjs(story.createdDate).format("DD MMMM YYYY") }}</p>
+          </UiSkeleton>
+          <UiSkeleton>
+            <UiTag v-if="withCategory">
+              <span>{{ story.category }}</span>
+            </UiTag>
+          </UiSkeleton>
         </div>
       </div>
     </div>
@@ -99,6 +119,25 @@ const handleDelete = (e: Event, id: string) => {
 </template>
 
 <style lang="scss" scoped>
+@mixin title-styles {
+  font-size: to-rem(26);
+  margin-bottom: spacing(5);
+  font-weight: 700;
+  transition: color 0.3s;
+  @include line-clamp(2);
+  overflow: hidden;
+
+  @include min-lg {
+    font-size: to-rem(36);
+  }
+}
+
+@mixin description-styles {
+  @include line-clamp(3);
+  margin-bottom: spacing(5);
+  overflow: hidden;
+}
+
 .story-card {
   transition: transform 0.4s;
 
@@ -122,9 +161,9 @@ const handleDelete = (e: Event, id: string) => {
     height: 400px;
     border-radius: spacing(2);
     margin-bottom: spacing(5);
-    background: #dddddd;
     overflow: hidden;
     position: relative;
+    background-color: #dddddd;
 
     @include min-lg {
       height: 500px;
@@ -165,22 +204,19 @@ const handleDelete = (e: Event, id: string) => {
   }
 
   &__title {
-    font-size: to-rem(26);
-    margin-bottom: spacing(5);
-    font-weight: 700;
-    transition: color 0.3s;
-    @include line-clamp(2);
-    overflow: hidden;
+    @include title-styles;
+  }
 
-    @include min-lg {
-      font-size: to-rem(36);
-    }
+  :deep(.story-card__title-skeleton) {
+    @include title-styles;
   }
 
   &__description {
-    @include line-clamp(3);
-    margin-bottom: spacing(5);
-    overflow: hidden;
+    @include description-styles;
+  }
+
+  :deep(.story-card__description-skeleton) {
+    @include description-styles;
   }
 
   &__info {
