@@ -22,3 +22,10 @@ export interface IStoryFilter {
   category: string;
   search: string;
 }
+
+export interface IStoryForm {
+  title: string;
+  content: string;
+  category_id: string;
+  content_image: File | null;
+}
