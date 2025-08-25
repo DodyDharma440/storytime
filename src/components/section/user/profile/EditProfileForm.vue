@@ -1,42 +1,138 @@
 <script setup lang="ts">
+import * as yup from "yup";
+
 import UiAvatar from "~/components/ui/Avatar.vue";
 import UiButton from "~/components/ui/Button.vue";
 import UiInput from "~/components/ui/Input.vue";
+import type { IUpdateProfileForm } from "~/interfaces/user";
+
+const schema = yup
+  .object({
+    name: yup.string().required("Name should not be empty"),
+    about: yup.string(),
+    old_password: yup.string(),
+    new_password: yup
+      .string()
+      .when("old_password", {
+        is: (val: string) => val && val.length > 0,
+        then: (schema) =>
+          schema.required(
+            "New password is required when old password is filled"
+          ),
+        otherwise: (schema) => schema,
+      })
+      .transform((val) => (val === "" ? undefined : val))
+      .nullable()
+      .min(8, "Password in minimum 8 characters")
+      .matches(
+        /[a-z]/,
+        "Password must include at least one lowercase letter (a-z)"
+      )
+      .matches(/[0-9]/, "Password must include at least one number (0-9)")
+      .matches(/^[^\s]+$/, "Password must not contain spaces"),
+    new_password_confirmation: yup
+      .string()
+      .transform((val) => (val === "" ? undefined : val)) // kosong dianggap undefined
+      .nullable()
+      .oneOf(
+        [yup.ref("new_password")],
+        "Confirm password must match to password"
+      ),
+  })
+  .test(
+    "passwords-required-together",
+    "Old password is required when changing password",
+    function (values) {
+      const { old_password, new_password } = values;
+      if ((old_password && !new_password) || (!old_password && new_password)) {
+        return this.createError({
+          path: !old_password ? "old_password" : "new_password",
+        });
+      }
+      return true;
+    }
+  );
 
 const emit = defineEmits<{ (e: "close"): void }>();
+
+const { handleSubmit, defineField, errors } = useForm<IUpdateProfileForm>({
+  validationSchema: schema,
+});
+
+const submitHandler = handleSubmit((values) => {
+  const { old_password, new_password, new_password_confirmation } = values;
+  if (!old_password || !new_password || !new_password_confirmation) {
+    delete values.new_password;
+    delete values.old_password;
+    delete values.new_password_confirmation;
+  }
+  // eslint-disable-next-line no-console
+  console.log("🚀 ~ values:", values);
+});
+
+const [name, nameAttrs] = defineField("name");
+const [about, aboutAttrs] = defineField("about");
+const [oldPassword, oldPasswordAttrs] = defineField("old_password");
+const [newPassword, newPasswordAttrs] = defineField("new_password");
+const [confirmPassword, confirmPasswordAttrs] = defineField(
+  "new_password_confirmation"
+);
 </script>
 
 <template>
-  <form class="profile-form">
+  <form class="profile-form" @submit="submitHandler">
     <div class="profile-form__fields">
       <div class="profile-form__fields-section">
         <div class="profile-form__fields-avatar">
           <UiAvatar src="" :size="200" />
           <UiButton is="label" variant="outline"> Change Picture </UiButton>
         </div>
-        <UiInput label="Name" placeholder="Your name" autocomplete="off" />
+        <UiInput
+          v-model="name"
+          label="Name"
+          placeholder="Your name"
+          autocomplete="off"
+          v-bind="nameAttrs"
+          :error="errors.name"
+        />
         <UiInput label="Email" placeholder="Your email" disabled />
-        <UiInput label="About me" placeholder="About..." type="textarea" />
+        <UiInput
+          v-model="about"
+          label="About me"
+          placeholder="About..."
+          type="textarea"
+          v-bind="aboutAttrs"
+          :error="errors.about"
+        />
       </div>
       <div class="profile-form__fields-section">
         <h3 class="section-title">Change Password</h3>
         <UiInput
+          v-model="oldPassword"
           label="Old Password"
           type="password"
           placeholder="Enter your old password"
           autocomplete="new-password"
+          v-bind="oldPasswordAttrs"
+          :error="errors.old_password"
         />
         <UiInput
+          v-model="newPassword"
           label="New Password"
           type="password"
           placeholder="Enter your new password"
           autocomplete="new-password"
+          v-bind="newPasswordAttrs"
+          :error="errors.new_password"
         />
         <UiInput
+          v-model="confirmPassword"
           label="Confirm New Password"
           type="password"
           placeholder="Re-enter your new password"
           autocomplete="new-password"
+          v-bind="confirmPasswordAttrs"
+          :error="errors.new_password_confirmation"
         />
       </div>
     </div>
@@ -44,7 +140,7 @@ const emit = defineEmits<{ (e: "close"): void }>();
       <UiButton variant="outline" type="button" @click="emit('close')">
         Cancel
       </UiButton>
-      <UiButton>Update Profile</UiButton>
+      <UiButton type="submit">Update Profile</UiButton>
     </div>
   </form>
 </template>
