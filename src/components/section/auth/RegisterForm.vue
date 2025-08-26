@@ -1,39 +1,16 @@
 <script setup lang="ts">
-import * as yup from "yup";
-
 import AuthFormWrapper from "~/components/layout/auth/FormWrapper.vue";
 import DefaultLogo from "~/components/layout/default/Logo.vue";
 import UiInput from "~/components/ui/Input.vue";
 import type { IRegisterForm } from "~/interfaces/auth";
+import { registerSchema } from "~/schemas/auth";
 
 import AuthFormSubmitter from "./FormSubmitter.vue";
-
-const schema = yup.object({
-  name: yup.string().required("Name should not be empty"),
-  email: yup
-    .string()
-    .required("Email should not be empty")
-    .email("Email must be a valid email"),
-  password: yup
-    .string()
-    .required("Password should not be empty")
-    .min(8, "Password in minimum 8 characters")
-    .matches(
-      /[a-z]/,
-      "Password must include at least one lowercase letter (a-z)"
-    )
-    .matches(/[0-9]/, "Password must include at least one number (0-9)")
-    .matches(/^[^\s]+$/, "Password must not contain spaces"),
-  confirmPassword: yup
-    .string()
-    .required("Confirm Password should not be empty")
-    .oneOf([yup.ref("password")], "Confirm password must match to password"),
-});
 
 const { $api } = useNuxtApp();
 
 const { handleSubmit, defineField, errors } = useForm<IRegisterForm>({
-  validationSchema: schema,
+  validationSchema: registerSchema,
 });
 
 const { isLoading, mutate } = useMutation({

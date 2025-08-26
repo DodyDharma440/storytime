@@ -1,25 +1,16 @@
 <script setup lang="ts">
-import * as yup from "yup";
-
 import AuthFormWrapper from "~/components/layout/auth/FormWrapper.vue";
 import DefaultLogo from "~/components/layout/default/Logo.vue";
 import UiInput from "~/components/ui/Input.vue";
 import type { ILoginForm } from "~/interfaces/auth";
+import { loginSchema } from "~/schemas/auth";
 
 import AuthFormSubmitter from "./FormSubmitter.vue";
-
-const schema = yup.object<ILoginForm>({
-  email: yup
-    .string()
-    .required("Email should not be empty")
-    .email("Email must be a valid email"),
-  password: yup.string().required("Password should not be empty"),
-});
 
 const { $api } = useNuxtApp();
 
 const { handleSubmit, defineField, errors } = useForm<ILoginForm>({
-  validationSchema: schema,
+  validationSchema: loginSchema,
 });
 
 const { isLoading, mutate } = useMutation({

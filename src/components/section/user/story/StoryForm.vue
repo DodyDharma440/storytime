@@ -1,35 +1,15 @@
 <script setup lang="ts">
-import * as yup from "yup";
-
 import UiButton from "~/components/ui/Button.vue";
 import UiInput from "~/components/ui/Input.vue";
 import UiSelect from "~/components/ui/Select.vue";
 import UiTiptapEditor from "~/components/ui/TiptapEditor.vue";
 import { allCategories } from "~/constants/stories";
 import type { IStory, IStoryForm } from "~/interfaces/story";
+import { storySchema } from "~/schemas/story";
 
 const categoryOptions = allCategories
   .slice(1)
   .map((c) => ({ label: c, value: c }));
-
-const schema = yup.object<IStoryForm>({
-  title: yup.string().required("Title should not be empty"),
-  content: yup.string().required("Content should not be empty"),
-  category_id: yup.string().required("Category should not be empty"),
-  content_image: yup
-    .mixed()
-    .required("Thumbnail image is required")
-    .test(
-      "fileSize",
-      "File size exceeds 2MB limit",
-      (value: any) => value && value.size <= 2 * 1024 * 1024 // 5 MB
-    )
-    .test(
-      "fileType",
-      "Only JPEG and PNG images are allowed",
-      (value: any) => value && ["image/jpeg", "image/png"].includes(value.type)
-    ),
-});
 
 interface StoryFormProps {
   editData?: IStory;
@@ -38,7 +18,7 @@ interface StoryFormProps {
 const props = defineProps<StoryFormProps>();
 
 const { handleSubmit, defineField, errors, values } = useForm<IStoryForm>({
-  validationSchema: schema,
+  validationSchema: storySchema,
   initialValues: props.editData
     ? {
         category_id: props.editData.category,
