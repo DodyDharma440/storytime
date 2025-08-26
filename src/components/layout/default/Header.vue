@@ -2,22 +2,13 @@
 import MenuIcon from "~/assets/icons/MenuIcon.vue";
 import DefaultLogo from "~/components/layout/default/Logo.vue";
 import UiButton from "~/components/ui/Button.vue";
+import UiDropdown from "~/components/ui/Dropdown.vue";
 
-import HeaderMobileMenu from "./HeaderMobileMenu.vue";
 import HeaderProfile from "./HeaderProfile.vue";
 
 const IS_LOGIN = false;
 
-const isOpen = ref(false);
-
-const handleToggle = (e: Event) => {
-  e.stopPropagation();
-  isOpen.value = !isOpen.value;
-};
-
-const handleClose = () => {
-  isOpen.value = false;
-};
+const mobileButtonRef = useTemplateRef("mobile-button-ref");
 </script>
 
 <template>
@@ -35,18 +26,28 @@ const handleClose = () => {
         </div>
 
         <div class="navbar__actions-mobile">
-          <button
-            id="nav-mobile-button"
-            type="button"
-            class="navbar__actions-mobile-button"
-            @click="handleToggle"
-          >
-            <MenuIcon class="navbar__actions-mobile-button-icon" />
-          </button>
+          <UiDropdown :button-ref="mobileButtonRef">
+            <template #button="slotProps">
+              <button
+                id="nav-mobile-button"
+                ref="mobile-button-ref"
+                type="button"
+                class="navbar__actions-mobile-button"
+                @click="slotProps.onToggle"
+              >
+                <MenuIcon class="navbar__actions-mobile-button-icon" />
+              </button>
+            </template>
 
-          <Transition name="fade">
-            <HeaderMobileMenu v-if="isOpen" @close="handleClose" />
-          </Transition>
+            <template #default>
+              <div class="navbar__actions-mobile-menu">
+                <UiButton variant="outline" :href="{ name: 'register' }">
+                  Register
+                </UiButton>
+                <UiButton :href="{ name: 'login' }"> Login </UiButton>
+              </div>
+            </template>
+          </UiDropdown>
         </div>
       </template>
     </div>
@@ -113,6 +114,23 @@ const handleClose = () => {
         &-icon {
           width: 28px;
           height: 28px;
+        }
+      }
+
+      :deep(.dropdown__content) {
+        margin-top: spacing(2);
+      }
+
+      &-menu {
+        min-width: 150px;
+        display: flex;
+        align-items: center;
+        gap: spacing(3);
+        padding: spacing(3);
+        flex-direction: column;
+
+        .btn {
+          width: 100%;
         }
       }
     }

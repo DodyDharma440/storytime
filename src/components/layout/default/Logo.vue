@@ -8,6 +8,8 @@
 .logo {
   width: 180px;
   height: 100%;
+  object-fit: contain;
+  object-position: center;
 
   @include min-lg {
     width: 254px;
