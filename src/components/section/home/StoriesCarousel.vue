@@ -47,5 +47,9 @@ defineProps<StorySectionProps>();
   max-width: 1716px;
   padding-left: spacing(4);
   align-items: flex-start;
+
+  @include min-custom(1732px) {
+    padding-left: spacing(1.5);
+  }
 }
 </style>

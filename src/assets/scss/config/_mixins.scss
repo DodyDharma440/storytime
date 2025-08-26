@@ -34,6 +34,13 @@
   }
 }
 
+// Custom breakpoint
+@mixin min-custom($breakpoint) {
+  @media (min-width: #{$breakpoint}) {
+    @content;
+  }
+}
+
 // Small devices (max)
 @mixin max-sm {
   @media (max-width: #{variables.$screen-sm-min - 1px}) {

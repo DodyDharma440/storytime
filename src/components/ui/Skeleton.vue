@@ -1,9 +1,13 @@
 <script lang="ts" setup>
-interface SkeletonProps {
+import type { HTMLAttributes } from "vue";
+
+interface SkeletonProps extends /* @vue-ignore */ HTMLAttributes {
   isLoading?: boolean;
   isCircle?: boolean;
   textLine?: number;
 }
+
+defineOptions({ inheritAttrs: false });
 
 const props = defineProps<SkeletonProps>();
 const isLoadingInject = inject<Ref<boolean>>("skeleton-loading");
@@ -14,7 +18,7 @@ const isLoadingComputed = computed(
 
 <template>
   <template v-if="isLoadingComputed">
-    <div v-if="textLine" v-bind="$attrs" class="skeleton-text">
+    <div v-if="textLine" class="skeleton-text" v-bind="$attrs">
       <div
         v-for="(_, i) in [...Array(textLine)]"
         :key="i"
