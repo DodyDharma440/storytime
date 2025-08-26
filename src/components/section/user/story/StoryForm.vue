@@ -35,10 +35,18 @@ interface StoryFormProps {
   editData?: IStory;
 }
 
-defineProps<StoryFormProps>();
+const props = defineProps<StoryFormProps>();
 
-const { handleSubmit, defineField, errors } = useForm<IStoryForm>({
+const { handleSubmit, defineField, errors, values } = useForm<IStoryForm>({
   validationSchema: schema,
+  initialValues: props.editData
+    ? {
+        category_id: props.editData.category,
+        content: props.editData.shortContent,
+        title: props.editData.title,
+        content_image_url: props.editData.image,
+      }
+    : undefined,
 });
 
 const submitHandler = handleSubmit((values) => {
@@ -52,7 +60,9 @@ const [categoryId, categoryIdAttrs] = defineField("category_id");
 const [contentImage, contentImageAttrs] = defineField("content_image");
 
 const previewUrl = computed(() =>
-  contentImage.value ? URL.createObjectURL(contentImage.value) : null
+  contentImage.value
+    ? URL.createObjectURL(contentImage.value)
+    : values.content_image_url ?? null
 );
 </script>
 
@@ -60,10 +70,10 @@ const previewUrl = computed(() =>
   <div class="container story-form">
     <div class="story-form__header">
       <NuxtLink :to="{ name: 'dashboard' }" class="story-form__header-back">
-        <Icon name="formkit:arrowleft" size="40" />
+        <Icon name="formkit:arrowleft" />
       </NuxtLink>
       <h1 class="story-form__header-title">
-        {{ editData ? "Edit Story" : "Write Story" }}
+        {{ editData ? "Edit" : "Write" }} Story
       </h1>
     </div>
 
@@ -147,22 +157,49 @@ const previewUrl = computed(() =>
 
 <style lang="scss" scoped>
 .story-form {
-  padding-top: 220px;
-  padding-bottom: 220px;
+  padding-top: 120px;
+  padding-bottom: 120px;
+
+  @include min-md {
+    padding-top: 180px;
+    padding-bottom: 180px;
+  }
+
+  @include min-lg {
+    padding-top: 220px;
+    padding-bottom: 220px;
+  }
 
   &__header {
     display: flex;
     align-items: center;
-    gap: 84px;
+    gap: spacing(8);
+
+    @include min-lg {
+      gap: spacing(14);
+    }
+
+    @include min-lg {
+      gap: 84px;
+    }
 
     &-back {
       display: flex;
       align-items: center;
       justify-content: center;
+      font-size: to-rem(26);
+
+      @include min-lg {
+        font-size: to-rem(40);
+      }
     }
 
     &-title {
-      font-size: to-rem(44);
+      font-size: to-rem(38);
+
+      @include min-lg {
+        font-size: to-rem(44);
+      }
     }
   }
 

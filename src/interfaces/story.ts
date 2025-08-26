@@ -38,6 +38,7 @@ export interface IStoryForm {
   content: string;
   category_id: string;
   content_image: File | null;
+  content_image_url?: string;
 }
 
 export interface IStoryRepository {
