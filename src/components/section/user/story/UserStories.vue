@@ -3,22 +3,31 @@ import StoryCard from "~/components/section/home/StoryCard.vue";
 import UiAlertDialog from "~/components/ui/AlertDialog.vue";
 import UiButton from "~/components/ui/Button.vue";
 import UiPagination from "~/components/ui/Pagination.vue";
-import { articles } from "~/constants/stories";
+import { articles, storySkeleton } from "~/constants/stories";
 
 const isEmpty = false;
 
 const page = ref(1);
+const isLoading = ref(false);
 const isOpenDelete: Ref<string | null> = ref(null);
+
+const gridRef = useTemplateRef("grid");
 
 const handleCloseDelete = () => {
   isOpenDelete.value = null;
 };
+
+watch(page, () => {
+  window.scrollTo(0, (gridRef.value?.offsetTop ?? 0) - 80);
+  isLoading.value = true;
+  setTimeout(() => (isLoading.value = false), 3000);
+});
 </script>
 
 <template>
   <div class="container user-stories">
     <h2 class="user-stories__title">My Story</h2>
-    <div class="user-stories__grid">
+    <div ref="grid" class="user-stories__grid">
       <div class="user-stories__create">
         <h3 class="user-stories__create-title">Write your story</h3>
         <p class="user-stories__create-description">
@@ -43,21 +52,32 @@ const handleCloseDelete = () => {
         </div>
         <template v-else>
           <div class="user-stories__list">
-            <div
-              v-for="(story, index) in articles.slice(0, 4)"
-              :key="index"
-              class="user-stories__list-item"
-            >
-              <NuxtLink
-                :to="{ name: 'story-slug', params: { slug: 'some-slug' } }"
+            <template v-if="isLoading">
+              <div
+                v-for="(_, index) in [...Array(6)]"
+                :key="index"
+                class="user-stories__list-item"
               >
-                <StoryCard
-                  :story="story"
-                  is-editable
-                  @delete="(id) => (isOpenDelete = id)"
-                />
-              </NuxtLink>
-            </div>
+                <StoryCard :story="storySkeleton" is-editable :is-loading />
+              </div>
+            </template>
+            <template v-else>
+              <div
+                v-for="story in articles.slice(0, 4)"
+                :key="story.id"
+                class="user-stories__list-item"
+              >
+                <NuxtLink
+                  :to="{ name: 'story-slug', params: { slug: 'some-slug' } }"
+                >
+                  <StoryCard
+                    :story="story"
+                    is-editable
+                    @delete="(id) => (isOpenDelete = id)"
+                  />
+                </NuxtLink>
+              </div>
+            </template>
           </div>
 
           <div class="user-stories__pagination">
@@ -127,6 +147,8 @@ const handleCloseDelete = () => {
 
     @include min-xl {
       @include col-span(4);
+      position: sticky;
+      top: 120px;
     }
 
     &-title {
