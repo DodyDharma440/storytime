@@ -17,17 +17,18 @@ interface StoryFormProps {
 
 const props = defineProps<StoryFormProps>();
 
-const { handleSubmit, defineField, errors, values } = useForm<IStoryForm>({
-  validationSchema: storySchema,
-  initialValues: props.editData
-    ? {
-        category_id: props.editData.category,
-        content: props.editData.shortContent,
-        title: props.editData.title,
-        content_image_url: props.editData.image,
-      }
-    : undefined,
-});
+const { handleSubmit, defineField, errors, values, setFieldValue } =
+  useForm<IStoryForm>({
+    validationSchema: storySchema,
+    initialValues: props.editData
+      ? {
+          category_id: props.editData.category,
+          content: props.editData.shortContent,
+          title: props.editData.title,
+          content_image_url: props.editData.image,
+        }
+      : undefined,
+  });
 
 const submitHandler = handleSubmit((values) => {
   // eslint-disable-next-line no-console
@@ -38,6 +39,16 @@ const [title, titleAttrs] = defineField("title");
 const [content, contentAttrs] = defineField("content");
 const [categoryId, categoryIdAttrs] = defineField("category_id");
 const [contentImage, contentImageAttrs] = defineField("content_image");
+
+const handleClearImage = () => {
+  contentImage.value = null;
+  setFieldValue("content_image_url", props.editData?.image);
+};
+
+const handleChangeFile = (e: Event) => {
+  contentImage.value = (e.target as HTMLInputElement)?.files?.[0] ?? null;
+  setFieldValue("content_image_url", undefined);
+};
 
 const previewUrl = computed(() =>
   contentImage.value
@@ -88,7 +99,7 @@ const previewUrl = computed(() =>
                 v-if="contentImage"
                 type="button"
                 class="story-form__fields-image-input-clear-btn"
-                @click="contentImage = null"
+                @click="handleClearImage"
               >
                 <Icon name="mdi:close" size="30" />
               </button>
@@ -111,11 +122,7 @@ const previewUrl = computed(() =>
                   style="display: none"
                   accept="image/png,image/jpeg,image/jpg"
                   v-bind="contentImageAttrs"
-                  @change="
-                    (e) => {
-                      contentImage = (e.target as HTMLInputElement)?.files?.[0] ?? null;
-                    }
-                  "
+                  @change="handleChangeFile"
                 />
               </label>
             </div>
