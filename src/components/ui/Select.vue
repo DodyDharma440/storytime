@@ -47,11 +47,12 @@ const handleHighlight = (type: "inc" | "dec") => {
   }
 };
 
-const handleEnter = (e: Event) => {
-  e.preventDefault();
+const handleEnter = () => {
   model.value = filteredOptions.value[highlightedIndex.value].value;
   isOpen.value = false;
   inputRef.value?.blur();
+  highlightedIndex.value = -1;
+  isSearched.value = false;
 };
 
 const filteredOptions = computed(() => {
@@ -171,7 +172,7 @@ useClickOutside(menuRef, handleClickOutside);
           @focus="isOpen = true"
           @keydown.arrow-down="handleHighlight('inc')"
           @keydown.arrow-up="handleHighlight('dec')"
-          @keydown.enter="handleEnter"
+          @keydown.enter.prevent="handleEnter"
           @keydown.esc="handleClickOutside"
         />
         <Transition name="select__dropdown-transition">
@@ -226,9 +227,13 @@ useClickOutside(menuRef, handleClickOutside);
 
     &-item {
       padding: spacing(4);
-      font-size: to-rem(20);
+      font-size: to-rem(16);
       transition: all 0.3s;
       cursor: pointer;
+
+      @include min-lg {
+        font-size: to-rem(18);
+      }
 
       &:hover {
         background-color: rgba($color: #000000, $alpha: 0.1);

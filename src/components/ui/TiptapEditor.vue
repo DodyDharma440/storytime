@@ -286,6 +286,7 @@ onBeforeUnmount(() => {
                 'editor__tools-button--active': editor.isActive('bulletList'),
               }"
               :disabled="!editor.can().chain().focus().toggleBulletList().run()"
+              type="button"
               @click="editor.chain().focus().toggleBulletList().run()"
             >
               <Icon name="iconoir:list" />
@@ -298,6 +299,7 @@ onBeforeUnmount(() => {
               :disabled="
                 !editor.can().chain().focus().toggleOrderedList().run()
               "
+              type="button"
               @click="editor.chain().focus().toggleOrderedList().run()"
             >
               <Icon name="iconoir:numbered-list-left" />
@@ -306,6 +308,7 @@ onBeforeUnmount(() => {
 
           <div class="editor__tools-group">
             <button
+              type="button"
               class="editor__tools-button"
               :class="{
                 'editor__tools-button--active': editor.isActive('subscript'),
@@ -316,6 +319,7 @@ onBeforeUnmount(() => {
               <Icon name="mdi:format-subscript" />
             </button>
             <button
+              type="button"
               class="editor__tools-button"
               :class="{
                 'editor__tools-button--active': editor.isActive('superscript'),
