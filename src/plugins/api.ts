@@ -2,10 +2,12 @@ import type { $Fetch, FetchOptions } from "ofetch";
 
 import AuthRepository from "~/repositories/modules/auth";
 import StoryRepository from "~/repositories/modules/story";
+import UserRepository from "~/repositories/modules/user";
 
 interface IApiInstance {
   auth: AuthRepository;
   story: StoryRepository;
+  user: UserRepository;
 }
 
 export default defineNuxtPlugin(() => {
@@ -19,6 +21,7 @@ export default defineNuxtPlugin(() => {
   const instances: IApiInstance = {
     auth: new AuthRepository(apiFetcher),
     story: new StoryRepository(apiFetcher),
+    user: new UserRepository(apiFetcher),
   };
 
   const token = useCookie("auth_token");
