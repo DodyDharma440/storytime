@@ -57,6 +57,7 @@ provide("skeleton-loading", isLoadingProps);
           class="story-card__thumbnail-image"
           :alt="`${story.title} thumb`"
           loading="lazy"
+          draggable="false"
         />
 
         <div v-if="isEditable" class="story-card__actions">

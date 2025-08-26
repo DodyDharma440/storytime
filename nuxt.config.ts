@@ -37,5 +37,6 @@ export default defineNuxtConfig({
     "@pinia/nuxt",
     "@vee-validate/nuxt",
     "nuxt-tiptap-editor",
+    "vue3-carousel-nuxt",
   ],
 });

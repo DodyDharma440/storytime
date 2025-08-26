@@ -11,54 +11,41 @@ defineProps<StorySectionProps>();
   <section class="section">
     <SectionTitle :title="title" :explore-href="exploreHref" with-container />
 
-    <div class="stories-slider-wrapper">
-      <div class="stories-slider container">
-        <div
-          v-for="(story, index) in stories"
-          :key="index"
-          class="stories-slider__item"
-        >
+    <Carousel
+      :items-to-show="1.2"
+      :wrap-around="false"
+      :gap="10"
+      :breakpoints="{
+        1024: {
+          itemsToShow: 2,
+          gap: 30,
+        },
+        1280: {
+          itemsToShow: 3,
+          gap: 30,
+        },
+      }"
+    >
+      <Slide v-for="(story, index) in stories" :key="index">
+        <div class="carousel__item">
           <NuxtLink :to="{ name: 'story-slug', params: { slug: 'some-slug' } }">
             <StoryCard :story="story" with-category />
           </NuxtLink>
         </div>
-      </div>
-    </div>
+      </Slide>
+    </Carousel>
   </section>
 </template>
 
 <style lang="scss" scoped>
-.stories-slider-wrapper {
-  overflow-x: auto;
+:deep(.carousel__viewport) {
   padding-top: spacing(1);
-  &::-webkit-scrollbar {
-    display: none;
-  }
-  -ms-overflow-style: none;
-  scrollbar-width: none;
 }
 
-.stories-slider {
-  white-space: nowrap;
-
-  &__item {
-    white-space: normal;
-    display: inline-block;
-    margin-left: spacing(7.5);
-    width: 400px;
-    vertical-align: top;
-
-    @include min-lg {
-      width: 547px;
-    }
-
-    &:nth-child(1) {
-      margin-left: 0;
-    }
-
-    &:nth-last-child(1) {
-      margin-right: spacing(15);
-    }
-  }
+:deep(.carousel__track) {
+  margin: 0px auto;
+  max-width: 1716px;
+  padding-left: spacing(4);
+  align-items: flex-start;
 }
 </style>
