@@ -6,6 +6,14 @@ export default defineNuxtConfig({
     head: {
       title: "Storytime",
     },
+    pageTransition: {
+      name: "page",
+      mode: "out-in",
+    },
+    layoutTransition: {
+      name: "page",
+      mode: "out-in",
+    },
   },
   srcDir: "src/",
   serverDir: "server/",

@@ -8,16 +8,18 @@ definePageMeta({
 </script>
 
 <template>
-  <div class="content-grid">
-    <AuthWelcome
-      title="Join the World’s Most-Loved Social Storytelling Platform!"
-      description="Create an account to explore interesting articles, connect with like-minded people, and share your own stories. "
-      image="/images/auth/register.png"
-      with-logo
-    />
-  </div>
-  <div class="content-grid">
-    <AuthRegisterForm />
+  <div class="auth-container">
+    <div class="content-grid">
+      <AuthWelcome
+        title="Join the World’s Most-Loved Social Storytelling Platform!"
+        description="Create an account to explore interesting articles, connect with like-minded people, and share your own stories. "
+        image="/images/auth/register.png"
+        with-logo
+      />
+    </div>
+    <div class="content-grid">
+      <AuthRegisterForm />
+    </div>
   </div>
 </template>
 

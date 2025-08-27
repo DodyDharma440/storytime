@@ -8,15 +8,17 @@ definePageMeta({
 </script>
 
 <template>
-  <div class="content-grid">
-    <AuthLoginForm />
-  </div>
-  <div class="content-grid">
-    <AuthWelcome
-      title="Welcome Back to Story Time!"
-      description="Dive back into captivating stories, follow your favorite authors, and continue sharing your own tales."
-      image="/images/auth/login.png"
-    />
+  <div class="auth-container">
+    <div class="content-grid">
+      <AuthLoginForm />
+    </div>
+    <div class="content-grid">
+      <AuthWelcome
+        title="Welcome Back to Story Time!"
+        description="Dive back into captivating stories, follow your favorite authors, and continue sharing your own tales."
+        image="/images/auth/login.png"
+      />
+    </div>
   </div>
 </template>
 

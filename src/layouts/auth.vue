@@ -1,5 +1,5 @@
 <template>
-  <div class="container auth-container">
+  <div class="container">
     <slot />
   </div>
 </template>
@@ -11,13 +11,9 @@
   padding-bottom: spacing(5);
 }
 
-.auth-container {
+:deep(.auth-container) {
   display: grid;
   align-items: center;
   @include grid-col(12);
-
-  & > div {
-    @include col-span(6);
-  }
 }
 </style>
