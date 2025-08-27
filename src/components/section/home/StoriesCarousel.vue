@@ -28,9 +28,7 @@ defineProps<StorySectionProps>();
     >
       <Slide v-for="(story, index) in stories" :key="index">
         <div class="carousel__item">
-          <NuxtLink :to="{ name: 'story-slug', params: { slug: 'some-slug' } }">
-            <StoryCard :story="story" with-category />
-          </NuxtLink>
+          <StoryCard :story="story" with-category />
         </div>
       </Slide>
     </Carousel>

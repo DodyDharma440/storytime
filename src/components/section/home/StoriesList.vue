@@ -24,25 +24,22 @@ defineProps<StoriesListProps>();
           'stories-grid__item--large': index === 0,
         }"
       >
-        <NuxtLink :to="{ name: 'story-slug', params: { slug: 'some-slug' } }">
-          <StoryCard
-            :story="story"
-            :is-highlight="index === 0"
-            is-grid
-            :with-category="false"
-          />
-        </NuxtLink>
+        <StoryCard
+          :story="story"
+          :is-highlight="index === 0"
+          is-grid
+          :with-category="false"
+        />
       </div>
     </div>
 
     <div v-if="layout === 'flex'" class="stories-flex">
-      <NuxtLink
+      <StoryCard
         v-for="(story, index) in stories"
         :key="index"
-        :to="{ name: 'story-slug', params: { slug: 'some-slug' } }"
-      >
-        <StoryCard :story="story" :with-category="false" />
-      </NuxtLink>
+        :story="story"
+        :with-category="false"
+      />
     </div>
   </section>
 </template>

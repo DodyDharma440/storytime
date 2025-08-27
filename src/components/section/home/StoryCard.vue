@@ -19,22 +19,14 @@ interface StoryCardEmits {
   (e: "delete", id: string): void;
 }
 
+const config = useRuntimeConfig();
 const emit = defineEmits<StoryCardEmits>();
 
 const props = withDefaults(defineProps<StoryCardProps>(), {
   withCategory: true,
 });
 
-const handleEdit = (e: Event, slug: string) => {
-  e.preventDefault();
-  navigateTo({
-    name: "dashboard-story-slug-edit",
-    params: { slug },
-  });
-};
-
-const handleDelete = (e: Event, id: string) => {
-  e.preventDefault();
+const handleDelete = (id: string) => {
   emit("delete", id);
 };
 
@@ -43,83 +35,96 @@ provide("skeleton-loading", isLoadingProps);
 </script>
 
 <template>
-  <article
-    class="story-card"
-    :class="{
-      'story-card--large': isGrid && isHighlight,
-      'story-card--small': isGrid && !isHighlight,
-    }"
+  <div
+    role="link"
+    :data-href="`${config.public.BASE_URL}/story/some-slug`"
+    tabindex="0"
   >
-    <UiSkeleton>
-      <div class="story-card__thumbnail">
-        <NuxtImg
-          :src="story.image"
-          class="story-card__thumbnail-image"
-          :alt="`${story.title} thumb`"
-          loading="lazy"
-          draggable="false"
-        />
+    <article
+      class="story-card"
+      :class="{
+        'story-card--large': isGrid && isHighlight,
+        'story-card--small': isGrid && !isHighlight,
+      }"
+    >
+      <UiSkeleton>
+        <div class="story-card__thumbnail">
+          <NuxtImg
+            :src="story.image"
+            class="story-card__thumbnail-image"
+            :alt="`${story.title} thumb`"
+            loading="lazy"
+            draggable="false"
+          />
 
-        <div v-if="isEditable" class="story-card__actions">
-          <button
-            type="button"
-            class="story-card__actions-button"
-            @click="(e) => handleEdit(e, 'some-id')"
-          >
-            <Icon name="mage:edit" />
-          </button>
-          <button
-            type="button"
-            class="story-card__actions-button"
-            @click="(e) => handleDelete(e, 'some-id')"
-          >
-            <Icon name="weui:delete-outlined" />
-          </button>
+          <div v-if="isEditable" class="story-card__actions">
+            <NuxtLink
+              class="story-card__actions-button"
+              :to="{
+                name: 'dashboard-story-slug-edit',
+                params: { slug: 'some-id' },
+              }"
+            >
+              <Icon name="mage:edit" />
+            </NuxtLink>
+            <button
+              type="button"
+              class="story-card__actions-button"
+              @click="handleDelete('some-id')"
+            >
+              <Icon name="weui:delete-outlined" />
+            </button>
+          </div>
         </div>
-      </div>
-    </UiSkeleton>
-
-    <div>
-      <UiSkeleton :text-line="1" class="story-card__title-skeleton">
-        <h6 class="story-card__title">
-          {{ story.title }}
-        </h6>
-      </UiSkeleton>
-      <UiSkeleton :text-line="3" class="story-card__description-skeleton">
-        <p class="story-card__description">
-          {{ story.shortContent }}
-        </p>
       </UiSkeleton>
 
-      <div class="story-card__info">
-        <div v-if="!isEditable" class="story-card__info-author">
-          <UiSkeleton is-circle>
-            <UiAvatar :src="story.authorAvatar" />
-          </UiSkeleton>
+      <div>
+        <UiSkeleton :text-line="1" class="story-card__title-skeleton">
+          <NuxtLink
+            :to="{ name: 'story-slug', params: { slug: 'some-slug' } }"
+            class="story-card__link"
+          >
+            <h3 class="story-card__title">
+              {{ story.title }}
+            </h3>
+          </NuxtLink>
+        </UiSkeleton>
+        <UiSkeleton :text-line="3" class="story-card__description-skeleton">
+          <p class="story-card__description">
+            {{ story.shortContent }}
+          </p>
+        </UiSkeleton>
 
-          <UiSkeleton>
-            <p class="story-card__info-author-name">
-              {{ story.authorName }}
-            </p>
-          </UiSkeleton>
-        </div>
+        <div class="story-card__info">
+          <div v-if="!isEditable" class="story-card__info-author">
+            <UiSkeleton is-circle>
+              <UiAvatar :src="story.authorAvatar" />
+            </UiSkeleton>
 
-        <div
-          class="story-card__info-subinfo"
-          :class="{ 'story-card__info-subinfo--editable': isEditable }"
-        >
-          <UiSkeleton>
-            <p>{{ dayjs(story.createdDate).format("DD MMMM YYYY") }}</p>
-          </UiSkeleton>
-          <UiSkeleton>
-            <UiTag v-if="withCategory">
-              <span>{{ story.category }}</span>
-            </UiTag>
-          </UiSkeleton>
+            <UiSkeleton>
+              <p class="story-card__info-author-name">
+                {{ story.authorName }}
+              </p>
+            </UiSkeleton>
+          </div>
+
+          <div
+            class="story-card__info-subinfo"
+            :class="{ 'story-card__info-subinfo--editable': isEditable }"
+          >
+            <UiSkeleton>
+              <p>{{ dayjs(story.createdDate).format("DD MMMM YYYY") }}</p>
+            </UiSkeleton>
+            <UiSkeleton>
+              <UiTag v-if="withCategory">
+                <span>{{ story.category }}</span>
+              </UiTag>
+            </UiSkeleton>
+          </div>
         </div>
       </div>
-    </div>
-  </article>
+    </article>
+  </div>
 </template>
 
 <style lang="scss" scoped>
@@ -144,6 +149,7 @@ provide("skeleton-loading", isLoadingProps);
 
 .story-card {
   transition: transform 0.4s;
+  position: relative;
 
   &:hover {
     transform: translateY(spacing(-1));
@@ -192,6 +198,7 @@ provide("skeleton-loading", isLoadingProps);
     display: flex;
     align-items: center;
     gap: spacing(7.5);
+    z-index: 2;
 
     &-button {
       width: 65px;
@@ -213,6 +220,14 @@ provide("skeleton-loading", isLoadingProps);
 
   &__title {
     @include title-styles;
+  }
+
+  &__link {
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+    }
   }
 
   :deep(.story-card__title-skeleton) {

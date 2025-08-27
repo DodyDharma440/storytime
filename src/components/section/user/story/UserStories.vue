@@ -67,15 +67,11 @@ watch(page, () => {
                 :key="story.id"
                 class="user-stories__list-item"
               >
-                <NuxtLink
-                  :to="{ name: 'story-slug', params: { slug: 'some-slug' } }"
-                >
-                  <StoryCard
-                    :story="story"
-                    is-editable
-                    @delete="(id) => (isOpenDelete = id)"
-                  />
-                </NuxtLink>
+                <StoryCard
+                  :story="story"
+                  is-editable
+                  @delete="(id) => (isOpenDelete = id)"
+                />
               </div>
             </template>
           </div>
