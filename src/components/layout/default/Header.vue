@@ -26,13 +26,14 @@ const mobileButtonRef = useTemplateRef("mobile-button-ref");
         </div>
 
         <div class="navbar__actions-mobile">
-          <UiDropdown :button-ref="mobileButtonRef">
+          <UiDropdown :button-ref="mobileButtonRef" with-overlay>
             <template #button="slotProps">
               <button
                 id="nav-mobile-button"
                 ref="mobile-button-ref"
                 type="button"
                 class="navbar__actions-mobile-button"
+                :style="slotProps.style"
                 @click="slotProps.onToggle"
               >
                 <MenuIcon class="navbar__actions-mobile-button-icon" />
@@ -110,6 +111,8 @@ const mobileButtonRef = useTemplateRef("mobile-button-ref");
         display: flex;
         align-items: center;
         justify-content: center;
+        background-color: $main-background;
+        border-radius: spacing(1);
 
         &-icon {
           width: 28px;

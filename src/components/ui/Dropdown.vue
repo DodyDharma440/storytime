@@ -4,6 +4,7 @@ import type { StyleValue } from "vue";
 interface DropdownProps {
   label?: string;
   buttonRef?: HTMLElement | null;
+  withOverlay?: boolean;
 }
 
 interface SlotProps {
@@ -15,7 +16,7 @@ interface SlotProps {
 
 interface DropdownSlots {
   default?(a: SlotProps): any;
-  button?(p: SlotProps): any;
+  button?(p: SlotProps & { style?: StyleValue }): any;
 }
 
 const props = defineProps<DropdownProps>();
@@ -74,16 +75,27 @@ watch(isOpen, async (value) => {
       :on-close="handleClose"
       :on-open="handleOpen"
       :on-toggle="handleToggle"
+      :style="
+        withOverlay && isOpen ? { position: 'relative', zIndex: 101 } : {}
+      "
     />
     <button
       v-if="!slots.button"
       ref="button-ref"
       class="dropdown__button"
+      :class="{ 'dropdown__button--with-overlay': withOverlay && isOpen }"
       @click="handleToggle"
     >
       <span>{{ label }}</span>
       <Icon name="mdi:chevron-down" size="32" />
     </button>
+    <Transition v-if="withOverlay" name="fade">
+      <div
+        v-if="isOpen"
+        class="dropdown__content-overlay"
+        @click="handleClose"
+      ></div>
+    </Transition>
     <Transition name="fade">
       <div
         v-if="isOpen"
@@ -133,6 +145,11 @@ watch(isOpen, async (value) => {
       font-size: to-rem(24);
       padding: spacing(7.5);
     }
+
+    &--with-overlay {
+      position: relative;
+      z-index: 101;
+    }
   }
 
   &__content {
@@ -143,6 +160,13 @@ watch(isOpen, async (value) => {
     min-width: 100%;
     z-index: $dropdown-z-index;
     background-color: #fff;
+
+    &-overlay {
+      background-color: rgba(#000000, 0.25);
+      position: fixed;
+      inset: 0;
+      z-index: $dropdown-z-index - 1;
+    }
   }
 }
 </style>
