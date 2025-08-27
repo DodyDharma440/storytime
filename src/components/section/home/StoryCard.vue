@@ -162,12 +162,16 @@ provide("skeleton-loading", isLoadingProps);
   }
 
   &__thumbnail {
-    height: 400px;
+    height: 300px;
     border-radius: spacing(2);
     margin-bottom: spacing(5);
     overflow: hidden;
     position: relative;
     background-color: #dddddd;
+
+    @include min-md {
+      height: 400px;
+    }
 
     @include min-lg {
       height: 500px;
@@ -269,10 +273,14 @@ provide("skeleton-loading", isLoadingProps);
 
   &--large {
     .story-card__thumbnail {
-      height: 700px;
+      height: 500px;
+
+      @include min-sm {
+        height: 600px;
+      }
 
       @include min-md {
-        height: 800px;
+        height: 700px;
       }
 
       @include min-lg {

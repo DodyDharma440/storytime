@@ -65,8 +65,12 @@ defineProps<SectionTitleProps>();
     display: flex;
     align-items: center;
     gap: 1px;
-    font-size: to-rem(20);
+    font-size: to-rem(18);
     transition: color 0.2s;
+
+    @include min-md {
+      font-size: to-rem(20);
+    }
 
     @include min-lg {
       font-size: to-rem(24);
