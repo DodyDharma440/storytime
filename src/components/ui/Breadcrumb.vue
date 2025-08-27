@@ -48,8 +48,16 @@ defineProps<BreadcrumbProps>();
     align-items: center;
     gap: spacing(4);
     color: $primary-color;
-    font-size: to-rem(20);
+    font-size: to-rem(16);
     font-weight: 500;
+
+    @include min-sm {
+      font-size: to-rem(18);
+    }
+
+    @include min-lg {
+      font-size: to-rem(20);
+    }
 
     &-item {
       display: flex;

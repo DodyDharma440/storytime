@@ -23,7 +23,8 @@ import SectionTitle from "./SectionTitle.vue";
 
 <style lang="scss" scoped>
 .categories {
-  display: flex;
+  display: grid;
+  @include grid-col(2);
   align-items: center;
   gap: spacing(5.5);
   flex-wrap: wrap;
@@ -31,16 +32,27 @@ import SectionTitle from "./SectionTitle.vue";
 
   @include min-lg {
     gap: spacing(7.5);
+    display: flex;
   }
 
   &__item {
-    padding: spacing(10);
+    @include col-span(2);
+    padding: spacing(8);
     border-radius: spacing(2);
     background-color: #f0f5ed;
     color: $primary-color;
     text-align: center;
-    font-size: to-rem(24);
+    font-size: to-rem(20);
     transition: all 0.4s;
+
+    @include min-custom(400px) {
+      padding: spacing(10);
+      @include col-span(1);
+    }
+
+    @include min-md {
+      font-size: to-rem(24);
+    }
 
     @include min-lg {
       padding: spacing(15);
