@@ -40,11 +40,11 @@ const story = inject<IStory>("story");
   }
 
   &__title {
-    font-size: to-rem(60);
+    font-size: to-rem(50);
     margin: 50px 0px;
 
     @include min-lg {
-      font-size: to-rem(50);
+      font-size: to-rem(60);
     }
   }
 

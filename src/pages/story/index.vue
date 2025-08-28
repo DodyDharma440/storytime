@@ -7,6 +7,15 @@ import UiBreadcrumb from "~/components/ui/Breadcrumb.vue";
 import { sortByOptions } from "~/constants/stories";
 import type { BreadcrumbItem } from "~/interfaces/ui";
 
+const config = useRuntimeConfig();
+useCreateMeta({
+  title: "Storytime - All Story",
+  ogImage: `${config.public.BASE_URL}/images/hero.png`,
+  description:
+    "The world's most-loved social storytelling platform. Story time connects a global community of 90 million readers and writers through the power of story.",
+  path: "/story",
+});
+
 const breadcrumbItems: BreadcrumbItem[] = [
   { label: "Home", href: { path: "/" } },
   { label: "All Story", href: { path: "/story" }, isActive: true },

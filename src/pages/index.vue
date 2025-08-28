@@ -5,6 +5,14 @@ import StoriesList from "~/components/section/home/StoriesList.vue";
 import StoryCategories from "~/components/section/home/StoryCategories.vue";
 import { articles } from "~/constants/stories";
 
+const config = useRuntimeConfig();
+
+useCreateMeta({
+  ogImage: `${config.public.BASE_URL}/images/hero.png`,
+  description:
+    "The world's most-loved social storytelling platform. Story time connects a global community of 90 million readers and writers through the power of story.",
+});
+
 const getStoriesByCategory = (category: string) => {
   return articles.filter((article) => article.category === category);
 };

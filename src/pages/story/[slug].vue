@@ -7,6 +7,13 @@ import { articles } from "~/constants/stories";
 import type { BreadcrumbItem } from "~/interfaces/ui";
 
 const story = articles[0];
+useCreateMeta({
+  title: `Storytime - ${story.title}`,
+  ogImage: story.image,
+  description: story.shortContent,
+  path: "/story/some-slug",
+});
+
 const breadcrumbItems: BreadcrumbItem[] = [
   { label: "Home", href: { path: "/" } },
   { label: story.title, href: { path: "/story" }, isActive: true },
@@ -31,7 +38,11 @@ provide("story", story);
 
 <style lang="scss" scoped>
 .story {
-  padding-top: 105px;
+  padding-top: 70px;
   padding-bottom: 200px;
+
+  @include min-lg {
+    padding-top: 105px;
+  }
 }
 </style>
