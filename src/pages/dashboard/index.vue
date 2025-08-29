@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import UserProfile from "~/components/section/user/profile/UserProfile.vue";
 import UserStories from "~/components/section/user/story/UserStories.vue";
+
+definePageMeta({
+  middleware: ["auth"],
+});
 </script>
 
 <template>

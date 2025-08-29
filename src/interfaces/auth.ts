@@ -2,15 +2,16 @@ import type { ApiResponse } from "./api";
 import type { IUser } from "./user";
 
 export interface ILoginForm {
-  email: string;
+  username_or_email: string;
   password: string;
 }
 
 export interface IRegisterForm {
   name: string;
   email: string;
+  username: string;
   password: string;
-  confirmPassword: string;
+  password_confirmation: string;
 }
 
 export interface IAuthResponse extends Omit<ApiResponse<any>, "data"> {
@@ -22,4 +23,5 @@ export interface IAuthRepository {
   login(data: ILoginForm): Promise<IAuthResponse>;
   register(data: IRegisterForm): Promise<IAuthResponse>;
   logout(): Promise<ApiResponse<any>>;
+  setToken(data: { token: string }): Promise<any>;
 }

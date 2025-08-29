@@ -4,6 +4,7 @@ import AuthLoginForm from "~/components/section/auth/LoginForm.vue";
 
 definePageMeta({
   layout: "auth",
+  middleware: ["auth"],
 });
 </script>
 

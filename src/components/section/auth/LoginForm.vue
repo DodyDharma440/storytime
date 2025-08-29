@@ -15,13 +15,22 @@ const { handleSubmit, defineField, errors } = useForm<ILoginForm>({
 
 const { isLoading, mutate } = useMutation({
   mutationFn: (data: ILoginForm) => $api.auth.login(data),
+  onError: (err) => {
+    alert(err.response._data?.message);
+  },
+  onSuccess: async (res) => {
+    const token = res.token;
+    await $api.auth.setToken({ token });
+    alert("Login success!");
+    navigateTo("/dashboard", { replace: true });
+  },
 });
 
 const submitHandler = handleSubmit((values) => {
   mutate(values);
 });
 
-const [email, emailAttrs] = defineField("email");
+const [email, emailAttrs] = defineField("username_or_email");
 const [password, passwordAttrs] = defineField("password");
 </script>
 
@@ -41,7 +50,7 @@ const [password, passwordAttrs] = defineField("password");
               placeholder="Enter your email"
               label="Email"
               v-bind="emailAttrs"
-              :error="errors.email"
+              :error="errors.username_or_email"
             />
             <UiInput
               id="password"

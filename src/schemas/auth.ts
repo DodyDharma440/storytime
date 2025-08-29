@@ -14,13 +14,13 @@ export const registerSchema = object({
     )
     .matches(/[0-9]/, "Password must include at least one number (0-9)")
     .matches(/^[^\s]+$/, "Password must not contain spaces"),
-  confirmPassword: string()
+  password_confirmation: string()
     .required("Confirm Password should not be empty")
     .oneOf([ref("password")], "Confirm password must match to password"),
 });
 
 export const loginSchema = object({
-  email: string()
+  username_or_email: string()
     .required("Email should not be empty")
     .email("Email must be a valid email"),
   password: string().required("Password should not be empty"),

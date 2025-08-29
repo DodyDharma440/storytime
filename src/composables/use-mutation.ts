@@ -1,9 +1,9 @@
-import type { ApiResponse } from "~/interfaces/api";
+import type { ApiResponse, ErrorResponse } from "~/interfaces/api";
 
 export type MutationOptions<P, R> = {
   mutationFn: (p: P) => Promise<R>;
   onSuccess?: (res: R) => void;
-  onError?: (err: any) => void;
+  onError?: (err: ErrorResponse<any>) => void;
   successMessage?: ((res: R) => string) | string;
 };
 

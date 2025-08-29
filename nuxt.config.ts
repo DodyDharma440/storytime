@@ -39,6 +39,14 @@ export default defineNuxtConfig({
       },
     },
   },
+  nitro: {
+    devProxy: {
+      "/api/backend": {
+        target: "https://timestory.tmdsite.my.id/api",
+        changeOrigin: true,
+      },
+    },
+  },
   modules: [
     "@nuxt/eslint",
     "@nuxt/image",

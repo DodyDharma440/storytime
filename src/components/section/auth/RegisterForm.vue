@@ -9,22 +9,44 @@ import AuthFormSubmitter from "./FormSubmitter.vue";
 
 const { $api } = useNuxtApp();
 
-const { handleSubmit, defineField, errors } = useForm<IRegisterForm>({
-  validationSchema: registerSchema,
-});
+const { handleSubmit, defineField, errors, setFieldError } =
+  useForm<IRegisterForm>({
+    validationSchema: registerSchema,
+  });
 
 const { isLoading, mutate } = useMutation({
   mutationFn: (data: IRegisterForm) => $api.auth.register(data),
+  onError: (error) => {
+    const errors = error.response?._data?.errors;
+    if (errors) {
+      Object.entries(errors).forEach(([key, value]) => {
+        if (key !== "username") {
+          setFieldError(key as keyof IRegisterForm, (value as string[])[0]);
+        }
+      });
+    }
+  },
+  onSuccess: async (res) => {
+    const token = res.token;
+    await $api.auth.setToken({ token });
+    alert("Register success!");
+    navigateTo("/dashboard", { replace: true });
+  },
 });
 
 const submitHandler = handleSubmit((values) => {
-  mutate(values);
+  mutate({
+    ...values,
+    username: values.email,
+  });
 });
 
 const [name, nameAttrs] = defineField("name");
 const [email, emailAttrs] = defineField("email");
 const [password, passwordAttrs] = defineField("password");
-const [confirmPassword, confirmPasswordAttrs] = defineField("confirmPassword");
+const [confirmPassword, confirmPasswordAttrs] = defineField(
+  "password_confirmation"
+);
 </script>
 
 <template>
@@ -71,7 +93,7 @@ const [confirmPassword, confirmPasswordAttrs] = defineField("confirmPassword");
             label="Confirm Password"
             type="password"
             v-bind="confirmPasswordAttrs"
-            :error="errors.confirmPassword"
+            :error="errors.password_confirmation"
             autocomplete="new-password"
           />
         </div>

@@ -4,6 +4,7 @@ import AuthRegisterForm from "~/components/section/auth/RegisterForm.vue";
 
 definePageMeta({
   layout: "auth",
+  middleware: ["auth"],
 });
 </script>
 

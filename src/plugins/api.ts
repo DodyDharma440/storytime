@@ -13,7 +13,7 @@ interface IApiInstance {
 export default defineNuxtPlugin(() => {
   const config = useRuntimeConfig();
   const fetchOptions: FetchOptions = {
-    baseURL: config.public.API_BASE_URL,
+    baseURL: `${config.public.API_BASE_URL}/api/backend`,
   };
 
   const apiFetcher = $fetch.create(fetchOptions) as $Fetch;
