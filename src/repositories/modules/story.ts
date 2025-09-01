@@ -14,27 +14,38 @@ class StoryRepository extends HttpFactory implements IStoryRepository {
     return await this.call(`/category`);
   }
 
-  async getStories(params: string): Promise<ApiResponse<IStory[]>> {
-    return await this.call(`${this.RESOURCE}?${params}`);
+  async getStories(
+    params: Record<string, any>
+  ): Promise<ApiResponse<IStory[]>> {
+    return await this.call(`${this.RESOURCE}?${params}`, {
+      options: { query: params },
+    });
   }
   async getStory(id: string): Promise<ApiResponse<IStory>> {
     return await this.call(`${this.RESOURCE}/${id}`);
   }
 
-  async getUserStories(params: string): Promise<ApiResponse<IStory[]>> {
-    return await this.call(`/user/stories?${params}`);
+  async getUserStories(
+    params: Record<string, any>
+  ): Promise<ApiResponse<IStory[]>> {
+    return await this.call(`/user/stories?${params}`, {
+      options: { query: params },
+    });
   }
   async getUserStory(id: string): Promise<ApiResponse<IStory>> {
     return await this.call(`${this.USER_RESOURCE}/${id}`);
   }
   async createStory(data: FormData): Promise<ApiResponse<IStory>> {
-    return await this.call(`${this.USER_RESOURCE}`, "POST", data);
+    return await this.call(`${this.USER_RESOURCE}`, { method: "POST", data });
   }
   async updateStory(data: FormData, id: string): Promise<ApiResponse<IStory>> {
-    return await this.call(`${this.USER_RESOURCE}/${id}`, "PUT", data);
+    return await this.call(`${this.USER_RESOURCE}/${id}`, {
+      method: "PUT",
+      data,
+    });
   }
   async deleteStory(id: string): Promise<ApiResponse<IStory>> {
-    return await this.call(`${this.USER_RESOURCE}/${id}`, "DELETE");
+    return await this.call(`${this.USER_RESOURCE}/${id}`, { method: "DELETE" });
   }
 }
 

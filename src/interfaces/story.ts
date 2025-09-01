@@ -44,10 +44,10 @@ export interface IStoryForm {
 export interface IStoryRepository {
   getCategories(): Promise<ApiResponse<IStoryCategory[]>>;
 
-  getStories(params: string): Promise<ApiResponse<IStory[]>>;
+  getStories(params: Record<string, any>): Promise<ApiResponse<IStory[]>>;
   getStory(id: string): Promise<ApiResponse<IStory>>;
 
-  getUserStories(params: string): Promise<ApiResponse<IStory[]>>;
+  getUserStories(params: Record<string, any>): Promise<ApiResponse<IStory[]>>;
   getUserStory(id: string): Promise<ApiResponse<IStory>>;
   createStory(data: FormData): Promise<ApiResponse<IStory>>;
   updateStory(data: FormData, id: string): Promise<ApiResponse<IStory>>;

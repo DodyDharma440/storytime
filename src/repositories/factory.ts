@@ -24,9 +24,11 @@ class HttpFactory {
 
   async call<T, B extends object = object>(
     url: string,
-    method: HttpMethod = "GET",
-    data?: B,
-    options?: FetchOptions<"json">
+    options?: {
+      method?: HttpMethod;
+      data?: B;
+      options?: FetchOptions<"json">;
+    }
   ) {
     const authToken = useState<string | null>("__auth_token");
 
@@ -34,12 +36,12 @@ class HttpFactory {
     this.controller = new AbortController();
 
     return this.$fetch<T>(url, {
-      method,
-      body: data,
+      method: options?.method ?? "GET",
+      body: options?.data,
       signal: this.controller.signal,
-      ...options,
+      ...options?.options,
       headers: {
-        ...options?.headers,
+        ...options?.options?.headers,
         ...(authToken.value
           ? { Authorization: `Bearer ${authToken.value}` }
           : {}),

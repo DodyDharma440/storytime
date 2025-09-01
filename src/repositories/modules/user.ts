@@ -15,14 +15,16 @@ class UserRepository extends HttpFactory implements IUserRepository {
   async updateProfile(
     data: Omit<IUpdateProfileForm, "temp_profile_picture" | "profile_picture">
   ): Promise<ApiResponse<IUser>> {
-    return await this.call(`${this.RESOURCE}/profile`, "POST", data);
+    return await this.call(`${this.RESOURCE}/profile`, {
+      method: "POST",
+      data,
+    });
   }
   async updateProfilePicture(data: FormData): Promise<ApiResponse<IUser>> {
-    return await this.call(
-      `${this.RESOURCE}/upload-profile-image`,
-      "POST",
-      data
-    );
+    return await this.call(`${this.RESOURCE}/upload-profile-image`, {
+      method: "POST",
+      data,
+    });
   }
 }
 
