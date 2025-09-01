@@ -27,8 +27,6 @@ export const useMutation = <P, T, R = ApiResponse<T>>({
         // TODO: DISPLAY TOAST
         // useNuxtApp().$toast.success(options?.successMessage || successMessage);
       }
-
-      isLoading.value = false;
     } catch (error: any) {
       (options?.onError || onError)?.(error);
       const message =
@@ -40,6 +38,7 @@ export const useMutation = <P, T, R = ApiResponse<T>>({
       // useNuxtApp().$toast.error(message);
       // eslint-disable-next-line no-console
       console.log(message);
+    } finally {
       isLoading.value = false;
     }
   };
