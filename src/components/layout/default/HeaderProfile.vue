@@ -17,7 +17,8 @@ const { isLoading, mutate } = useMutation({
   onSuccess: async () => {
     await $api.auth.clearToken();
     userStore.resetUser();
-    window.location.replace("/login");
+    useState("__auth_token", () => undefined);
+    navigateTo("/login", { replace: true });
   },
 });
 

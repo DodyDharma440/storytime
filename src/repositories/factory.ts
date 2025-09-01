@@ -45,6 +45,7 @@ class HttpFactory {
         ...(authToken.value
           ? { Authorization: `Bearer ${authToken.value}` }
           : {}),
+        Accept: "application/json",
       },
     });
   }

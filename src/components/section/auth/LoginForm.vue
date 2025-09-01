@@ -23,7 +23,9 @@ const { isLoading, mutate } = useMutation({
     const token = res.data.token;
     await $api.auth.setToken({ token });
     userStore.setUser(res.data.user);
+    useState("__auth_token", () => res.data.token);
     navigateTo("/dashboard", { replace: true });
+
     alert("Login success!");
   },
 });
