@@ -3,11 +3,27 @@ import UiAlertDialog from "~/components/ui/AlertDialog.vue";
 import UiAvatar from "~/components/ui/Avatar.vue";
 import UiDropdown from "~/components/ui/Dropdown.vue";
 
+const { $api } = useNuxtApp();
+const userStore = useUserAuthStore();
+
 const isOpenLogout = ref(false);
 const buttonRef = useTemplateRef("button-ref");
 
+const { isLoading, mutate } = useMutation({
+  mutationFn: () => $api.auth.logout(),
+  onError: (err) => {
+    alert(err.response._data?.message);
+  },
+  onSuccess: async () => {
+    await $api.auth.clearToken();
+    userStore.resetUser();
+    window.location.replace("/login");
+  },
+});
+
 const handleLogout = () => {
   isOpenLogout.value = false;
+  mutate({});
 };
 </script>
 
@@ -22,9 +38,9 @@ const handleLogout = () => {
           role="button"
           @click="slotProps.onToggle"
         >
-          <UiAvatar src="https://avatar.iran.liara.run/public/boy" />
+          <UiAvatar :src="null" />
           <div class="navbar-profile__info">
-            <p class="navbar-profile__info-name">Iswara</p>
+            <p class="navbar-profile__info-name">{{ userStore.user?.name }}</p>
             <Icon class="navbar-profile__info-icon" name="mdi:chevron-down" />
           </div>
         </div>
@@ -32,7 +48,9 @@ const handleLogout = () => {
 
       <template #default="slotProps">
         <div class="profile-menu">
-          <div class="profile-menu__item profile-menu__item-name">Iswara</div>
+          <div class="profile-menu__item profile-menu__item-name">
+            {{ userStore.getUser }}
+          </div>
           <NuxtLink
             :to="{ name: 'dashboard' }"
             class="profile-menu__item"
@@ -55,6 +73,7 @@ const handleLogout = () => {
       title="Logout"
       description="Are you sure want to logout?"
       confirm-button-text="Logout"
+      :is-loading="isLoading"
       @close="isOpenLogout = false"
       @confirm="handleLogout"
     />

@@ -6,6 +6,7 @@ interface AlertDialogProps {
   isOpen: boolean;
   confirmButtonText?: string;
   cancelButtonText?: string;
+  isLoading?: boolean;
   title: string;
   description: string;
 }
@@ -28,8 +29,16 @@ const emit = defineEmits<AlertDialogEmits>();
       <p>{{ description }}</p>
 
       <div class="alert-dialog__actions">
-        <UiButton variant="outline" @click="emit('close')">Cancel</UiButton>
-        <UiButton @click="emit('confirm')">{{ confirmButtonText }}</UiButton>
+        <UiButton
+          variant="outline"
+          :disabled="isLoading"
+          @click="emit('close')"
+        >
+          Cancel
+        </UiButton>
+        <UiButton :is-loading="isLoading" @click="emit('confirm')">
+          {{ confirmButtonText }}
+        </UiButton>
       </div>
     </div>
   </UiModal>

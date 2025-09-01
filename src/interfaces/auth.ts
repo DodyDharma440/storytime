@@ -14,14 +14,20 @@ export interface IRegisterForm {
   password_confirmation: string;
 }
 
-export interface IAuthResponse extends Omit<ApiResponse<any>, "data"> {
+export interface IAuthResponse {
   user: IUser;
   token: string;
 }
 
 export interface IAuthRepository {
-  login(data: ILoginForm): Promise<IAuthResponse>;
-  register(data: IRegisterForm): Promise<IAuthResponse>;
+  login(data: ILoginForm): Promise<ApiResponse<IAuthResponse>>;
+  register(data: IRegisterForm): Promise<ApiResponse<IAuthResponse>>;
   logout(): Promise<ApiResponse<any>>;
   setToken(data: { token: string }): Promise<any>;
+  clearToken(): Promise<any>;
+}
+
+export interface IUserAuthStore {
+  user: IUser | null;
+  isLoading: boolean;
 }

@@ -6,7 +6,7 @@ import UiDropdown from "~/components/ui/Dropdown.vue";
 
 import HeaderProfile from "./HeaderProfile.vue";
 
-const IS_LOGIN = false;
+const userStore = useUserAuthStore();
 
 const mobileButtonRef = useTemplateRef("mobile-button-ref");
 </script>
@@ -16,7 +16,7 @@ const mobileButtonRef = useTemplateRef("mobile-button-ref");
     <div class="container navbar__content">
       <DefaultLogo />
 
-      <HeaderProfile v-if="IS_LOGIN" />
+      <HeaderProfile v-if="userStore.user" />
       <template v-else>
         <div class="navbar__actions">
           <UiButton variant="outline" :href="{ name: 'register' }">

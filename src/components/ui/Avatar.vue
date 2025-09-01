@@ -22,6 +22,7 @@ defineProps<AvatarProps>();
     "
   >
     <NuxtImg v-if="src" :src="src" class="avatar__image" />
+    <Icon v-else name="iconoir:user" :size="(size ?? 50) / 1.5" />
   </div>
 </template>
 
@@ -32,6 +33,9 @@ defineProps<AvatarProps>();
   border-radius: 50%;
   background-color: #dddddd;
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   &__image {
     object-fit: cover;

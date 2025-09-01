@@ -8,6 +8,11 @@ import type {
 import HttpFactory from "~/repositories/factory";
 
 class AuthRepository extends HttpFactory implements IAuthRepository {
+  async clearToken(): Promise<any> {
+    const config = useRuntimeConfig();
+    return await this.call(`${config.public.BASE_URL}/api/clear-token`, "POST");
+  }
+
   async setToken(data: { token: string }): Promise<any> {
     const config = useRuntimeConfig();
     return await this.call(
@@ -17,11 +22,11 @@ class AuthRepository extends HttpFactory implements IAuthRepository {
     );
   }
 
-  async login(data: ILoginForm): Promise<IAuthResponse> {
+  async login(data: ILoginForm): Promise<ApiResponse<IAuthResponse>> {
     return await this.call(`/login`, "POST", data);
   }
 
-  async register(data: IRegisterForm): Promise<IAuthResponse> {
+  async register(data: IRegisterForm): Promise<ApiResponse<IAuthResponse>> {
     return await this.call(`/register`, "POST", data);
   }
 

@@ -1,9 +1,9 @@
-export interface ApiResponse<T> {
+export type ApiResponse<T> = {
   success: boolean;
-  data: T;
   message?: string;
   status: number;
-}
+  data: T;
+};
 
 export interface ErrorResponse<T extends Record<string, any>> {
   response: {

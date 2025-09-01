@@ -1,3 +1,13 @@
+<script setup lang="ts">
+const userStore = useUserAuthStore();
+const { $api } = useNuxtApp();
+const token = useCookie("auth-token", { watch: true });
+
+if (token.value) {
+  await userStore.getUser($api.user);
+}
+</script>
+
 <template>
   <NuxtLoadingIndicator color="#466543" :throttle="0" />
   <NuxtLayout>

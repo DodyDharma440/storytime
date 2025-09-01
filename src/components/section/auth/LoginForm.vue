@@ -8,6 +8,7 @@ import { loginSchema } from "~/schemas/auth";
 import AuthFormSubmitter from "./FormSubmitter.vue";
 
 const { $api } = useNuxtApp();
+const userStore = useUserAuthStore();
 
 const { handleSubmit, defineField, errors } = useForm<ILoginForm>({
   validationSchema: loginSchema,
@@ -19,10 +20,11 @@ const { isLoading, mutate } = useMutation({
     alert(err.response._data?.message);
   },
   onSuccess: async (res) => {
-    const token = res.token;
+    const token = res.data.token;
     await $api.auth.setToken({ token });
-    alert("Login success!");
+    userStore.setUser(res.data.user);
     navigateTo("/dashboard", { replace: true });
+    alert("Login success!");
   },
 });
 

@@ -24,7 +24,7 @@ export default defineNuxtPlugin(() => {
     user: new UserRepository(apiFetcher),
   };
 
-  const token = useCookie("auth_token");
+  const token = useCookie("auth-token");
   const authToken = useState("__auth_token", () => token);
 
   return {
