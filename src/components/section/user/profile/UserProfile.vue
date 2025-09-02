@@ -4,6 +4,8 @@ import UiButton from "~/components/ui/Button.vue";
 
 import ModalEditProfile from "./ModalEditProfile.vue";
 
+const userStore = useUserAuthStore();
+
 const isOpen = ref(false);
 
 const handleOpen = () => {
@@ -14,14 +16,12 @@ const handleOpen = () => {
 <template>
   <div class="profile">
     <div class="container profile__content">
-      <UiAvatar :size="200" />
+      <UiAvatar :src="userStore.user?.profile_image" :size="200" />
       <div class="profile__content-bio">
-        <h2 class="profile__content-title">Iswara</h2>
-        <p class="profile__content-email">dewiratnaiswara99@gmail.com</p>
+        <h2 class="profile__content-title">{{ userStore.user?.name }}</h2>
+        <p class="profile__content-email">{{ userStore.user?.email }}</p>
         <p class="profile__content-description">
-          Avid reader and aspiring writer. Lover of mysteries, thrillers, and
-          sci-fi. Coffee enthusiast and nature explorer. Always on the lookout
-          for new stories and adventures.
+          {{ userStore.user?.about ?? "-" }}
         </p>
       </div>
       <UiButton @click="handleOpen"> Edit Profile </UiButton>

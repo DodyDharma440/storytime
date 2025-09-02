@@ -2,7 +2,7 @@ import { object, ref, string } from "yup";
 
 export const editProfilSchema = object({
   name: string().required("Name should not be empty"),
-  about: string(),
+  about: string().required("About should not be empty"),
   old_password: string(),
   new_password: string()
     .when("old_password", {

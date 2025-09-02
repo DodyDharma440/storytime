@@ -9,22 +9,65 @@ import ModalCropImage from "./ModalCropImage.vue";
 
 const emit = defineEmits<{ (e: "close"): void }>();
 
+const { $api } = useNuxtApp();
+
+const userStore = useUserAuthStore();
+const { user } = storeToRefs(userStore);
+
+const email = ref(user.value?.email);
+
 const { handleSubmit, defineField, errors } = useForm<IUpdateProfileForm>({
   validationSchema: editProfilSchema,
+  initialValues: {
+    name: user.value?.name,
+    about: user.value?.about ?? "",
+    profile_picture_url: user.value?.profile_image ?? undefined,
+  },
+});
+
+const { mutate: mutateProfile, isLoading: isLoadingProfile } = useMutation({
+  mutationFn: (data: IUpdateProfileForm) => $api.user.updateProfile(data),
+  onSuccess: () => {
+    emit("close");
+    userStore.getUser($api.user);
+  },
+});
+
+const { mutate: mutatePicture, isLoading: isLoadingPicture } = useMutation({
+  mutationFn: (data: FormData) => $api.user.updateProfilePicture(data),
 });
 
 const submitHandler = handleSubmit((values) => {
-  const { old_password, new_password, new_password_confirmation } = values;
+  const {
+    old_password,
+    new_password,
+    new_password_confirmation,
+    profile_picture,
+  } = values;
 
   delete values.temp_profile_picture;
+  delete values.profile_picture_url;
 
   if (!old_password || !new_password || !new_password_confirmation) {
     delete values.new_password;
     delete values.old_password;
     delete values.new_password_confirmation;
   }
-  // eslint-disable-next-line no-console
-  console.log("🚀 ~ values:", values);
+
+  if (profile_picture) {
+    const formData = new FormData();
+    formData.append("profile_image", profile_picture);
+    mutatePicture(formData, {
+      onSuccess: () => {
+        alert("Profile picture updated");
+        delete values.profile_picture;
+        mutateProfile(values);
+      },
+    });
+  } else {
+    delete values.profile_picture;
+    mutateProfile(values);
+  }
 });
 
 const [name, nameAttrs] = defineField("name");
@@ -36,9 +79,13 @@ const [confirmPassword, confirmPasswordAttrs] = defineField(
 );
 
 const [picture, pictureAttrs] = defineField("temp_profile_picture");
+
+const [defaultPicture] = defineField("profile_picture_url");
 const [croppedPicture] = defineField("profile_picture");
 const croppedPictureUrl = computed(() =>
-  croppedPicture.value ? URL.createObjectURL(croppedPicture.value) : null
+  croppedPicture.value
+    ? URL.createObjectURL(croppedPicture.value)
+    : defaultPicture.value ?? null
 );
 </script>
 
@@ -72,7 +119,12 @@ const croppedPictureUrl = computed(() =>
           v-bind="nameAttrs"
           :error="errors.name"
         />
-        <UiInput label="Email" placeholder="Your email" disabled />
+        <UiInput
+          v-model="email"
+          label="Email"
+          placeholder="Your email"
+          disabled
+        />
         <UiInput
           v-model="about"
           label="About me"
@@ -114,10 +166,20 @@ const croppedPictureUrl = computed(() =>
       </div>
     </div>
     <div class="profile-form__action">
-      <UiButton variant="outline" type="button" @click="emit('close')">
+      <UiButton
+        variant="outline"
+        type="button"
+        :disabled="isLoadingPicture || isLoadingProfile"
+        @click="emit('close')"
+      >
         Cancel
       </UiButton>
-      <UiButton type="submit">Update Profile</UiButton>
+      <UiButton
+        type="submit"
+        :is-loading="isLoadingPicture || isLoadingProfile"
+      >
+        Update Profile
+      </UiButton>
     </div>
 
     <ModalCropImage

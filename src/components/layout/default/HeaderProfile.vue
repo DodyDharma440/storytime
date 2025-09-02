@@ -50,7 +50,9 @@ const handleLogout = () => {
       <template #default="slotProps">
         <div class="profile-menu">
           <div class="profile-menu__item profile-menu__item-name">
-            {{ userStore.getUser }}
+            <p>
+              {{ userStore.user?.name }}
+            </p>
           </div>
           <NuxtLink
             :to="{ name: 'dashboard' }"
@@ -106,6 +108,8 @@ const handleLogout = () => {
       display: none;
       @include min-lg {
         display: block;
+        max-width: 150px;
+        @include line-clamp(1);
       }
     }
 
@@ -144,6 +148,11 @@ const handleLogout = () => {
       text-align: center;
       font-weight: 700;
       border-bottom: 1px solid #cccccc;
+      max-width: 200px;
+
+      & > p {
+        @include line-clamp(1);
+      }
 
       @include min-lg {
         display: none;

@@ -16,7 +16,7 @@ class UserRepository extends HttpFactory implements IUserRepository {
     data: Omit<IUpdateProfileForm, "temp_profile_picture" | "profile_picture">
   ): Promise<ApiResponse<IUser>> {
     return await this.call(`${this.RESOURCE}/profile`, {
-      method: "POST",
+      method: "PUT",
       data,
     });
   }
