@@ -7,16 +7,19 @@ import UiTag from "~/components/ui/Tag.vue";
 import type { IStory } from "~/interfaces/story";
 
 const htmlToInlineText = (html: string) => {
-  const div = document.createElement("div");
-  div.innerHTML = html;
+  if (typeof window !== "undefined") {
+    const div = document.createElement("div");
+    div.innerHTML = html;
 
-  div
-    .querySelectorAll("p, div, h1, h2, h3, h4, h5, h6, li, br")
-    .forEach((el) => {
-      el.insertAdjacentText("afterend", " ");
-    });
+    div
+      .querySelectorAll("p, div, h1, h2, h3, h4, h5, h6, li, br")
+      .forEach((el) => {
+        el.insertAdjacentText("afterend", " ");
+      });
 
-  return div.textContent?.replace(/\s+/g, " ").trim() || "";
+    return div.textContent?.replace(/\s+/g, " ").trim() || "";
+  }
+  return html;
 };
 
 interface StoryCardProps {
