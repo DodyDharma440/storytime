@@ -4,6 +4,7 @@ import { NuxtImg } from "#components";
 import SearchIcon from "~/assets/icons/SearchIcon.vue";
 import UiInput from "~/components/ui/Input.vue";
 
+const userStore = useUserAuthStore();
 const searchValue = ref("");
 
 const handleSearch = () => {
@@ -18,7 +19,12 @@ const handleSearch = () => {
 
 <template>
   <section class="hero container">
-    <h1 class="hero__title">Welcome to Storytime</h1>
+    <h1 class="hero__title">
+      <template v-if="userStore.user">
+        Hi, {{ userStore.user.name }} <br />
+      </template>
+      Welcome to Storytime
+    </h1>
     <p class="hero__description">
       The world's most-loved social storytelling platform. Story time connects a
       global community of 90 million readers and writers through the power of

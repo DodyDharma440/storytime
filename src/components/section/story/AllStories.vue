@@ -20,6 +20,9 @@ const { data, status, error, refresh } = useAsyncData("all-stories", () => {
     category: filters.value.category,
   });
 
+  params.keyword = params.search;
+  delete params.search;
+
   return $api.story.getStories({
     ...params,
     limit: PER_PAGE,
