@@ -6,6 +6,19 @@ import UiSkeleton from "~/components/ui/Skeleton.vue";
 import UiTag from "~/components/ui/Tag.vue";
 import type { IStory } from "~/interfaces/story";
 
+const htmlToInlineText = (html: string) => {
+  const div = document.createElement("div");
+  div.innerHTML = html;
+
+  div
+    .querySelectorAll("p, div, h1, h2, h3, h4, h5, h6, li, br")
+    .forEach((el) => {
+      el.insertAdjacentText("afterend", " ");
+    });
+
+  return div.textContent?.replace(/\s+/g, " ").trim() || "";
+};
+
 interface StoryCardProps {
   story: IStory;
   isHighlight?: boolean;
@@ -29,6 +42,8 @@ const props = withDefaults(defineProps<StoryCardProps>(), {
 const handleDelete = (id: string) => {
   emit("delete", id);
 };
+
+const contentPreview = computed(() => htmlToInlineText(props.story.content));
 
 const isLoadingProps = toRef(props, "isLoading");
 provide("skeleton-loading", isLoadingProps);
@@ -90,9 +105,10 @@ provide("skeleton-loading", isLoadingProps);
           </NuxtLink>
         </UiSkeleton>
         <UiSkeleton :text-line="3" class="story-card__description-skeleton">
-          <p class="story-card__description">
-            {{ story.content }}
-          </p>
+          <!-- eslint-disable-next-line vue/no-v-html -->
+          <div class="story-card__description">
+            {{ contentPreview }}
+          </div>
         </UiSkeleton>
 
         <div class="story-card__info">

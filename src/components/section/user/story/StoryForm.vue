@@ -3,19 +3,24 @@ import UiButton from "~/components/ui/Button.vue";
 import UiInput from "~/components/ui/Input.vue";
 import UiSelect from "~/components/ui/Select.vue";
 import UiTiptapEditor from "~/components/ui/TiptapEditor.vue";
-import { allCategories } from "~/constants/stories";
 import type { IStory, IStoryForm } from "~/interfaces/story";
 import { storySchema } from "~/schemas/story";
-
-const categoryOptions = allCategories
-  .slice(1)
-  .map((c) => ({ label: c, value: c }));
 
 interface StoryFormProps {
   editData?: IStory;
 }
 
 const props = defineProps<StoryFormProps>();
+
+const { $api } = useNuxtApp();
+
+const categoriesStore = useCategoriesStore();
+if (!categoriesStore.categories.length) {
+  const { data } = await useAsyncData("categories", () =>
+    $api.story.getCategories()
+  );
+  categoriesStore.setCategories(data.value?.data ?? []);
+}
 
 const { handleSubmit, defineField, errors, values, setFieldValue } =
   useForm<IStoryForm>({
@@ -30,9 +35,44 @@ const { handleSubmit, defineField, errors, values, setFieldValue } =
       : undefined,
   });
 
+const { mutate: createStory, isLoading: isLoadingCreate } = useMutation({
+  mutationFn: (data: FormData) => $api.story.createStory(data),
+  successMessage: "Story successfully created",
+  onSuccess: () => navigateTo({ name: "dashboard" }),
+});
+
+const { mutate: updateStory, isLoading: isLoadingUpdate } = useMutation({
+  mutationFn: ({ data, id }: { data: FormData; id: string }) =>
+    $api.story.updateStory(data, id),
+  successMessage: "Story successfully updated",
+  onSuccess: () => navigateTo({ name: "dashboard" }),
+});
+
+const categoryOptions = computed(() => {
+  return categoriesStore.categories.map((category) => ({
+    label: category.name,
+    value: `${category.id}`,
+  }));
+});
+
 const submitHandler = handleSubmit((values) => {
-  // eslint-disable-next-line no-console
-  console.log("🚀 ~ values:", values);
+  const formData = new FormData();
+
+  const { title, category_id, content_image, content } = values;
+  delete values.content_image_url;
+
+  formData.append("title", title);
+  formData.append("category_id", category_id);
+  if (content_image) {
+    formData.append("content_image", content_image);
+  }
+  formData.append("content", content);
+
+  if (props.editData) {
+    updateStory({ data: formData, id: props.editData.id });
+  } else {
+    createStory(formData);
+  }
 });
 
 const [title, titleAttrs] = defineField("title");
@@ -131,10 +171,18 @@ const previewUrl = computed(() =>
       </div>
 
       <div class="story-form__action">
-        <UiButton type="button" variant="outline" :to="{ name: 'dashboard' }">
+        <UiButton
+          type="button"
+          variant="outline"
+          :to="{ name: 'dashboard' }"
+          :disabled="isLoadingUpdate || isLoadingCreate"
+        >
           Cancel
         </UiButton>
-        <UiButton type="submit">
+        <UiButton
+          type="submit"
+          :is-loading="isLoadingUpdate || isLoadingCreate"
+        >
           {{ editData ? "Update" : "Post" }} Story
         </UiButton>
       </div>

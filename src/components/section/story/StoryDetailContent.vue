@@ -15,9 +15,8 @@ const story = inject<IStory>("story");
         />
       </div>
     </div>
-    <div class="story-content__text">
-      {{ story?.content }}
-    </div>
+    <!-- eslint-disable-next-line vue/no-v-html -->
+    <div class="story-content__text" v-html="story?.content"></div>
   </div>
 </template>
 
@@ -64,6 +63,11 @@ const story = inject<IStory>("story");
 
   &__text {
     @include col-span(12);
+
+    * {
+      all: revert;
+      line-height: 1.5;
+    }
 
     @include min-xl {
       @include col-span(7);
