@@ -3,6 +3,12 @@ export type ApiResponse<T> = {
   message?: string;
   status: number;
   data: T;
+  meta?: {
+    current_page: string;
+    last_page: number;
+    per_page: string;
+    total: number;
+  };
 };
 
 export interface ErrorResponse<T extends Record<string, any>> {

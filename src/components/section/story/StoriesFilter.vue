@@ -1,28 +1,32 @@
 <script setup lang="ts">
 import SearchIcon from "~/assets/icons/SearchIcon.vue";
 import UiInput from "~/components/ui/Input.vue";
-import { allCategories, sortByOptions } from "~/constants/stories";
+import { sortByOptions } from "~/constants/stories";
 
 import DropdownFilter from "./DropdownFilter.vue";
 
 const route = useRoute();
+const categoriesStore = useCategoriesStore();
 
 const storiesFilter = useStoriesFilterStore();
 const searchValue: Ref<string> = ref((route.query.search as string) ?? "");
 
-storiesFilter.$subscribe((mutate, state) => {
-  searchValue.value = state.search;
+const categoriesOptions = computed(() => {
+  const options = categoriesStore.categories.map((category) => ({
+    label: category.name,
+    value: category.slug,
+  }));
+
+  return [{ label: "All", value: "All" }, ...options];
 });
 
-const handleSearch = () => {
-  storiesFilter.setValue({
-    search: searchValue.value.trim(),
-    page: 1,
-  });
-};
-
-watch(searchValue, () => {
-  debounce(handleSearch, 500);
+watch(searchValue, (newValue) => {
+  debounce(() => {
+    storiesFilter.setValue({
+      search: newValue.trim(),
+      page: 1,
+    });
+  }, 500);
 });
 </script>
 
@@ -30,13 +34,13 @@ watch(searchValue, () => {
   <div class="stories-filter">
     <div class="stories-filter__dropdown-group">
       <DropdownFilter
-        v-model="storiesFilter.sortBy"
+        filter-key="sortBy"
         :items="sortByOptions"
         label="Sort by"
       />
       <DropdownFilter
-        v-model="storiesFilter.category"
-        :items="allCategories"
+        filter-key="category"
+        :items="categoriesOptions"
         label="Category"
       />
     </div>

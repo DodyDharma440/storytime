@@ -32,4 +32,9 @@ export const allCategories = [
   "Mystery",
 ];
 
-export const sortByOptions = ["Newest", "Popular", "A - Z", "Z - A"];
+export const sortByOptions = [
+  { label: "Newest", value: "newest" },
+  { label: "Popular", value: "popular" },
+  { label: "A - Z", value: "a-z" },
+  { label: "Z - A", value: "z-a" },
+];

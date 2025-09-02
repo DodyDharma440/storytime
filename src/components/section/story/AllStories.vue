@@ -1,45 +1,68 @@
 <script setup lang="ts">
 import StoryCard from "~/components/section/home/StoryCard.vue";
+import UiLoader from "~/components/ui/Loader.vue";
 import UiPagination from "~/components/ui/Pagination.vue";
 import { storySkeleton } from "~/constants/stories";
-import type { IStory } from "~/interfaces/story";
+
+const PER_PAGE = 12;
 
 const storiesFilter = useStoriesFilterStore();
+const { filters } = storeToRefs(storiesFilter);
 
-const isLoading = ref(true);
+const { $api } = useNuxtApp();
 
-onMounted(() => {
-  setTimeout(() => {
-    isLoading.value = false;
-  }, 1000);
+const { data, status, error, refresh } = useAsyncData("all-stories", () => {
+  const params = generateParams({
+    page: `${filters.value.page}`,
+    // BUG: double fetch if search is included
+    search: filters.value.search,
+    sort_by: filters.value.sortBy,
+    category: filters.value.category,
+  });
+
+  return $api.story.getStories({
+    ...params,
+    limit: PER_PAGE,
+  });
+});
+
+watch(filters, () => {
+  refresh();
 });
 </script>
 
 <template>
   <div class="stories">
-    <div class="stories__grid">
-      <template v-if="isLoading">
-        <div
-          v-for="(_, index) in [...Array(6)]"
-          :key="index"
-          class="stories__grid-item"
-        >
-          <StoryCard :story="storySkeleton" with-category :is-loading />
+    <UiLoader :is-loading="status === 'pending'" :error="error">
+      <template #loading>
+        <div class="stories__grid">
+          <div
+            v-for="(_, index) in [...Array(6)]"
+            :key="index"
+            class="stories__grid-item"
+          >
+            <StoryCard :story="storySkeleton" with-category is-loading />
+          </div>
         </div>
       </template>
-      <template v-else>
+      <div class="stories__grid">
         <div
-          v-for="story in [] as IStory[]"
+          v-for="story in data?.data ?? []"
           :key="story.id"
           class="stories__grid-item"
         >
           <StoryCard :story="story" />
         </div>
-      </template>
-    </div>
+      </div>
+    </UiLoader>
 
     <div class="stories__pagination">
-      <UiPagination v-model="storiesFilter.page" :total="0" :per-page="12" />
+      <UiPagination
+        :current-page="storiesFilter.filters.page"
+        :total="data?.meta?.total ?? 0"
+        :per-page="PER_PAGE"
+        @change="(v) => storiesFilter.setValue({ page: v })"
+      />
     </div>
   </div>
 </template>

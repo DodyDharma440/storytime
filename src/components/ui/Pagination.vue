@@ -2,26 +2,35 @@
 interface PaginationProps {
   total: number;
   perPage: number;
+  currentPage?: number;
+}
+
+interface PaginationEmits {
+  (e: "change", value: number): void;
 }
 
 const props = defineProps<PaginationProps>();
 const model = defineModel<number>({ default: 1 });
+const emit = defineEmits<PaginationEmits>();
+
+const pageValue = computed(() => props.currentPage ?? model.value);
 
 const handleChangePage = (value: number) => {
   model.value = value;
+  emit("change", value);
 };
 
 const totalPages = computed(() => {
   return Math.ceil(props.total / props.perPage);
 });
 
-const canPrev = computed(() => model.value > 1);
+const canPrev = computed(() => pageValue.value > 1);
 
-const canNext = computed(() => model.value < totalPages.value);
+const canNext = computed(() => pageValue.value < totalPages.value);
 const { total, perPage } = toRefs(props);
 
 const paginationRange = usePagination({
-  currentPage: model,
+  currentPage: pageValue,
   totalCount: total,
   siblingCount: 1,
   pageSize: perPage,
@@ -30,7 +39,7 @@ const paginationRange = usePagination({
 const handleClickPage = (pageItem: string | number, index: number) => {
   if (pageItem === "...") {
     const isActiveRight =
-      model.value > Number(paginationRange.value?.[index - 1]);
+      pageValue.value > Number(paginationRange.value?.[index - 1]);
     const dotIndex = isActiveRight ? index + 1 : index - 1;
     let dotClickValue = Number(paginationRange.value?.[dotIndex] ?? "0");
 
@@ -56,7 +65,7 @@ const handleClickPage = (pageItem: string | number, index: number) => {
       class="pagination__button"
       @click="
         () => {
-          handleChangePage(Number(model - 1));
+          handleChangePage(Number(pageValue - 1));
         }
       "
     >
@@ -67,7 +76,7 @@ const handleClickPage = (pageItem: string | number, index: number) => {
       :key="index"
       type="button"
       class="pagination__button"
-      :class="{ 'pagination__button--active': Number(pageItem) === model }"
+      :class="{ 'pagination__button--active': Number(pageItem) === pageValue }"
       @click="() => handleClickPage(pageItem, index)"
     >
       {{ pageItem }}
@@ -78,7 +87,7 @@ const handleClickPage = (pageItem: string | number, index: number) => {
       class="pagination__button"
       @click="
         () => {
-          handleChangePage(Number(model + 1));
+          handleChangePage(Number(pageValue + 1));
         }
       "
     >

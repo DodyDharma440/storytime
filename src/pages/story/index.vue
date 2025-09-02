@@ -22,32 +22,21 @@ const breadcrumbItems: BreadcrumbItem[] = [
 ];
 
 const route = useRoute();
+
+const categoriesStore = useCategoriesStore();
+if (!categoriesStore.categories.length) {
+  const { $api } = useNuxtApp();
+  const { data } = await useAsyncData("categories", () =>
+    $api.story.getCategories()
+  );
+  categoriesStore.setCategories(data.value?.data ?? []);
+}
+
 const storiesFilter = useStoriesFilterStore();
-
-const handleGenerateParams = (query: Record<string, string>) => {
-  const { page, sort_by, category, search } = query;
-
-  const queryParams: Record<string, string> = {
-    page: `${page || "1"}`,
-    sort_by: `${sort_by || sortByOptions[0]}`,
-  };
-
-  if (category && category !== "All") {
-    queryParams.category = category;
-  }
-
-  if (search) {
-    queryParams.search = search;
-  }
-
-  return queryParams;
-};
 
 const { page, sort_by } = route.query;
 if (!page || !sort_by) {
-  const queryParams = handleGenerateParams(
-    route.query as Record<string, string>
-  );
+  const queryParams = generateParams(route.query as Record<string, string>);
 
   navigateTo(
     {
@@ -58,35 +47,23 @@ if (!page || !sort_by) {
   );
 }
 
-// const fetchParams = new URLSearchParams({
-//   category: `${category || "All"}`,
-//   search: `${search || ""}`,
-//   page: `${page || "1"}`,
-//   sortBy: `${sort_by || sortByOptions[0]}`,
-// });
-
-// const data = await useFetch(
-//   `https://api.kraken.com/0/public/Depth?pair=xbteur&count=4&${fetchParams}`
-// );
-// console.log("success fetching");
-
-storiesFilter.$subscribe((mutation, state) => {
-  const { page, sortBy, category, search } = state;
-  const queryParams = handleGenerateParams({
-    page: `${page}`,
-    sort_by: sortBy,
-    category,
-    search,
+const unsubscribe = storiesFilter.$subscribe((mutation, state) => {
+  const currentQuery = route.query;
+  const newQuery = generateParams({
+    page: String(state.filters.page),
+    sort_by: state.filters.sortBy,
+    category: state.filters.category,
+    search: state.filters.search,
   });
 
-  navigateTo(
-    {
-      name: "story",
-      query: queryParams,
-    },
-    { replace: true }
-  );
-  window.scrollTo(0, 0);
+  const isSame =
+    Object.keys(newQuery).every((key) => currentQuery[key] === newQuery[key]) &&
+    Object.keys(currentQuery).length === Object.keys(newQuery).length;
+
+  if (!isSame) {
+    navigateTo({ name: "story", query: newQuery });
+    window.scrollTo(0, 0);
+  }
 });
 
 const handleSetStore = (query: LocationQuery) => {
@@ -96,12 +73,15 @@ const handleSetStore = (query: LocationQuery) => {
     category: `${category || "All"}`,
     search: `${search || ""}`,
     page: Number(page || "1"),
-    sortBy: `${sort_by || sortByOptions[0]}`,
+    sortBy: `${sort_by || sortByOptions[0].value}`,
   });
 };
 
-watch(() => route.query, handleSetStore);
 handleSetStore(route.query);
+
+onUnmounted(() => {
+  unsubscribe();
+});
 </script>
 
 <template>

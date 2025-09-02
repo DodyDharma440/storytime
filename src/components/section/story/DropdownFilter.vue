@@ -1,19 +1,30 @@
 <script setup lang="ts">
 import UiDropdown from "~/components/ui/Dropdown.vue";
+import type { IStoryFilter } from "~/interfaces/story";
 
 interface DropdownFilterProps {
-  items: string[];
+  items: Record<"label" | "value", string>[];
   label: string;
+  filterKey: keyof Pick<IStoryFilter, "category" | "sortBy">;
 }
 
-defineProps<DropdownFilterProps>();
-const model = defineModel<string>();
+const store = useStoriesFilterStore();
+const props = defineProps<DropdownFilterProps>();
+
+const valueLabel = computed(() => {
+  return (
+    props.items.find((item) => item.value === store.filters[props.filterKey])
+      ?.label ??
+    store.filters[props.filterKey] ??
+    ""
+  );
+});
 
 const storiesFilter = useStoriesFilterStore();
 
 const handleChange = (value: string) => {
-  model.value = value;
   storiesFilter.setValue({
+    [props.filterKey]: value,
     page: 1,
   });
 };
@@ -22,23 +33,24 @@ const handleChange = (value: string) => {
 <template>
   <div class="dropdown-filter">
     <p class="dropdown-filter__label">{{ label }}</p>
-    <UiDropdown v-slot="slotProps" :label="model ?? ''">
+    <UiDropdown v-slot="slotProps" :label="valueLabel ?? ''">
       <ul>
         <li
           v-for="(item, index) in items"
           :key="index"
           class="dropdown-filter__item"
           :class="{
-            'dropdown-filter__item--active': item === model,
+            'dropdown-filter__item--active':
+              item.value === store.filters[filterKey],
           }"
           @click="
             () => {
               slotProps.onClose();
-              handleChange(item);
+              handleChange(item.value);
             }
           "
         >
-          {{ item }}
+          {{ item.label }}
         </li>
       </ul>
     </UiDropdown>
