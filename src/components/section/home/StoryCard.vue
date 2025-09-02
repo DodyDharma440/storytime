@@ -62,7 +62,7 @@ provide("skeleton-loading", isLoadingProps);
               class="story-card__actions-button"
               :to="{
                 name: 'dashboard-story-slug-edit',
-                params: { slug: 'some-id' },
+                params: { slug: story.id },
               }"
             >
               <Icon name="mage:edit" />
@@ -70,7 +70,7 @@ provide("skeleton-loading", isLoadingProps);
             <button
               type="button"
               class="story-card__actions-button"
-              @click="handleDelete('some-id')"
+              @click="handleDelete(story.id)"
             >
               <Icon name="weui:delete-outlined" />
             </button>

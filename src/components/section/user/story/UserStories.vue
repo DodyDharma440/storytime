@@ -2,14 +2,15 @@
 import StoryCard from "~/components/section/home/StoryCard.vue";
 import UiAlertDialog from "~/components/ui/AlertDialog.vue";
 import UiButton from "~/components/ui/Button.vue";
+import UiLoader from "~/components/ui/Loader.vue";
 import UiPagination from "~/components/ui/Pagination.vue";
 import { storySkeleton } from "~/constants/stories";
-import type { IStory } from "~/interfaces/story";
 
-const isEmpty = false;
+const PER_PAGE = 4;
+
+const { $api } = useNuxtApp();
 
 const page = ref(1);
-const isLoading = ref(false);
 const isOpenDelete: Ref<string | null> = ref(null);
 
 const gridRef = useTemplateRef("grid");
@@ -18,10 +19,31 @@ const handleCloseDelete = () => {
   isOpenDelete.value = null;
 };
 
+const { data, status, error, refresh } = useAsyncData(
+  "all-user-stories",
+  () => {
+    return $api.story.getUserStories({
+      page: page.value,
+      limit: PER_PAGE,
+    });
+  }
+);
+
+const { mutate: mutateDelete, isLoading: isLoadingDelete } = useMutation({
+  mutationFn: (id: string) => $api.story.deleteStory(id),
+  onSuccess: () => {
+    isOpenDelete.value = null;
+    page.value = 1;
+  },
+});
+
+const handleDelete = () => {
+  if (isOpenDelete.value) mutateDelete(isOpenDelete.value);
+};
+
 watch(page, () => {
   window.scrollTo(0, (gridRef.value?.offsetTop ?? 0) - 80);
-  isLoading.value = true;
-  setTimeout(() => (isLoading.value = false), 3000);
+  refresh();
 });
 </script>
 
@@ -40,56 +62,64 @@ watch(page, () => {
         </UiButton>
       </div>
       <div class="user-stories__list-grid-item">
-        <div v-if="isEmpty" class="user-stories__empty">
-          <h4 class="user-stories__empty-title">No Stories Yet</h4>
-          <p class="user-stories__empty-description">
-            You haven't shared any stories yet. Start your fitness journey
-            today!
-          </p>
-          <NuxtImg
-            class="user-stories__empty-image"
-            src="/images/error/empty.png"
-          />
-        </div>
-        <template v-else>
-          <div class="user-stories__list">
-            <template v-if="isLoading">
+        <UiLoader :is-loading="status === 'pending'" :error="error">
+          <template #loading>
+            <div class="user-stories__list">
               <div
                 v-for="(_, index) in [...Array(6)]"
                 :key="index"
                 class="user-stories__list-item"
               >
-                <StoryCard :story="storySkeleton" is-editable :is-loading />
+                <StoryCard :story="storySkeleton" is-editable is-loading />
               </div>
-            </template>
-            <template v-else>
-              <div
-                v-for="story in [] as IStory[]"
-                :key="story.id"
-                class="user-stories__list-item"
-              >
-                <StoryCard
-                  :story="story"
-                  is-editable
-                  @delete="(id) => (isOpenDelete = id)"
-                />
-              </div>
-            </template>
-          </div>
+            </div>
+          </template>
+          <template #empty>
+            <div class="user-stories__empty">
+              <h4 class="user-stories__empty-title">No Stories Yet</h4>
+              <p class="user-stories__empty-description">
+                You haven't shared any stories yet. Start your fitness journey
+                today!
+              </p>
+              <NuxtImg
+                class="user-stories__empty-image"
+                src="/images/error/empty.png"
+              />
+            </div>
+          </template>
 
-          <div class="user-stories__pagination">
-            <UiPagination v-model="page" :total="0" :per-page="4" />
+          <div class="user-stories__list">
+            <div
+              v-for="story in data?.data ?? []"
+              :key="story.id"
+              class="user-stories__list-item"
+            >
+              <StoryCard
+                :story="story"
+                is-editable
+                @delete="(id) => (isOpenDelete = id)"
+              />
+            </div>
           </div>
+        </UiLoader>
 
-          <UiAlertDialog
-            :is-open="!!isOpenDelete"
-            title="Delete Story"
-            description="Are you sure want to delete this story?"
-            confirm-button-text="Delete"
-            @close="handleCloseDelete"
-            @confirm="handleCloseDelete"
+        <div class="user-stories__pagination">
+          <UiPagination
+            v-model="page"
+            :total="data?.meta?.total ?? 0"
+            :per-page="PER_PAGE"
           />
-        </template>
+        </div>
+
+        <UiAlertDialog
+          :is-open="!!isOpenDelete"
+          title="Delete Story"
+          description="Are you sure want to delete this story?"
+          confirm-button-text="Delete"
+          :is-loading="isLoadingDelete"
+          @close="handleCloseDelete"
+          @confirm="handleDelete"
+        />
       </div>
     </div>
   </div>

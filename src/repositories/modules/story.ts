@@ -8,7 +8,7 @@ import HttpFactory from "~/repositories/factory";
 
 class StoryRepository extends HttpFactory implements IStoryRepository {
   private RESOURCE = "/story";
-  private USER_RESOURCE = `/user/${this.RESOURCE}`;
+  private USER_RESOURCE = `/user${this.RESOURCE}`;
 
   async getCategories(): Promise<ApiResponse<IStoryCategory[]>> {
     return await this.call(`/category`);

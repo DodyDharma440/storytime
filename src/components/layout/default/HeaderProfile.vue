@@ -39,7 +39,7 @@ const handleLogout = () => {
           role="button"
           @click="slotProps.onToggle"
         >
-          <UiAvatar :src="null" />
+          <UiAvatar :src="userStore.user?.profile_image" />
           <div class="navbar-profile__info">
             <p class="navbar-profile__info-name">{{ userStore.user?.name }}</p>
             <Icon class="navbar-profile__info-icon" name="mdi:chevron-down" />
