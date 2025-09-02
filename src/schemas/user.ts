@@ -1,4 +1,4 @@
-import { object, ref, string } from "yup";
+import { mixed, object, ref, string } from "yup";
 
 export const editProfilSchema = object({
   name: string().required("Name should not be empty"),
@@ -24,6 +24,28 @@ export const editProfilSchema = object({
     .transform((val) => (val === "" ? undefined : val)) // kosong dianggap undefined
     .nullable()
     .oneOf([ref("new_password")], "Confirm password must match to password"),
+  profile_picture: mixed()
+    .nullable()
+    .when("profile_picture_url", {
+      is: (value?: string) => !value,
+      then: (schema) =>
+        schema
+          .notRequired()
+          .nullable()
+          .test(
+            "fileSize",
+            "File size exceeds 2MB limit",
+            (value: any) => value && value.size <= 2 * 1024 * 1024
+          )
+          .test(
+            "fileType",
+            "Only JPEG and PNG images are allowed",
+            (value: any) =>
+              value &&
+              ["image/jpeg", "image/png", "image/jpg"].includes(value.type)
+          ),
+      otherwise: (schema) => schema,
+    }),
 }).test(
   "passwords-required-together",
   "Old password is required when changing password",

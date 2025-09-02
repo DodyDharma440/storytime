@@ -16,17 +16,31 @@ const { user } = storeToRefs(userStore);
 
 const email = ref(user.value?.email);
 
-const { handleSubmit, defineField, errors } = useForm<IUpdateProfileForm>({
-  validationSchema: editProfilSchema,
-  initialValues: {
-    name: user.value?.name,
-    about: user.value?.about ?? "",
-    profile_picture_url: user.value?.profile_image ?? undefined,
-  },
-});
+const { handleSubmit, defineField, errors, setFieldError } =
+  useForm<IUpdateProfileForm>({
+    validationSchema: editProfilSchema,
+    initialValues: {
+      name: user.value?.name,
+      about: user.value?.about ?? "",
+      profile_picture_url: user.value?.profile_image ?? undefined,
+    },
+  });
 
 const { mutate: mutateProfile, isLoading: isLoadingProfile } = useMutation({
   mutationFn: (data: IUpdateProfileForm) => $api.user.updateProfile(data),
+  onError: (error) => {
+    const errors = error.response?._data?.errors;
+    if (errors) {
+      Object.entries(errors).forEach(([key, value]) => {
+        if (key !== "username") {
+          setFieldError(
+            key as keyof IUpdateProfileForm,
+            (value as string[])[0]
+          );
+        }
+      });
+    }
+  },
   onSuccess: () => {
     emit("close");
     userStore.getUser($api.user);
@@ -94,7 +108,17 @@ const croppedPictureUrl = computed(() =>
     <div class="profile-form__fields">
       <div class="profile-form__fields-section">
         <div class="profile-form__fields-avatar">
-          <UiAvatar :src="croppedPictureUrl" :size="200" />
+          <div class="profile-form__fields-avatar-circle">
+            <UiAvatar :src="croppedPictureUrl" :size="200" />
+            <button
+              v-if="croppedPicture"
+              class="profile-form__fields-avatar-button"
+              type="button"
+              @click="() => (croppedPicture = null)"
+            >
+              <Icon name="iconoir:trash" />
+            </button>
+          </div>
 
           <UiButton is="label" variant="outline">
             Change Picture
@@ -222,6 +246,24 @@ const croppedPictureUrl = computed(() =>
 
       @include min-lg {
         flex-direction: row;
+      }
+
+      &-circle {
+        position: relative;
+      }
+
+      &-button {
+        position: absolute;
+        top: 0;
+        right: 0;
+        font-size: to-rem(20);
+        background-color: $error-color;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        border-radius: 50%;
+        padding: spacing(3);
       }
     }
   }
