@@ -37,7 +37,7 @@ provide("skeleton-loading", isLoadingProps);
 <template>
   <div
     role="link"
-    :data-href="`${config.public.BASE_URL}/story/some-slug`"
+    :data-href="`${config.public.BASE_URL}/story/${story.id}`"
     tabindex="0"
   >
     <article
@@ -50,7 +50,7 @@ provide("skeleton-loading", isLoadingProps);
       <UiSkeleton>
         <div class="story-card__thumbnail">
           <NuxtImg
-            :src="story.image"
+            :src="story.content_image"
             class="story-card__thumbnail-image"
             :alt="`${story.title} thumb`"
             loading="lazy"
@@ -91,19 +91,19 @@ provide("skeleton-loading", isLoadingProps);
         </UiSkeleton>
         <UiSkeleton :text-line="3" class="story-card__description-skeleton">
           <p class="story-card__description">
-            {{ story.shortContent }}
+            {{ story.content }}
           </p>
         </UiSkeleton>
 
         <div class="story-card__info">
           <div v-if="!isEditable" class="story-card__info-author">
             <UiSkeleton is-circle>
-              <UiAvatar :src="story.authorAvatar" />
+              <UiAvatar :src="story.author.profile_image" />
             </UiSkeleton>
 
             <UiSkeleton>
               <p class="story-card__info-author-name">
-                {{ story.authorName }}
+                {{ story.author.name }}
               </p>
             </UiSkeleton>
           </div>
@@ -113,11 +113,11 @@ provide("skeleton-loading", isLoadingProps);
             :class="{ 'story-card__info-subinfo--editable': isEditable }"
           >
             <UiSkeleton>
-              <p>{{ dayjs(story.createdDate).format("DD MMMM YYYY") }}</p>
+              <p>{{ dayjs(story.created_at).format("DD MMMM YYYY") }}</p>
             </UiSkeleton>
             <UiSkeleton>
               <UiTag v-if="withCategory">
-                <span>{{ story.category }}</span>
+                <span>{{ story.category.name }}</span>
               </UiTag>
             </UiSkeleton>
           </div>

@@ -1,7 +1,21 @@
 <script setup lang="ts">
-import { categories } from "~/constants/stories";
+import type { NuxtError } from "#app";
+
+import UiLoader from "~/components/ui/Loader.vue";
+import UiSkeleton from "~/components/ui/Skeleton.vue";
 
 import SectionTitle from "./SectionTitle.vue";
+
+interface StoryCategoriesProps {
+  isLoading: boolean;
+  error: NuxtError<any> | null;
+}
+
+defineProps<StoryCategoriesProps>();
+
+const store = useCategoriesStore();
+
+const categories = computed(() => store.categories.slice(3) ?? []);
 </script>
 
 <template>
@@ -9,14 +23,25 @@ import SectionTitle from "./SectionTitle.vue";
     <SectionTitle title="More Categories" />
 
     <div class="categories">
-      <NuxtLink
-        v-for="(category, index) in categories"
-        :key="index"
-        class="categories__item"
-        :to="{ name: 'story', query: { category } }"
-      >
-        {{ category }}
-      </NuxtLink>
+      <UiLoader :is-loading="isLoading" :error="error">
+        <template #loading>
+          <UiSkeleton
+            v-for="(_, index) in [...Array(5)]"
+            :key="index"
+            is-loading
+          >
+            <div class="categories__item">Category</div>
+          </UiSkeleton>
+        </template>
+        <NuxtLink
+          v-for="(category, index) in categories"
+          :key="index"
+          class="categories__item"
+          :to="{ name: 'story', query: { category: category.slug } }"
+        >
+          {{ category.name }}
+        </NuxtLink>
+      </UiLoader>
     </div>
   </section>
 </template>
@@ -33,6 +58,10 @@ import SectionTitle from "./SectionTitle.vue";
   @include min-lg {
     gap: spacing(7.5);
     display: flex;
+  }
+
+  :deep(> div) {
+    width: 100%;
   }
 
   &__item {

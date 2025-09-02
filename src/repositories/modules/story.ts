@@ -15,10 +15,12 @@ class StoryRepository extends HttpFactory implements IStoryRepository {
   }
 
   async getStories(
-    params: Record<string, any>
+    params: Record<string, any>,
+    withSignal?: boolean
   ): Promise<ApiResponse<IStory[]>> {
-    return await this.call(`${this.RESOURCE}?${params}`, {
+    return await this.call(`${this.RESOURCE}`, {
       options: { query: params },
+      withSignal,
     });
   }
   async getStory(id: string): Promise<ApiResponse<IStory>> {
@@ -28,7 +30,7 @@ class StoryRepository extends HttpFactory implements IStoryRepository {
   async getUserStories(
     params: Record<string, any>
   ): Promise<ApiResponse<IStory[]>> {
-    return await this.call(`/user/stories?${params}`, {
+    return await this.call(`/user/stories`, {
       options: { query: params },
     });
   }

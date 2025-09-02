@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import StoryCard from "~/components/section/home/StoryCard.vue";
 import UiPagination from "~/components/ui/Pagination.vue";
-import { articles, storySkeleton } from "~/constants/stories";
+import { storySkeleton } from "~/constants/stories";
+import type { IStory } from "~/interfaces/story";
 
 const storiesFilter = useStoriesFilterStore();
 
@@ -28,7 +29,7 @@ onMounted(() => {
       </template>
       <template v-else>
         <div
-          v-for="story in articles"
+          v-for="story in [] as IStory[]"
           :key="story.id"
           class="stories__grid-item"
         >
@@ -38,11 +39,7 @@ onMounted(() => {
     </div>
 
     <div class="stories__pagination">
-      <UiPagination
-        v-model="storiesFilter.page"
-        :total="articles.length"
-        :per-page="12"
-      />
+      <UiPagination v-model="storiesFilter.page" :total="0" :per-page="12" />
     </div>
   </div>
 </template>

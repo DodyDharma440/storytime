@@ -3,23 +3,22 @@ import StoriesCarousel from "~/components/section/home/StoriesCarousel.vue";
 import StoryDetailContent from "~/components/section/story/StoryDetailContent.vue";
 import StoryDetailHeader from "~/components/section/story/StoryDetailHeader.vue";
 import UiBreadcrumb from "~/components/ui/Breadcrumb.vue";
-import { articles } from "~/constants/stories";
 import type { BreadcrumbItem } from "~/interfaces/ui";
 
-const story = articles[0];
-useCreateMeta({
-  title: `Storytime - ${story.title}`,
-  ogImage: story.image,
-  description: story.shortContent,
-  path: "/story/some-slug",
-});
+// const story = articles[0];
+// useCreateMeta({
+//   title: `Storytime - ${story.title}`,
+//   ogImage: story.image,
+//   description: story.shortContent,
+//   path: "/story/some-slug",
+// });
 
 const breadcrumbItems: BreadcrumbItem[] = [
   { label: "Home", href: { path: "/" } },
-  { label: story.title, href: { path: "/story" }, isActive: true },
+  // { label: story.title, href: { path: "/story" }, isActive: true },
 ];
 
-provide("story", story);
+// provide("story", story);
 </script>
 
 <template>
@@ -31,7 +30,7 @@ provide("story", story);
     </div>
 
     <div>
-      <StoriesCarousel title="Similar Story" :stories="articles.slice(1, 4)" />
+      <StoriesCarousel title="Similar Story" :stories="[]" />
     </div>
   </div>
 </template>

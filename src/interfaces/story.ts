@@ -11,20 +11,23 @@ export interface IStoryCategory {
 }
 
 export interface IStory {
-  id: number;
+  id: string;
   title: string;
-  shortContent: string;
-  image: string;
-  authorName: string;
-  authorAvatar: string;
-  category: string;
-  createdDate: string;
+  content: string;
+  content_image: string;
+  author: {
+    name: string;
+    profile_image: string;
+  };
+  category: {
+    id: number;
+    name: string;
+  };
+  created_at: string | null;
+  updated_at: string | null;
 }
 
-export interface StorySectionProps
-  extends Omit<SectionTitleProps, "withContainer"> {
-  stories: IStory[];
-}
+export type StorySectionProps = Omit<SectionTitleProps, "withContainer">;
 
 export interface IStoryFilter {
   page: number;

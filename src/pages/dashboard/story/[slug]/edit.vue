@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import StoryForm from "~/components/section/user/story/StoryForm.vue";
-import { articles } from "~/constants/stories";
 
 definePageMeta({
   middleware: ["auth"],
@@ -8,5 +7,5 @@ definePageMeta({
 </script>
 
 <template>
-  <StoryForm :edit-data="articles[0]" />
+  <StoryForm />
 </template>

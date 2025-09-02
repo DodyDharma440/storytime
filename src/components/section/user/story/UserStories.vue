@@ -3,7 +3,8 @@ import StoryCard from "~/components/section/home/StoryCard.vue";
 import UiAlertDialog from "~/components/ui/AlertDialog.vue";
 import UiButton from "~/components/ui/Button.vue";
 import UiPagination from "~/components/ui/Pagination.vue";
-import { articles, storySkeleton } from "~/constants/stories";
+import { storySkeleton } from "~/constants/stories";
+import type { IStory } from "~/interfaces/story";
 
 const isEmpty = false;
 
@@ -63,7 +64,7 @@ watch(page, () => {
             </template>
             <template v-else>
               <div
-                v-for="story in articles.slice(0, 4)"
+                v-for="story in [] as IStory[]"
                 :key="story.id"
                 class="user-stories__list-item"
               >
@@ -77,11 +78,7 @@ watch(page, () => {
           </div>
 
           <div class="user-stories__pagination">
-            <UiPagination
-              v-model="page"
-              :total="articles.length"
-              :per-page="4"
-            />
+            <UiPagination v-model="page" :total="0" :per-page="4" />
           </div>
 
           <UiAlertDialog

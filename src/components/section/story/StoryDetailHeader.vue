@@ -11,12 +11,12 @@ const story = inject<IStory>("story");
 <template>
   <div class="story-header">
     <p class="story-header__date">
-      {{ dayjs(story?.createdDate).format("DD MMMM YYYY") }}
+      {{ dayjs(story?.created_at).format("DD MMMM YYYY") }}
     </p>
     <h1 class="story-header__title">{{ story?.title }}</h1>
     <div class="story-header__author">
-      <UiAvatar :src="story?.authorAvatar ?? ''" />
-      <p>{{ story?.authorName }}</p>
+      <UiAvatar :src="story?.author.profile_image ?? ''" />
+      <p>{{ story?.author.name }}</p>
     </div>
     <UiTag>
       {{ story?.category }}

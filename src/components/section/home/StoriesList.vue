@@ -1,46 +1,101 @@
 <script setup lang="ts">
-import type { StorySectionProps } from "~/interfaces/story";
+import UiLoader from "~/components/ui/Loader.vue";
+import { storySkeleton } from "~/constants/stories";
+import type { IStoryCategory, StorySectionProps } from "~/interfaces/story";
 
 import SectionTitle from "./SectionTitle.vue";
 import StoryCard from "./StoryCard.vue";
 
-interface StoriesListProps extends StorySectionProps {
+interface StoriesListProps extends Omit<StorySectionProps, "title"> {
   layout: "grid" | "flex";
+  category: IStoryCategory;
 }
 
-defineProps<StoriesListProps>();
+const { $api } = useNuxtApp();
+
+const props = defineProps<StoriesListProps>();
+
+const {
+  data: dataStories,
+  status,
+  error,
+} = useAsyncData(`stories-${props.category.slug}`, () => {
+  return $api.story.getStories(
+    { limit: 3, category_id: props.category.id },
+    false
+  );
+});
 </script>
 
 <template>
   <section class="section container">
-    <SectionTitle :title="title" :explore-href="exploreHref" />
+    <SectionTitle :title="category.name" :explore-href="exploreHref" />
 
-    <div v-if="layout === 'grid'" class="stories-grid">
-      <div
-        v-for="(story, index) in stories"
-        :key="index"
-        :class="{
-          'stories-grid__item': index > 0,
-          'stories-grid__item--large': index === 0,
-        }"
-      >
-        <StoryCard
-          :story="story"
-          :is-highlight="index === 0"
-          is-grid
-          :with-category="false"
-        />
-      </div>
-    </div>
+    <template v-if="layout === 'grid'">
+      <UiLoader :is-loading="status === 'pending'" :error="error">
+        <template #loading>
+          <div class="stories-grid">
+            <div
+              v-for="(_, index) in [...Array(3)]"
+              :key="index"
+              :class="{
+                'stories-grid__item': index > 0,
+                'stories-grid__item--large': index === 0,
+              }"
+            >
+              <StoryCard
+                :story="storySkeleton"
+                :is-highlight="index === 0"
+                is-grid
+                :with-category="false"
+                is-loading
+              />
+            </div>
+          </div>
+        </template>
+        <div class="stories-grid">
+          <div
+            v-for="(story, index) in dataStories?.data ?? []"
+            :key="index"
+            :class="{
+              'stories-grid__item': index > 0,
+              'stories-grid__item--large': index === 0,
+            }"
+          >
+            <StoryCard
+              :story="story"
+              :is-highlight="index === 0"
+              is-grid
+              :with-category="false"
+            />
+          </div>
+        </div>
+      </UiLoader>
+    </template>
 
-    <div v-if="layout === 'flex'" class="stories-flex">
-      <StoryCard
-        v-for="(story, index) in stories"
-        :key="index"
-        :story="story"
-        :with-category="false"
-      />
-    </div>
+    <template v-if="layout === 'flex'">
+      <UiLoader :is-loading="status === 'pending'" :error="error">
+        <template #loading>
+          <div class="stories-flex">
+            <StoryCard
+              v-for="(_, index) in [...Array(3)]"
+              :key="index"
+              :story="storySkeleton"
+              :with-category="false"
+              is-loading
+            />
+          </div>
+        </template>
+        <div class="stories-flex">
+          <StoryCard
+            v-for="(story, index) in dataStories?.data ?? []"
+            :key="index"
+            :story="story"
+            :with-category="false"
+          />
+        </div>
+      </UiLoader>
+    </template>
   </section>
 </template>
 
@@ -79,6 +134,10 @@ defineProps<StoriesListProps>();
     flex-direction: column;
     @include min-xl {
       flex-direction: row;
+    }
+
+    & > div {
+      flex: 1;
     }
   }
 }

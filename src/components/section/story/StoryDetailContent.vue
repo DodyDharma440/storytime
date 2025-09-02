@@ -1,33 +1,23 @@
 <script setup lang="ts">
 import type { IStory } from "~/interfaces/story";
 
-import ModalImages from "./ModalImages.vue";
-
 const story = inject<IStory>("story");
-
-const isOpenImages = ref(false);
-
-const handleOpenImages = () => {
-  isOpenImages.value = true;
-};
 </script>
 
 <template>
   <div class="story-content">
     <div class="story-content__images">
-      <div class="story-content__images-thumbnail" @click="handleOpenImages">
+      <div class="story-content__images-thumbnail">
         <img
-          :src="story?.image"
+          :src="story?.content_image"
           :alt="`${story?.title} Thumb`"
           class="story-content__images-thumbnail-image"
         />
       </div>
     </div>
     <div class="story-content__text">
-      {{ story?.shortContent }}
+      {{ story?.content }}
     </div>
-
-    <ModalImages v-model="isOpenImages" />
   </div>
 </template>
 

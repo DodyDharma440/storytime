@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import UiAvatar from "~/components/ui/Avatar.vue";
 import UiButton from "~/components/ui/Button.vue";
-import { articles } from "~/constants/stories";
 
 import ModalEditProfile from "./ModalEditProfile.vue";
 
@@ -15,7 +14,7 @@ const handleOpen = () => {
 <template>
   <div class="profile">
     <div class="container profile__content">
-      <UiAvatar :src="articles[0].authorAvatar" :size="200" />
+      <UiAvatar :size="200" />
       <div class="profile__content-bio">
         <h2 class="profile__content-title">Iswara</h2>
         <p class="profile__content-email">dewiratnaiswara99@gmail.com</p>

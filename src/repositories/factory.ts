@@ -9,36 +9,35 @@ type HttpMethod =
   | "HEAD"
   | "OPTIONS";
 
+export interface FactoryOptions<B = Record<string, any>> {
+  method?: HttpMethod;
+  data?: B;
+  options?: FetchOptions<"json">;
+  withSignal?: boolean;
+}
+
 class HttpFactory {
   $fetch: $Fetch;
-  private controller: AbortController | null = null;
+  private controllers = new Map<string, AbortController>();
 
   constructor(fetcher: $Fetch) {
     this.$fetch = fetcher;
   }
 
-  abort() {
-    this.controller?.abort();
-    this.controller = null;
-  }
-
   async call<T, B extends object = object>(
     url: string,
-    options?: {
-      method?: HttpMethod;
-      data?: B;
-      options?: FetchOptions<"json">;
-    }
+    options?: FactoryOptions<B>
   ) {
     const authToken = useState<string | null>("__auth_token");
 
-    this.controller?.abort();
-    this.controller = new AbortController();
+    const controller = new AbortController();
+    this.controllers.get(url)?.abort();
+    this.controllers.set(url, controller);
 
     return this.$fetch<T>(url, {
       method: options?.method ?? "GET",
       body: options?.data,
-      signal: this.controller.signal,
+      signal: options?.withSignal ?? true ? controller.signal : undefined,
       ...options?.options,
       headers: {
         ...options?.options?.headers,

@@ -22,10 +22,10 @@ const { handleSubmit, defineField, errors, values, setFieldValue } =
     validationSchema: storySchema,
     initialValues: props.editData
       ? {
-          category_id: props.editData.category,
-          content: props.editData.shortContent,
+          category_id: `${props.editData.category.id}`,
+          content: props.editData.content,
           title: props.editData.title,
-          content_image_url: props.editData.image,
+          content_image_url: props.editData.content_image,
         }
       : undefined,
   });
@@ -42,7 +42,7 @@ const [contentImage, contentImageAttrs] = defineField("content_image");
 
 const handleClearImage = () => {
   contentImage.value = null;
-  setFieldValue("content_image_url", props.editData?.image);
+  setFieldValue("content_image_url", props.editData?.content_image);
 };
 
 const handleChangeFile = (e: Event) => {
