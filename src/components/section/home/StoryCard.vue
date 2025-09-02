@@ -81,7 +81,7 @@ provide("skeleton-loading", isLoadingProps);
       <div>
         <UiSkeleton :text-line="1" class="story-card__title-skeleton">
           <NuxtLink
-            :to="{ name: 'story-slug', params: { slug: 'some-slug' } }"
+            :to="{ name: 'story-slug', params: { slug: story.id } }"
             class="story-card__link"
           >
             <h3 class="story-card__title">

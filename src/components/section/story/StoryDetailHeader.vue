@@ -19,7 +19,7 @@ const story = inject<IStory>("story");
       <p>{{ story?.author.name }}</p>
     </div>
     <UiTag>
-      {{ story?.category }}
+      {{ story?.category.name }}
     </UiTag>
   </div>
 </template>

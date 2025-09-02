@@ -2,10 +2,15 @@ type UseSeoMetaInput = Parameters<typeof useSeoMeta>[0];
 
 interface UseCreateMetaOptions extends UseSeoMetaInput {
   path?: string;
+  serverOnly?: boolean;
 }
 
-export const useCreateMeta = ({ path, ...options }: UseCreateMetaOptions) => {
-  if (import.meta.server) {
+export const useCreateMeta = ({
+  path,
+  serverOnly = true,
+  ...options
+}: UseCreateMetaOptions) => {
+  if (serverOnly ? import.meta.server : true) {
     const config = useRuntimeConfig();
     useSeoMeta({
       title: "Storytime",

@@ -5,20 +5,34 @@ import StoryDetailHeader from "~/components/section/story/StoryDetailHeader.vue"
 import UiBreadcrumb from "~/components/ui/Breadcrumb.vue";
 import type { BreadcrumbItem } from "~/interfaces/ui";
 
-// const story = articles[0];
-// useCreateMeta({
-//   title: `Storytime - ${story.title}`,
-//   ogImage: story.image,
-//   description: story.shortContent,
-//   path: "/story/some-slug",
-// });
+const route = useRoute();
+const { $api } = useNuxtApp();
+const slug = computed(() => route.params.slug as string);
+const { data } = await useAsyncData(
+  `story-${slug.value}`,
+  () => $api.story.getStory(slug.value),
+  { watch: [slug] }
+);
+const story = computed(() => data.value?.data);
+
+useCreateMeta({
+  serverOnly: false,
+  title: `Storytime - ${story?.value?.title}`,
+  ogImage: story?.value?.content_image,
+  description: story?.value?.content,
+  path: `/story/${route.params.slug}`,
+});
 
 const breadcrumbItems: BreadcrumbItem[] = [
   { label: "Home", href: { path: "/" } },
-  // { label: story.title, href: { path: "/story" }, isActive: true },
+  {
+    label: story?.value?.title ?? "-",
+    href: { path: "/story" },
+    isActive: true,
+  },
 ];
 
-// provide("story", story);
+provide("story", story);
 </script>
 
 <template>
@@ -30,7 +44,7 @@ const breadcrumbItems: BreadcrumbItem[] = [
     </div>
 
     <div>
-      <StoriesCarousel title="Similar Story" :stories="[]" />
+      <StoriesCarousel title="Similar Story" />
     </div>
   </div>
 </template>
