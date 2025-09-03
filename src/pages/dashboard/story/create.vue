@@ -4,6 +4,10 @@ import StoryForm from "~/components/section/user/story/StoryForm.vue";
 definePageMeta({
   middleware: ["auth"],
 });
+
+useSeoMeta({
+  title: "Storytime - Create Story",
+});
 </script>
 
 <template>

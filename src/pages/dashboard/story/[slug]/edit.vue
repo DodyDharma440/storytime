@@ -6,6 +6,10 @@ definePageMeta({
   middleware: ["auth"],
 });
 
+useSeoMeta({
+  title: "Storytime - Edit Story",
+});
+
 const route = useRoute();
 const { $api } = useNuxtApp();
 const slug = computed(() => route.params.slug as string);

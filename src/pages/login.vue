@@ -6,6 +6,10 @@ definePageMeta({
   layout: "auth",
   middleware: ["auth"],
 });
+
+useSeoMeta({
+  title: "Storytime - Login",
+});
 </script>
 
 <template>

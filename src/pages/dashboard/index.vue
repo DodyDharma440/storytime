@@ -5,6 +5,10 @@ import UserStories from "~/components/section/user/story/UserStories.vue";
 definePageMeta({
   middleware: ["auth"],
 });
+
+useSeoMeta({
+  title: "Storytime - Dashboard",
+});
 </script>
 
 <template>
