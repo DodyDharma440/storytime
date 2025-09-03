@@ -42,7 +42,7 @@ export default defineNuxtConfig({
   nitro: {
     devProxy: {
       "/api/backend": {
-        target: "https://timestory.tmdsite.my.id/api",
+        target: process.env.NUXT_PUBLIC_BACKEND_BASE_URL,
         changeOrigin: true,
       },
     },

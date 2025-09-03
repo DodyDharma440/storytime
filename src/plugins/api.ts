@@ -14,7 +14,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   const config = useRuntimeConfig();
 
   const fetchOptions: FetchOptions = {
-    baseURL: `${config.public.API_BASE_URL}/api/backend`,
+    baseURL: `${config.public.API_BASE_URL}`,
     onResponseError: async (error) => {
       if (error.response.status === 401) {
         if (import.meta.server) {
