@@ -10,17 +10,18 @@ const isOpenLogout = ref(false);
 const buttonRef = useTemplateRef("button-ref");
 
 const { isLoading, mutate } = useMutation({
-  mutationFn: () => $api.auth.logout(),
+  mutationFn: () => {
+    return Promise.all([$api.auth.logout(), $api.auth.clearToken()]);
+  },
   onSuccess: async () => {
-    await $api.auth.clearToken();
     clearNuxtState("__auth_token");
     userStore.resetUser();
     navigateTo("/login", { replace: true });
   },
+  successMessage: "Logout success",
 });
 
 const handleLogout = () => {
-  isOpenLogout.value = false;
   mutate({});
 };
 </script>

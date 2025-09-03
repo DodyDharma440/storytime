@@ -33,8 +33,13 @@ const { mutate: mutateDelete, isLoading: isLoadingDelete } = useMutation({
   mutationFn: (id: string) => $api.story.deleteStory(id),
   onSuccess: () => {
     isOpenDelete.value = null;
-    page.value = 1;
+    if (page.value > 1) {
+      page.value = 1;
+    } else {
+      refresh();
+    }
   },
+  successMessage: "Story successfully deleted",
 });
 
 const handleDelete = () => {
