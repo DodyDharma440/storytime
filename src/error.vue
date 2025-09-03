@@ -18,9 +18,6 @@ const customMessages: Record<string, string> = {
     "An unexpected error occurred, and we couldn’t complete your request. Please try again later.",
 };
 
-definePageMeta({
-  layout: "default",
-});
 defineProps({
   // eslint-disable-next-line vue/require-default-prop
   error: Object as () => NuxtError,
