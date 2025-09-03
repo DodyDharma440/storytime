@@ -35,9 +35,9 @@ export default defineNuxtPlugin((nuxtApp) => {
         } else {
           const userStore = useUserAuthStore();
           await $fetch("/api/clear-token", { method: "POST" });
-          navigateTo("/login");
           clearNuxtState("__auth_token");
           userStore.resetUser();
+          navigateTo("/login");
         }
       }
     },
