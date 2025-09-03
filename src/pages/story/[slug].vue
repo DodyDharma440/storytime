@@ -38,7 +38,7 @@ provide("story", story);
 <template>
   <div class="story">
     <UiBreadcrumb :items="breadcrumbItems" />
-    <div class="container">
+    <div class="container" :class="{ story__error: !!error }">
       <UiLoader :is-loading="status === 'pending'" :error="error">
         <StoryDetailHeader />
         <StoryDetailContent />
@@ -58,6 +58,10 @@ provide("story", story);
 
   @include min-lg {
     padding-top: 105px;
+  }
+
+  &__error {
+    padding-top: spacing(5);
   }
 }
 </style>

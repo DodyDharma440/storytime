@@ -23,7 +23,11 @@ const categories = computed(() => store.categories.slice(3) ?? []);
     <SectionTitle title="More Categories" />
 
     <div class="categories">
-      <UiLoader :is-loading="isLoading" :error="error">
+      <UiLoader
+        :is-loading="isLoading"
+        :error="error"
+        :is-empty="!categories.length"
+      >
         <template #loading>
           <UiSkeleton
             v-for="(_, index) in [...Array(5)]"

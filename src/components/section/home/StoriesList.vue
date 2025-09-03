@@ -32,7 +32,11 @@ const {
     <SectionTitle :title="category.name" :explore-href="exploreHref" />
 
     <template v-if="layout === 'grid'">
-      <UiLoader :is-loading="status === 'pending'" :error="error">
+      <UiLoader
+        :is-loading="status === 'pending'"
+        :error="error"
+        :is-empty="!dataStories?.data.length"
+      >
         <template #loading>
           <div class="stories-grid">
             <div
@@ -74,7 +78,11 @@ const {
     </template>
 
     <template v-if="layout === 'flex'">
-      <UiLoader :is-loading="status === 'pending'" :error="error">
+      <UiLoader
+        :is-loading="status === 'pending'"
+        :error="error"
+        :is-empty="!dataStories?.data.length"
+      >
         <template #loading>
           <div class="stories-flex">
             <StoryCard

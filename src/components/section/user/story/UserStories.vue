@@ -62,7 +62,11 @@ watch(page, () => {
         </UiButton>
       </div>
       <div class="user-stories__list-grid-item">
-        <UiLoader :is-loading="status === 'pending'" :error="error">
+        <UiLoader
+          :is-loading="status === 'pending'"
+          :error="error"
+          :is-empty="!data?.data.length"
+        >
           <template #loading>
             <div class="user-stories__list">
               <div

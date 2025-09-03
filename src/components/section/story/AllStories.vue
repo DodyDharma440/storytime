@@ -36,7 +36,11 @@ watch(filters, () => {
 
 <template>
   <div class="stories">
-    <UiLoader :is-loading="status === 'pending'" :error="error">
+    <UiLoader
+      :is-loading="status === 'pending'"
+      :error="error"
+      :is-empty="!data?.data.length"
+    >
       <template #loading>
         <div class="stories__grid">
           <div

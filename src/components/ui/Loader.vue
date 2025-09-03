@@ -3,6 +3,8 @@ import type { VNode } from "vue";
 
 import type { NuxtError } from "#app";
 
+import LoadingSpinner from "~/assets/icons/LoadingSpinner.vue";
+
 interface LoaderProps {
   isLoading: boolean;
   error?: NuxtError<any> | null;
@@ -32,7 +34,10 @@ const errorMessage = computed(() => {
     <template v-if="slots.loading">
       <slot name="loading" />
     </template>
-    <div v-else>Loading...</div>
+    <div v-else class="loading">
+      <LoadingSpinner class="loading__loader" />
+      <p>Loading...</p>
+    </div>
   </template>
   <div v-else-if="error">
     <div class="error">
@@ -47,7 +52,12 @@ const errorMessage = computed(() => {
     <template v-if="slots.empty">
       <slot name="empty" />
     </template>
-    <div v-else>No Data</div>
+    <div v-else>
+      <div class="empty">
+        <NuxtImg class="empty__image" src="/images/error/empty.png" />
+        <h4 class="empty__title">No Data</h4>
+      </div>
+    </div>
   </div>
   <template v-else>
     <slot name="default" />
@@ -55,6 +65,22 @@ const errorMessage = computed(() => {
 </template>
 
 <style lang="scss" scoped>
+.loading {
+  padding: spacing(5);
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: spacing(3);
+  color: $primary-color;
+
+  &__loader {
+    width: 60px;
+    height: 60px;
+  }
+}
+
 .error {
   display: flex;
   align-items: center;
@@ -78,6 +104,29 @@ const errorMessage = computed(() => {
 
     @include min-xl {
       font-size: to-rem(28);
+    }
+  }
+}
+
+.empty {
+  padding: spacing(10) spacing(6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: spacing(5);
+
+  &__image {
+    max-height: 250px;
+    object-fit: contain;
+  }
+
+  &__title {
+    font-size: to-rem(20);
+    font-weight: 600;
+
+    @include min-lg {
+      font-size: to-rem(24);
     }
   }
 }
