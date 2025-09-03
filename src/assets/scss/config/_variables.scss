@@ -4,6 +4,7 @@ $primary-color-light: #f0f5ed;
 $main-background: #ffffff;
 $text-color: #222222;
 $error-color: #fb2c36;
+$warning-color: #fdc700;
 
 // Breakpoints
 $screen-sm-min: 640px;
@@ -21,3 +22,4 @@ $dropdown-z-index: 101;
 $navbar-z-index: 100;
 $modal-overlay-z-index: 200;
 $modal-z-index: 201;
+$toast-z-index: 300;

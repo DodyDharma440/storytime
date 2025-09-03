@@ -14,6 +14,7 @@ export const useMutation = <P, T, R = ApiResponse<T>>({
   successMessage,
 }: MutationOptions<P, R>) => {
   const isLoading = ref(false);
+  const { $toast } = useNuxtApp();
 
   const mutate = async (
     p: P,
@@ -24,9 +25,12 @@ export const useMutation = <P, T, R = ApiResponse<T>>({
       const res = await mutationFn(p);
       (options?.onSuccess || onSuccess)?.(res as R);
       if (successMessage || options?.successMessage) {
-        // TODO: DISPLAY TOAST
-        // useNuxtApp().$toast.success(options?.successMessage || successMessage);
-        alert(options?.successMessage || successMessage);
+        const _successMessage = successMessage || options?.successMessage;
+        const message =
+          _successMessage instanceof Function
+            ? _successMessage(res)
+            : _successMessage;
+        $toast.success({ text: message ?? "Success" });
       }
     } catch (error: any) {
       (options?.onError || onError)?.(error);
@@ -35,11 +39,7 @@ export const useMutation = <P, T, R = ApiResponse<T>>({
         error?.message ??
         "Something went wrong";
 
-      // TODO: DISPLAY TOAST
-      // useNuxtApp().$toast.error(message);
-      alert(message);
-      // eslint-disable-next-line no-console
-      console.log(message);
+      $toast.error({ text: message });
     } finally {
       isLoading.value = false;
     }

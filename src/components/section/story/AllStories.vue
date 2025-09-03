@@ -11,23 +11,26 @@ const { filters } = storeToRefs(storiesFilter);
 
 const { $api } = useNuxtApp();
 
-const { data, status, error, refresh } = useAsyncData("all-stories", () => {
-  const params = generateParams({
-    page: `${filters.value.page}`,
-    // BUG: double fetch if search is included
-    search: filters.value.search,
-    sort_by: filters.value.sortBy,
-    category: filters.value.category,
-  });
+const { data, status, error, refresh } = useAsyncData(
+  "all-stories",
+  async () => {
+    const params = generateParams({
+      page: `${filters.value.page}`,
+      // BUG: double fetch if search is included
+      search: filters.value.search,
+      sort_by: filters.value.sortBy,
+      category: filters.value.category,
+    });
 
-  params.keyword = params.search;
-  delete params.search;
+    // params.keyword = params.search;
+    // delete params.search;
 
-  return $api.story.getStories({
-    ...params,
-    limit: PER_PAGE,
-  });
-});
+    return $api.story.getStories({
+      ...params,
+      limit: PER_PAGE,
+    });
+  }
+);
 
 watch(filters, () => {
   refresh();

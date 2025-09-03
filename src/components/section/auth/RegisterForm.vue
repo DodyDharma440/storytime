@@ -29,9 +29,9 @@ const { isLoading, mutate } = useMutation({
   onSuccess: async (res) => {
     const token = res.data.token;
     await $api.auth.setToken({ token });
-    alert("Register success!");
     navigateTo("/dashboard", { replace: true });
   },
+  successMessage: "Register success!",
 });
 
 const submitHandler = handleSubmit((values) => {

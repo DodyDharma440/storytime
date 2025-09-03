@@ -22,9 +22,8 @@ const { isLoading, mutate } = useMutation({
     userStore.setUser(res.data.user);
     useState("__auth_token", () => res.data.token);
     navigateTo("/dashboard", { replace: true });
-
-    alert("Login success!");
   },
+  successMessage: "Login success",
 });
 
 const submitHandler = handleSubmit((values) => {

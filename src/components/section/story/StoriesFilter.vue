@@ -26,7 +26,7 @@ watch(searchValue, (newValue) => {
       search: newValue.trim(),
       page: 1,
     });
-  }, 500);
+  }, 1000);
 });
 </script>
 

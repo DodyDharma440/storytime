@@ -14,9 +14,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
   if (!import.meta.server) {
     let token = useState<string | null>("__auth_token").value;
     if (!token) {
-      const res = await $fetch<{ token: string | null }>(
-        "http://localhost:3001/api/get-token"
-      );
+      const res = await $fetch<{ token: string | null }>("/api/get-token");
       token = res.token;
     }
     return handleRedirect(token, to.path);

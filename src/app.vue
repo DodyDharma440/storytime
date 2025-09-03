@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import UiToast from "~/components/ui/Toast.vue";
+
 const userStore = useUserAuthStore();
 const { $api } = useNuxtApp();
 const token = useCookie("auth-token", { watch: true });
@@ -12,6 +14,7 @@ if (token.value) {
   <NuxtLoadingIndicator color="#466543" :throttle="0" />
   <NuxtLayout>
     <NuxtPage />
+    <UiToast />
   </NuxtLayout>
 </template>
 

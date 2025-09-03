@@ -9,7 +9,7 @@ import ModalCropImage from "./ModalCropImage.vue";
 
 const emit = defineEmits<{ (e: "close"): void }>();
 
-const { $api } = useNuxtApp();
+const { $api, $toast } = useNuxtApp();
 
 const userStore = useUserAuthStore();
 const { user } = storeToRefs(userStore);
@@ -45,10 +45,12 @@ const { mutate: mutateProfile, isLoading: isLoadingProfile } = useMutation({
     emit("close");
     userStore.getUser($api.user);
   },
+  successMessage: "Your profile successfuly updated",
 });
 
 const { mutate: mutatePicture, isLoading: isLoadingPicture } = useMutation({
   mutationFn: (data: FormData) => $api.user.updateProfilePicture(data),
+  successMessage: "Profile picture updated",
 });
 
 const submitHandler = handleSubmit((values) => {
@@ -73,7 +75,6 @@ const submitHandler = handleSubmit((values) => {
     formData.append("profile_image", profile_picture);
     mutatePicture(formData, {
       onSuccess: () => {
-        alert("Profile picture updated");
         delete values.profile_picture;
         mutateProfile(values);
       },
@@ -109,6 +110,9 @@ const croppedPictureUrl = computed(() =>
       <div class="profile-form__fields-section">
         <div class="profile-form__fields-avatar">
           <div class="profile-form__fields-avatar-circle">
+            <button type="button" @click="$toast.success({ text: 'Hello' })">
+              TOAST
+            </button>
             <UiAvatar :src="croppedPictureUrl" :size="200" />
             <button
               v-if="croppedPicture"

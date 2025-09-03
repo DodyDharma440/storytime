@@ -11,9 +11,6 @@ const buttonRef = useTemplateRef("button-ref");
 
 const { isLoading, mutate } = useMutation({
   mutationFn: () => $api.auth.logout(),
-  onError: (err) => {
-    alert(err.response._data?.message);
-  },
   onSuccess: async () => {
     await $api.auth.clearToken();
     clearNuxtState("__auth_token");
