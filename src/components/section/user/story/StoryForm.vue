@@ -176,6 +176,7 @@ const previewUrl = computed(() =>
           variant="outline"
           :to="{ name: 'dashboard' }"
           :disabled="isLoadingUpdate || isLoadingCreate"
+          :href="{ name: 'dashboard' }"
         >
           Cancel
         </UiButton>

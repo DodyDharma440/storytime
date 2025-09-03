@@ -3,12 +3,13 @@ import StoriesCarousel from "~/components/section/home/StoriesCarousel.vue";
 import StoryDetailContent from "~/components/section/story/StoryDetailContent.vue";
 import StoryDetailHeader from "~/components/section/story/StoryDetailHeader.vue";
 import UiBreadcrumb from "~/components/ui/Breadcrumb.vue";
+import UiLoader from "~/components/ui/Loader.vue";
 import type { BreadcrumbItem } from "~/interfaces/ui";
 
 const route = useRoute();
 const { $api } = useNuxtApp();
 const slug = computed(() => route.params.slug as string);
-const { data } = await useAsyncData(
+const { data, status, error } = await useAsyncData(
   `story-${slug.value}`,
   () => $api.story.getStory(slug.value),
   { watch: [slug] }
@@ -16,7 +17,6 @@ const { data } = await useAsyncData(
 const story = computed(() => data.value?.data);
 
 useCreateMeta({
-  serverOnly: false,
   title: `Storytime - ${story?.value?.title}`,
   ogImage: story?.value?.content_image,
   description: story?.value?.content,
@@ -39,8 +39,10 @@ provide("story", story);
   <div class="story">
     <UiBreadcrumb :items="breadcrumbItems" />
     <div class="container">
-      <StoryDetailHeader />
-      <StoryDetailContent />
+      <UiLoader :is-loading="status === 'pending'" :error="error">
+        <StoryDetailHeader />
+        <StoryDetailContent />
+      </UiLoader>
     </div>
 
     <div>
