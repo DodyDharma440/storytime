@@ -16,9 +16,6 @@ const { handleSubmit, defineField, errors } = useForm<ILoginForm>({
 
 const { isLoading, mutate } = useMutation({
   mutationFn: (data: ILoginForm) => $api.auth.login(data),
-  onError: (err) => {
-    alert(err.response._data?.message);
-  },
   onSuccess: async (res) => {
     const token = res.data.token;
     await $api.auth.setToken({ token });

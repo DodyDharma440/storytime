@@ -16,8 +16,8 @@ const { isLoading, mutate } = useMutation({
   },
   onSuccess: async () => {
     await $api.auth.clearToken();
+    clearNuxtState("__auth_token");
     userStore.resetUser();
-    useState("__auth_token", () => undefined);
     navigateTo("/login", { replace: true });
   },
 });
