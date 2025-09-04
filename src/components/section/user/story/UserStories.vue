@@ -119,15 +119,17 @@ watch(page, () => {
           />
         </div>
 
-        <UiAlertDialog
-          :is-open="!!isOpenDelete"
-          title="Delete Story"
-          description="Are you sure want to delete this story?"
-          confirm-button-text="Delete"
-          :is-loading="isLoadingDelete"
-          @close="handleCloseDelete"
-          @confirm="handleDelete"
-        />
+        <ClientOnly>
+          <UiAlertDialog
+            :is-open="!!isOpenDelete"
+            title="Delete Story"
+            description="Are you sure want to delete this story?"
+            confirm-button-text="Delete"
+            :is-loading="isLoadingDelete"
+            @close="handleCloseDelete"
+            @confirm="handleDelete"
+          />
+        </ClientOnly>
       </div>
     </div>
   </div>
