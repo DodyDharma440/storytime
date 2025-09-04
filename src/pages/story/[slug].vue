@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import StoriesCarousel from "~/components/section/home/StoriesCarousel.vue";
+import StoriesList from "~/components/section/home/StoriesList.vue";
 import StoryDetailContent from "~/components/section/story/StoryDetailContent.vue";
 import StoryDetailHeader from "~/components/section/story/StoryDetailHeader.vue";
 import UiBreadcrumb from "~/components/ui/Breadcrumb.vue";
@@ -46,7 +46,7 @@ provide("story", story);
     </div>
 
     <div>
-      <StoriesCarousel title="Similar Story" />
+      <StoriesList layout="flex" title="Similar Story" />
     </div>
   </div>
 </template>

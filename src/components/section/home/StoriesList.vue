@@ -7,8 +7,9 @@ import SectionTitle from "./SectionTitle.vue";
 import StoryCard from "./StoryCard.vue";
 
 interface StoriesListProps extends Omit<StorySectionProps, "title"> {
+  title?: string;
   layout: "grid" | "flex";
-  category: IStoryCategory;
+  category?: IStoryCategory;
 }
 
 const { $api } = useNuxtApp();
@@ -19,17 +20,24 @@ const {
   data: dataStories,
   status,
   error,
-} = useAsyncData(`stories-${props.category.slug}`, () => {
-  return $api.story.getStories(
-    { limit: 3, category_id: props.category.id },
-    false
-  );
+} = useAsyncData(`stories-${props.category?.slug}`, () => {
+  const params: Record<string, any> = {
+    limit: 3,
+  };
+  if (props.category) {
+    params.category_id = props.category.id;
+  }
+
+  return $api.story.getStories(params, false);
 });
 </script>
 
 <template>
   <section class="section container">
-    <SectionTitle :title="category.name" :explore-href="exploreHref" />
+    <SectionTitle
+      :title="category?.name ?? title ?? ''"
+      :explore-href="exploreHref"
+    />
 
     <template v-if="layout === 'grid'">
       <UiLoader
