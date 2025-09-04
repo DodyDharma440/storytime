@@ -2,6 +2,10 @@
 import UiAvatar from "~/components/ui/Avatar.vue";
 import UiButton from "~/components/ui/Button.vue";
 import UiInput from "~/components/ui/Input.vue";
+import {
+  useUpdateProfile,
+  useUpdateProfilePicture,
+} from "~/composables/modules/user";
 import type { IUpdateProfileForm } from "~/interfaces/user";
 import { editProfilSchema } from "~/schemas/user";
 
@@ -26,32 +30,30 @@ const { handleSubmit, defineField, errors, setFieldError } =
     },
   });
 
-const { mutate: mutateProfile, isLoading: isLoadingProfile } = useMutation({
-  mutationFn: (data: IUpdateProfileForm) => $api.user.updateProfile(data),
-  onError: (error) => {
-    const errors = error.response?._data?.errors;
-    if (errors) {
-      Object.entries(errors).forEach(([key, value]) => {
-        if (key !== "username") {
-          setFieldError(
-            key as keyof IUpdateProfileForm,
-            (value as string[])[0]
-          );
-        }
-      });
-    }
-  },
-  onSuccess: () => {
-    emit("close");
-    userStore.getUser($api.user);
-  },
-  successMessage: "Your profile successfuly updated",
-});
+const { mutate: mutateProfile, isLoading: isLoadingProfile } = useUpdateProfile(
+  {
+    onError: (error) => {
+      const errors = error.response?._data?.errors;
+      if (errors) {
+        Object.entries(errors).forEach(([key, value]) => {
+          if (key !== "username") {
+            setFieldError(
+              key as keyof IUpdateProfileForm,
+              (value as string[])[0]
+            );
+          }
+        });
+      }
+    },
+    onSuccess: () => {
+      emit("close");
+      userStore.getUser($api.user);
+    },
+  }
+);
 
-const { mutate: mutatePicture, isLoading: isLoadingPicture } = useMutation({
-  mutationFn: (data: FormData) => $api.user.updateProfilePicture(data),
-  successMessage: "Profile picture updated",
-});
+const { mutate: mutatePicture, isLoading: isLoadingPicture } =
+  useUpdateProfilePicture();
 
 const submitHandler = handleSubmit((values) => {
   const {

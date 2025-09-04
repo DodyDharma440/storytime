@@ -2,29 +2,17 @@
 import AuthFormWrapper from "~/components/layout/auth/FormWrapper.vue";
 import DefaultLogo from "~/components/layout/default/Logo.vue";
 import UiInput from "~/components/ui/Input.vue";
+import { useLogin } from "~/composables/modules/auth";
 import type { ILoginForm } from "~/interfaces/auth";
 import { loginSchema } from "~/schemas/auth";
 
 import AuthFormSubmitter from "./FormSubmitter.vue";
 
-const { $api } = useNuxtApp();
-const userStore = useUserAuthStore();
-
 const { handleSubmit, defineField, errors } = useForm<ILoginForm>({
   validationSchema: loginSchema,
 });
 
-const { isLoading, mutate } = useMutation({
-  mutationFn: (data: ILoginForm) => $api.auth.login(data),
-  onSuccess: async (res) => {
-    const token = res.data.token;
-    await $api.auth.setToken({ token });
-    userStore.setUser(res.data.user);
-    useState("__auth_token", () => res.data.token);
-    navigateTo("/dashboard", { replace: true });
-  },
-  successMessage: "Login success",
-});
+const { isLoading, mutate } = useLogin();
 
 const submitHandler = handleSubmit((values) => {
   mutate(values);

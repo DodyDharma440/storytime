@@ -1,14 +1,9 @@
 import type { $Fetch, FetchOptions } from "ofetch";
 
+import type { IApiInstance } from "~/interfaces/api";
 import AuthRepository from "~/repositories/modules/auth";
 import StoryRepository from "~/repositories/modules/story";
 import UserRepository from "~/repositories/modules/user";
-
-interface IApiInstance {
-  auth: AuthRepository;
-  story: StoryRepository;
-  user: UserRepository;
-}
 
 export default defineNuxtPlugin((nuxtApp) => {
   const config = useRuntimeConfig();

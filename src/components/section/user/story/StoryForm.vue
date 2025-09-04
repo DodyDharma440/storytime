@@ -3,6 +3,7 @@ import UiButton from "~/components/ui/Button.vue";
 import UiInput from "~/components/ui/Input.vue";
 import UiSelect from "~/components/ui/Select.vue";
 import UiTiptapEditor from "~/components/ui/TiptapEditor.vue";
+import { useCreateStory, useUpdateStory } from "~/composables/modules/story";
 import type { IStory, IStoryForm } from "~/interfaces/story";
 import { storySchema } from "~/schemas/story";
 
@@ -35,18 +36,8 @@ const { handleSubmit, defineField, errors, values, setFieldValue } =
       : undefined,
   });
 
-const { mutate: createStory, isLoading: isLoadingCreate } = useMutation({
-  mutationFn: (data: FormData) => $api.story.createStory(data),
-  successMessage: "Story successfully created",
-  onSuccess: () => navigateTo({ name: "dashboard" }),
-});
-
-const { mutate: updateStory, isLoading: isLoadingUpdate } = useMutation({
-  mutationFn: ({ data, id }: { data: FormData; id: string }) =>
-    $api.story.updateStory(data, id),
-  successMessage: "Story successfully updated",
-  onSuccess: () => navigateTo({ name: "dashboard" }),
-});
+const { mutate: createStory, isLoading: isLoadingCreate } = useCreateStory();
+const { mutate: updateStory, isLoading: isLoadingUpdate } = useUpdateStory();
 
 const categoryOptions = computed(() => {
   return categoriesStore.categories.map((category) => ({
@@ -69,7 +60,7 @@ const submitHandler = handleSubmit((values) => {
   formData.append("content", content);
 
   if (props.editData) {
-    updateStory({ data: formData, id: props.editData.id });
+    updateStory({ formValues: formData, id: props.editData.id });
   } else {
     createStory(formData);
   }

@@ -4,6 +4,7 @@ import UiAlertDialog from "~/components/ui/AlertDialog.vue";
 import UiButton from "~/components/ui/Button.vue";
 import UiLoader from "~/components/ui/Loader.vue";
 import UiPagination from "~/components/ui/Pagination.vue";
+import { useDeleteStory } from "~/composables/modules/story";
 import { storySkeleton } from "~/constants/stories";
 
 const PER_PAGE = 4;
@@ -29,8 +30,7 @@ const { data, status, error, refresh } = useAsyncData(
   }
 );
 
-const { mutate: mutateDelete, isLoading: isLoadingDelete } = useMutation({
-  mutationFn: (id: string) => $api.story.deleteStory(id),
+const { mutate: mutateDelete, isLoading: isLoadingDelete } = useDeleteStory({
   onSuccess: () => {
     isOpenDelete.value = null;
     if (page.value > 1) {
@@ -39,7 +39,6 @@ const { mutate: mutateDelete, isLoading: isLoadingDelete } = useMutation({
       refresh();
     }
   },
-  successMessage: "Story successfully deleted",
 });
 
 const handleDelete = () => {

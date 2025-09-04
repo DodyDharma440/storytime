@@ -2,24 +2,14 @@
 import UiAlertDialog from "~/components/ui/AlertDialog.vue";
 import UiAvatar from "~/components/ui/Avatar.vue";
 import UiDropdown from "~/components/ui/Dropdown.vue";
+import { useLogout } from "~/composables/modules/auth";
 
-const { $api } = useNuxtApp();
 const userStore = useUserAuthStore();
 
 const isOpenLogout = ref(false);
 const buttonRef = useTemplateRef("button-ref");
 
-const { isLoading, mutate } = useMutation({
-  mutationFn: () => {
-    return Promise.all([$api.auth.logout(), $api.auth.clearToken()]);
-  },
-  onSuccess: async () => {
-    clearNuxtState("__auth_token");
-    userStore.resetUser();
-    navigateTo("/login", { replace: true });
-  },
-  successMessage: "Logout success",
-});
+const { isLoading, mutate } = useLogout();
 
 const handleLogout = () => {
   mutate({});

@@ -1,4 +1,4 @@
-import type { ApiResponse } from "~/interfaces/api";
+import type { ApiResponse, UpdateData } from "~/interfaces/api";
 import type {
   IStory,
   IStoryCategory,
@@ -40,10 +40,13 @@ class StoryRepository extends HttpFactory implements IStoryRepository {
   async createStory(data: FormData): Promise<ApiResponse<IStory>> {
     return await this.call(`${this.USER_RESOURCE}`, { method: "POST", data });
   }
-  async updateStory(data: FormData, id: string): Promise<ApiResponse<IStory>> {
+  async updateStory({
+    formValues,
+    id,
+  }: UpdateData<FormData>): Promise<ApiResponse<IStory>> {
     return await this.call(`${this.USER_RESOURCE}/${id}`, {
       method: "PUT",
-      data,
+      data: formValues,
     });
   }
   async deleteStory(id: string): Promise<ApiResponse<IStory>> {

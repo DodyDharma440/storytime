@@ -1,6 +1,6 @@
 import type { $Fetch, FetchOptions } from "ofetch";
 
-type HttpMethod =
+export type HttpMethod =
   | "POST"
   | "GET"
   | "PUT"

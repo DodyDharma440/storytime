@@ -2,20 +2,18 @@
 import AuthFormWrapper from "~/components/layout/auth/FormWrapper.vue";
 import DefaultLogo from "~/components/layout/default/Logo.vue";
 import UiInput from "~/components/ui/Input.vue";
+import { useRegister } from "~/composables/modules/auth";
 import type { IRegisterForm } from "~/interfaces/auth";
 import { registerSchema } from "~/schemas/auth";
 
 import AuthFormSubmitter from "./FormSubmitter.vue";
-
-const { $api } = useNuxtApp();
 
 const { handleSubmit, defineField, errors, setFieldError } =
   useForm<IRegisterForm>({
     validationSchema: registerSchema,
   });
 
-const { isLoading, mutate } = useMutation({
-  mutationFn: (data: IRegisterForm) => $api.auth.register(data),
+const { isLoading, mutate } = useRegister({
   onError: (error) => {
     const errors = error.response?._data?.errors;
     if (errors) {
@@ -26,12 +24,6 @@ const { isLoading, mutate } = useMutation({
       });
     }
   },
-  onSuccess: async (res) => {
-    const token = res.data.token;
-    await $api.auth.setToken({ token });
-    navigateTo("/dashboard", { replace: true });
-  },
-  successMessage: "Register success!",
 });
 
 const submitHandler = handleSubmit((values) => {
