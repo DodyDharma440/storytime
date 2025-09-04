@@ -42,7 +42,7 @@ export default defineNuxtConfig({
   nitro: {
     devProxy: {
       "/api/backend": {
-        target: process.env.NUXT_PUBLIC_BACKEND_BASE_URL,
+        target: `${process.env.NUXT_PUBLIC_BACKEND_BASE_URL}/api`,
         changeOrigin: true,
       },
     },
