@@ -13,7 +13,7 @@ import ModalCropImage from "./ModalCropImage.vue";
 
 const emit = defineEmits<{ (e: "close"): void }>();
 
-const { $api, $toast } = useNuxtApp();
+const { $api } = useNuxtApp();
 
 const userStore = useUserAuthStore();
 const { user } = storeToRefs(userStore);
@@ -112,9 +112,6 @@ const croppedPictureUrl = computed(() =>
       <div class="profile-form__fields-section">
         <div class="profile-form__fields-avatar">
           <div class="profile-form__fields-avatar-circle">
-            <button type="button" @click="$toast.success({ text: 'Hello' })">
-              TOAST
-            </button>
             <UiAvatar :src="croppedPictureUrl" :size="200" />
             <button
               v-if="croppedPicture"
